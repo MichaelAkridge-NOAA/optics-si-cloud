@@ -4,8 +4,12 @@
 
 # =============================================================================
 # Label Studio Installation Script for Google Cloud Workstations
-# Version: 2.0.7 (2024-03-24)
+# Version: 2.0.8 (2024-03-24)
 # =============================================================================
+# Changes in 2.0.8:
+#   - Fixed: Log file permission denied (chown before startup)
+#   - Improved: URL detection with 4 methods (resolv.conf, metadata attrs,
+#     resolv.conf word scan, metadata proxy-url)
 # Changes in 2.0.7:
 #   - REMOVED set -e (root cause of script silently stopping)
 #   - FIXED version check: use 'pip show' instead of 'label-studio --version'
@@ -22,7 +26,7 @@
 #   - Dynamic URL detection from DNS/resolv.conf
 #   - New commands: label-studio-set-url, label-studio-diagnostics
 # =============================================================================
-SCRIPT_VERSION="2.0.7"
+SCRIPT_VERSION="2.0.8"
 
 echo "=============================================="
 echo "Label Studio Installer v${SCRIPT_VERSION}"
@@ -230,6 +234,11 @@ RUNTIME_ENV_FILE="$LABEL_STUDIO_HOME/.env.runtime"
 mkdir -p "$LABEL_STUDIO_HOME"
 mkdir -p "$LABEL_STUDIO_HOME/data"
 
+# Fix log file ownership (may have been created by root in previous run)
+touch "$LOG_FILE"
+chown "$ACTUAL_USER" "$LOG_FILE" 2>/dev/null || true
+chown "$ACTUAL_USER" "$LABEL_STUDIO_HOME" 2>/dev/null || true
+
 # Check if Label Studio is already running
 if pgrep -f "label-studio start" > /dev/null; then
     echo "Label Studio is already running."
@@ -256,10 +265,29 @@ if [ -z "$CLUSTER_DOMAIN" ]; then
             "http://metadata.google.internal/computeMetadata/v1/instance/attributes/$attr" \
             2>/dev/null || echo "")
         if echo "$ATTR_VAL" | grep -q 'cloudworkstations\.dev'; then
-            CLUSTER_DOMAIN=$(echo "$ATTR_VAL" | grep -oE '[a-z0-9-]+\.cloudworkstations\.dev' | head -1)
+            CLUSTER_DOMAIN=$(echo "$ATTR_VAL" | grep -oE '[a-z0-9.-]+\.cloudworkstations\.dev' | head -1)
             break
         fi
     done
+fi
+
+# Method 3: Extract from full resolv.conf search line (grab everything after hostname prefix)
+# The search line may contain: cluster-XXXX.cloudworkstations.dev
+if [ -z "$CLUSTER_DOMAIN" ] && [ -f /etc/resolv.conf ]; then
+    CLUSTER_DOMAIN=$(cat /etc/resolv.conf 2>/dev/null \
+        | tr ' ' '\n' \
+        | grep 'cloudworkstations\.dev' \
+        | head -1 || echo "")
+fi
+
+# Method 4: Try to get the full proxy URL from the GCE metadata proxy-url
+if [ -z "$CLUSTER_DOMAIN" ]; then
+    PROXY_URL=$(curl -sf -m 2 -H 'Metadata-Flavor: Google' \
+        "http://metadata.google.internal/computeMetadata/v1/instance/attributes/proxy-url" \
+        2>/dev/null || echo "")
+    if echo "$PROXY_URL" | grep -q 'cloudworkstations\.dev'; then
+        CLUSTER_DOMAIN=$(echo "$PROXY_URL" | grep -oE '[a-z0-9.-]+\.cloudworkstations\.dev' | head -1)
+    fi
 fi
 
 # Build the runtime config file (overrides static .env at startup)
@@ -608,6 +636,11 @@ fi
 
 echo ""
 echo "[Step 10/10] Starting Label Studio now..."
+
+# Fix ownership of all label-studio files (may have been created by root)
+chown -R "$ACTUAL_USER:$ACTUAL_USER" "$LABEL_STUDIO_HOME" 2>/dev/null || true
+chown -R "$ACTUAL_USER:$ACTUAL_USER" "$ACTUAL_HOME/.local/share/label-studio" 2>/dev/null || true
+
 "$LABEL_STUDIO_HOME/startup.sh"
 echo ""
 echo "Waiting for Label Studio to initialize..."
