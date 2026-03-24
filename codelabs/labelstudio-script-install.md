@@ -37,18 +37,21 @@ wget https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools
 chmod +x install_label_studio.sh
 ```
 
-**Option 2: Use the cloned repository**
+**Option 2: Clone the repository first**
 
-If you have already cloned the repository:
+If you prefer to clone the entire repository:
 
 ```bash
+# Clone the repository
+git clone https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools.git
+
 # Navigate to the scripts directory
 cd optics-si-cloud-tools/scripts
 chmod +x install_label_studio.sh
 ```
 
 <aside class="warning">
-Note: You don't need to clone the repository just to run the script. The direct download method (Option 1) is simpler.
+Note: You don't need to clone the repository just to run the script. The direct download method (Option 1) is simpler and faster.
 </aside>
 
 ## Run the Installation Script
