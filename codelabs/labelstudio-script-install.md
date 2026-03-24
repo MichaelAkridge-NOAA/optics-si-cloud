@@ -29,21 +29,27 @@ Duration: 2
 
 The installation script is located in the `scripts` directory of the optics-si-cloud repository.
 
-You can download it directly or clone the repository:
+**Option 1: Download the script directly** (Recommended)
 
 ```bash
-# Option 1: Download the script directly
+# Download the script to your current directory
 wget https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud/main/scripts/install_label_studio.sh
 chmod +x install_label_studio.sh
 ```
 
-Or if you have the repository cloned:
+**Option 2: Use the cloned repository**
+
+If you have already cloned the repository:
 
 ```bash
 # Navigate to the scripts directory
 cd optics-si-cloud/scripts
 chmod +x install_label_studio.sh
 ```
+
+<aside class="warning">
+Note: You don't need to clone the repository just to run the script. The direct download method (Option 1) is simpler.
+</aside>
 
 ## Run the Installation Script
 Duration: 5
@@ -55,15 +61,21 @@ sudo ./install_label_studio.sh
 ```
 
 The script will:
-1. Update system packages
-2. Install Python 3 and pip if not already present
-3. Create a virtual environment for Label Studio at `/home/user/.label-studio`
-4. Install Label Studio in the virtual environment
-5. Create a startup script that launches Label Studio automatically on workstation boot
-6. Start Label Studio on port 8080
+1. Detect your user and home directory automatically
+2. Check and update system packages
+3. Install Python 3 and pip if not already present
+4. Create a virtual environment for Label Studio at `~/.label-studio`
+5. Install Label Studio in the virtual environment
+6. Create management commands (status, restart, stop, logs)
+7. Create a startup script that launches Label Studio automatically on workstation boot
+8. Start Label Studio on port 8080
 
 <aside class="positive">
 The script runs Label Studio as a background service and configures it to start automatically when your workstation boots.
+</aside>
+
+<aside class="warning">
+You may see GPG key warnings for some apt repositories (like yarn). These warnings are harmless and won't affect the Label Studio installation.
 </aside>
 
 ## What the Script Does
@@ -138,41 +150,72 @@ Navigate to `http://localhost:8080` and verify:
 - You can create an account
 - The dashboard is accessible
 
-## Manual Control (Optional)
+## Management Commands
 Duration: 2
 
-If you need to manually control Label Studio:
-
-### Stop Label Studio
-```bash
-sudo pkill -f label-studio
-```
-
-### Start Label Studio Manually
-```bash
-cd /home/user/.label-studio
-source venv/bin/activate
-label-studio start --host 0.0.0.0 --port 8080 --data-dir /home/user/.label-studio
-```
+The installation script creates convenient commands to manage Label Studio:
 
 ### Check Status
 ```bash
-sudo systemctl status workstation-startup.service
+label-studio-status
+```
+Shows if Label Studio is running, the process ID, URL, and log location.
+
+### Restart Label Studio
+```bash
+label-studio-restart
+```
+Stops and restarts Label Studio. Useful after configuration changes.
+
+### Stop Label Studio
+```bash
+label-studio-stop
+```
+Stops the Label Studio service.
+
+### View Logs
+```bash
+label-studio-logs
+```
+Displays real-time Label Studio logs. Press `Ctrl+C` to exit.
+
+### Manual Start (if needed)
+```bash
+cd ~/.label-studio
+source venv/bin/activate
+label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data
 ```
 
 ## Troubleshooting
 Duration: 3
 
+### GPG Key Warnings During Installation
+
+If you see errors like:
+```
+W: GPG error: https://dl.yarnpkg.com/debian stable InRelease: 
+   The following signatures couldn't be verified because the public key is not available: NO_PUBKEY ...
+```
+
+**Solution**: These warnings are harmless and don't affect Label Studio installation. The script will continue and install Label Studio successfully. These errors come from other apt repositories on your system (like yarn, nodejs) and can be safely ignored.
+
 ### Label Studio Won't Start
 
 Check the logs:
 ```bash
-cat /home/user/.label-studio/label-studio.log
+label-studio-logs
+# Or directly:
+cat ~/.label-studio/label-studio.log
+```
+
+Check the status:
+```bash
+label-studio-status
 ```
 
 Verify the virtual environment:
 ```bash
-ls -la /home/user/.label-studio/venv
+ls -la ~/.label-studio/venv
 ```
 
 ### Port 8080 Already in Use
@@ -185,13 +228,19 @@ sudo lsof -i :8080
 You can modify the port in the startup script:
 ```bash
 sudo nano /etc/workstation-startup.d/50-start-label-studio
+# Change --port 8080 to another port like --port 8081
+```
+
+Then restart:
+```bash
+label-studio-restart
 ```
 
 ### Permission Issues
 
 Ensure proper ownership:
 ```bash
-sudo chown -R $USER:$USER /home/user/.label-studio
+sudo chown -R $USER:$USER ~/.label-studio
 ```
 
 ### Script Fails to Install
@@ -204,6 +253,11 @@ sudo -v
 Check internet connectivity:
 ```bash
 ping -c 3 pypi.org
+```
+
+Verify Python is available:
+```bash
+python3 --version
 ```
 
 ## Next Steps

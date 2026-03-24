@@ -29,13 +29,14 @@ jobs:
           claat export -o docs/codelabs codelabs/*.md
           echo "Codelabs output:"
           tree docs/codelabs || true
-      - name: Patch HTML with close button script and Commit
+      - name: Patch HTML with scripts and Commit
         run: |
           find docs/codelabs -name index.html | while read f; do
             tmpfile=$(mktemp)
             awk '
               /<\/body>/ {
                 print "<script src=\"/optics-si-cloud/codelabs/assets/close-button-patch.js\"></script>"
+                print "<script src=\"/optics-si-cloud/codelabs/assets/copy-code-button.js\"></script>"
               }
               { print }
             ' "$f" > "$tmpfile" && mv "$tmpfile" "$f"
