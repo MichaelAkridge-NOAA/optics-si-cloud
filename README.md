@@ -1,8 +1,8 @@
-# Optics SI Cloud
+# Optics SI Cloud Tools
 
-<a href="https://michaelakridge-noaa.github.io/optics-si-cloud/" target="_blank"><img src="./docs/logo/optics_si_logo_v1.png" align="right" alt="logo" height="250"/></a>
+<a href="https://michaelakridge-noaa.github.io/optics-si-cloud-tools/" target="_blank"><img src="./docs/logo/optics_si_logo_v1.png" align="right" alt="logo" height="250"/></a>
 
-Optics SI Cloud repository is to support data science workflows, cloud deployment, documentation, and reproducible research using cloud workstations and resources.
+Optics SI cloud tools repository is to support data science workflows, cloud deployment, documentation, and reproducible research using cloud workstations and resources.
 
 ### Main Folders
 - **cloud/**: Cloud deployment resources (e.g., Terraform, AWS, Azure, GCP configs).

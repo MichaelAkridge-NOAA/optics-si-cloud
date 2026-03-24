@@ -35,8 +35,8 @@ jobs:
             tmpfile=$(mktemp)
             awk '
               /<\/body>/ {
-                print "<script src=\"/optics-si-cloud/codelabs/assets/close-button-patch.js\"></script>"
-                print "<script src=\"/optics-si-cloud/codelabs/assets/copy-code-button.js\"></script>"
+                print "<script src=\"/optics-si-cloud-tools/codelabs/assets/close-button-patch.js\"></script>"
+                print "<script src=\"/optics-si-cloud-tools/codelabs/assets/copy-code-button.js\"></script>"
               }
               { print }
             ' "$f" > "$tmpfile" && mv "$tmpfile" "$f"

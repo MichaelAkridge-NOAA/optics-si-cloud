@@ -4,7 +4,7 @@ categories: Label Studio, Cloud Workstation, Setup
 tags: label-studio, cloud, automation, script
 status: Published
 authors: Optics SI Team
-Feedback Link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud
+Feedback Link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools
 
 # Install Label Studio via Script
 
@@ -27,13 +27,13 @@ This codelab walks you through installing Label Studio on a Google Cloud Worksta
 ## Download the Installation Script
 Duration: 2
 
-The installation script is located in the `scripts` directory of the optics-si-cloud repository.
+The installation script is located in the `scripts` directory of the optics-si-cloud-tools repository.
 
 **Option 1: Download the script directly** (Recommended)
 
 ```bash
 # Download the script to your current directory
-wget https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud/main/scripts/install_label_studio.sh
+wget https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/install_label_studio.sh
 chmod +x install_label_studio.sh
 ```
 
@@ -43,7 +43,7 @@ If you have already cloned the repository:
 
 ```bash
 # Navigate to the scripts directory
-cd optics-si-cloud/scripts
+cd optics-si-cloud-tools/scripts
 chmod +x install_label_studio.sh
 ```
 
@@ -275,7 +275,7 @@ Congratulations! You've successfully installed Label Studio using the automated 
 ### Additional Resources
 - [Label Studio Documentation](https://labelstud.io/guide/)
 - [Label Studio GitHub](https://github.com/heartexlabs/label-studio)
-- [Optics SI Cloud Repository](https://github.com/MichaelAkridge-NOAA/optics-si-cloud)
+- [Optics SI Cloud Tools Repository](https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools)
 
 <aside class="positive">
 For Docker-based installation, see the "Install Label Studio via Docker" codelab.
