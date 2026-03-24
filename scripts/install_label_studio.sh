@@ -89,6 +89,7 @@ su - "$ACTUAL_USER" -c "cd '$LABEL_STUDIO_HOME' && nohup '$LABEL_STUDIO_HOME/ven
     --host 0.0.0.0 \
     --port 8080 \
     --data-dir '$LABEL_STUDIO_HOME/data' \
+    --allow-origins '*' \
     >> '$LOG_FILE' 2>&1 &"
 
 echo "Label Studio started. PID: $!" | tee -a "$LOG_FILE"

@@ -192,6 +192,102 @@ label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data
 ## Troubleshooting
 Duration: 3
 
+### Cloud Workstation Port Forwarding Issues
+
+**Problem**: "Unable to forward your request to a backend" or "Couldn't connect to a server on port 8080"
+
+This is the most common issue with Cloud Workstations. Try these steps in order:
+
+**Step 1: Check if Label Studio is actually running**
+```bash
+label-studio-status
+```
+
+**Step 2: Check the logs for errors**
+```bash
+label-studio-logs
+# Press Ctrl+C to exit
+# Or view the entire log:
+cat ~/.label-studio/label-studio.log
+```
+
+**Step 3: Verify Label Studio is listening on the correct interface**
+```bash
+sudo netstat -tlnp | grep 8080
+# If netstat is not available, try:
+ps aux | grep label-studio
+```
+
+You should see `0.0.0.0:8080` (listening on all interfaces), NOT `127.0.0.1:8080`.
+
+**Step 4: Check if the log file exists and what it says**
+```bash
+# Find where Label Studio is actually logging
+ls -la ~/.label-studio/
+# Check if log file exists
+if [ -f ~/.label-studio/label-studio.log ]; then
+  tail -100 ~/.label-studio/label-studio.log
+else
+  echo "Log file does not exist - Label Studio may not be starting properly"
+fi
+```
+
+**Step 5: Manually verify Label Studio can start**
+```bash
+# Stop any existing processes
+pkill -f label-studio
+sleep 2
+
+# Try starting Label Studio manually and watch for errors
+cd ~/.label-studio
+source venv/bin/activate
+label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data
+```
+
+This will run in foreground so you can see any errors. If it starts successfully, press `Ctrl+C` and restart with the background command.
+
+**Step 6: Start in background with proper logging**
+```bash
+cd ~/.label-studio
+source venv/bin/activate
+nohup label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data > ~/label-studio.log 2>&1 &
+
+# Wait and check the log
+sleep 10
+tail -50 ~/label-studio.log
+
+# Test locally
+curl -v http://localhost:8080
+```
+
+**Step 7: For Cloud Workstation port forwarding, you may need to allow external origins**
+
+Create or edit `~/.label-studio/config.json`:
+```bash
+cat > ~/.label-studio/config.json << 'EOF'
+{
+  "allow_cors": true,
+  "cors_origin": "*"
+}
+EOF
+```
+
+Then restart:
+```bash
+pkill -f label-studio
+cd ~/.label-studio
+source venv/bin/activate
+nohup label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data --allow-origins '*' > ~/label-studio.log 2>&1 &
+```
+
+<aside class="positive">
+Cloud Workstation port forwarding should work automatically without manual port mapping if Label Studio is listening on 0.0.0.0:8080. The --allow-origins flag helps with CORS issues in the Cloud Workstation proxy.
+</aside>
+
+<aside class="positive">
+After restarting, wait at least 30 seconds before trying to access through the Cloud Workstation port forwarding URL. Label Studio can take time to fully initialize.
+</aside>
+
 ### GPG Key Warnings During Installation
 
 If you see errors like:
@@ -220,6 +316,11 @@ Verify the virtual environment:
 ```bash
 ls -la ~/.label-studio/venv
 ```
+
+Common issues in logs:
+- **Database locked**: Kill existing processes and restart
+- **Permission denied**: Run `sudo chown -R $USER:$USER ~/.label-studio`
+- **Module not found**: Reinstall with `source ~/.label-studio/venv/bin/activate && pip install --upgrade label-studio`
 
 ### Port 8080 Already in Use
 
