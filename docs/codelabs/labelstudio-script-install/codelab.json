@@ -1,0 +1,29 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-03-24T19:03:01Z",
+  "id": "labelstudio-script-install",
+  "duration": 0,
+  "title": "Install Label Studio via Script",
+  "authors": "Optics SI Team",
+  "summary": "Install Label Studio using an automated script on Google Cloud Workstation",
+  "source": "codelabs/labelstudio-script-install.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "labelstudio",
+    "cloud",
+    "automation"
+  ],
+  "tags": [
+    "label-studio",
+    "cloud",
+    "automation",
+    "script"
+  ],
+  "url": "labelstudio-script-install"
+}

@@ -1,0 +1,226 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Install Label Studio via Script</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="labelstudio-script-install"
+                  title="Install Label Studio via Script"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud">
+    
+      <google-codelab-step label="Overview" duration="2">
+        <p>This codelab walks you through installing Label Studio on a Google Cloud Workstation using an automated installation script. Label Studio is an open-source data labeling tool that supports various data types including images, audio, text, time series, and video.</p>
+        <h2 is-upgraded>What you&#39;ll learn</h2>
+        <ul>
+          <li>How to run the automated Label Studio installation script</li>
+          <li>Understanding the installation process and configuration</li>
+          <li>Accessing Label Studio after installation</li>
+          <li>Verifying the installation</li>
+        </ul>
+        <h2 is-upgraded>What you&#39;ll need</h2>
+        <ul>
+          <li>A Google Cloud Workstation or Linux machine with sudo access</li>
+          <li>Internet connectivity</li>
+          <li>Basic familiarity with the terminal</li>
+        </ul>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Download the Installation Script" duration="2">
+        <p>The installation script is located in the <code>scripts</code> directory of the optics-si-cloud repository.</p>
+        <p>You can download it directly or clone the repository:</p>
+        <pre><code language="language-bash" class="language-bash"># Option 1: Download the script directly
+wget https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud/main/scripts/install_label_studio.sh
+chmod +x install_label_studio.sh
+</code></pre>
+        <p>Or if you have the repository cloned:</p>
+        <pre><code language="language-bash" class="language-bash"># Navigate to the scripts directory
+cd optics-si-cloud/scripts
+chmod +x install_label_studio.sh
+</code></pre>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Run the Installation Script" duration="5">
+        <p>Execute the installation script with sudo privileges:</p>
+        <pre><code language="language-bash" class="language-bash">sudo ./install_label_studio.sh
+</code></pre>
+        <p>The script will:</p>
+        <ol type="1">
+          <li>Update system packages</li>
+          <li>Install Python 3 and pip if not already present</li>
+          <li>Create a virtual environment for Label Studio at <code>/home/user/.label-studio</code></li>
+          <li>Install Label Studio in the virtual environment</li>
+          <li>Create a startup script that launches Label Studio automatically on workstation boot</li>
+          <li>Start Label Studio on port 8080</li>
+        </ol>
+        <aside class="special">
+          <p>The script runs Label Studio as a background service and configures it to start automatically when your workstation boots.</p>
+        </aside>
+      </google-codelab-step>
+    
+      <google-codelab-step label="What the Script Does" duration="3">
+        <p>The installation script performs the following operations:</p>
+        <h2 is-upgraded>System Setup</h2>
+        <ul>
+          <li>Installs Python 3, pip, and venv packages</li>
+          <li>Creates a persistent directory at <code>/home/user/.label-studio</code></li>
+        </ul>
+        <h2 is-upgraded>Virtual Environment</h2>
+        <ul>
+          <li>Creates an isolated Python virtual environment</li>
+          <li>Installs the latest version of Label Studio</li>
+        </ul>
+        <h2 is-upgraded>Startup Configuration</h2>
+        <ul>
+          <li>Creates a startup script at <code>/etc/workstation-startup.d/50-start-label-studio</code></li>
+          <li>Configures Label Studio to:
+            <ul>
+              <li>Listen on all network interfaces (0.0.0.0)</li>
+              <li>Run on port 8080</li>
+              <li>Store data in <code>/home/user/.label-studio</code></li>
+              <li>Log output to <code>label-studio.log</code></li>
+            </ul>
+          </li>
+        </ul>
+        <h2 is-upgraded>Data Persistence</h2>
+        <p>The script ensures your data is preserved by:</p>
+        <ul>
+          <li>Storing all Label Studio data in your home directory</li>
+          <li>Using a persistent virtual environment</li>
+          <li>Logging all activity for troubleshooting</li>
+        </ul>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Access Label Studio" duration="2">
+        <p>Once the installation completes, Label Studio should be accessible:</p>
+        <ol type="1">
+          <li><strong>Local Access</strong>: Navigate to <code>http://localhost:8080</code> in your browser</li>
+          <li><strong>Remote Access</strong>: If accessing from another machine, use your workstation&#39;s IP address or hostname:
+            <pre><code>http://your-workstation-ip:8080</code></pre>
+          </li>
+          <li><strong>First Login</strong>: On first access, you&#39;ll be prompted to create an admin account:
+            <ul>
+              <li>Email: Your email address</li>
+              <li>Password: Choose a secure password</li>
+            </ul>
+          </li>
+        </ol>
+        <aside class="special">
+          <p>Label Studio will automatically start when your workstation boots, so you don&#39;t need to manually start it each time.</p>
+        </aside>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Verify Installation" duration="2">
+        <p>To verify that Label Studio is running correctly:</p>
+        <h2 is-upgraded>Check the Process</h2>
+        <pre><code language="language-bash" class="language-bash">ps aux | grep label-studio
+</code></pre>
+        <p>You should see the Label Studio process running.</p>
+        <h2 is-upgraded>Check the Logs</h2>
+        <pre><code language="language-bash" class="language-bash">cat /home/user/.label-studio/label-studio.log
+</code></pre>
+        <p>Look for messages indicating successful startup.</p>
+        <h2 is-upgraded>Test the Web Interface</h2>
+        <p>Navigate to <code>http://localhost:8080</code> and verify:</p>
+        <ul>
+          <li>The login page loads</li>
+          <li>You can create an account</li>
+          <li>The dashboard is accessible</li>
+        </ul>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Manual Control (Optional)" duration="2">
+        <p>If you need to manually control Label Studio:</p>
+        <h2 is-upgraded>Stop Label Studio</h2>
+        <pre><code language="language-bash" class="language-bash">sudo pkill -f label-studio
+</code></pre>
+        <h2 is-upgraded>Start Label Studio Manually</h2>
+        <pre><code language="language-bash" class="language-bash">cd /home/user/.label-studio
+source venv/bin/activate
+label-studio start --host 0.0.0.0 --port 8080 --data-dir /home/user/.label-studio
+</code></pre>
+        <h2 is-upgraded>Check Status</h2>
+        <pre><code language="language-bash" class="language-bash">sudo systemctl status workstation-startup.service
+</code></pre>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Troubleshooting" duration="3">
+        <h2 is-upgraded>Label Studio Won&#39;t Start</h2>
+        <p>Check the logs:</p>
+        <pre><code language="language-bash" class="language-bash">cat /home/user/.label-studio/label-studio.log
+</code></pre>
+        <p>Verify the virtual environment:</p>
+        <pre><code language="language-bash" class="language-bash">ls -la /home/user/.label-studio/venv
+</code></pre>
+        <h2 is-upgraded>Port 8080 Already in Use</h2>
+        <p>Check what&#39;s using the port:</p>
+        <pre><code language="language-bash" class="language-bash">sudo lsof -i :8080
+</code></pre>
+        <p>You can modify the port in the startup script:</p>
+        <pre><code language="language-bash" class="language-bash">sudo nano /etc/workstation-startup.d/50-start-label-studio
+</code></pre>
+        <h2 is-upgraded>Permission Issues</h2>
+        <p>Ensure proper ownership:</p>
+        <pre><code language="language-bash" class="language-bash">sudo chown -R $USER:$USER /home/user/.label-studio
+</code></pre>
+        <h2 is-upgraded>Script Fails to Install</h2>
+        <p>Make sure you have sudo access:</p>
+        <pre><code language="language-bash" class="language-bash">sudo -v
+</code></pre>
+        <p>Check internet connectivity:</p>
+        <pre><code language="language-bash" class="language-bash">ping -c 3 pypi.org
+</code></pre>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="1">
+        <p>Congratulations! You&#39;ve successfully installed Label Studio using the automated script.</p>
+        <h2 is-upgraded>What&#39;s Next?</h2>
+        <ul>
+          <li>Import your first dataset</li>
+          <li>Create a labeling project</li>
+          <li>Configure labeling interfaces</li>
+          <li>Set up ML-assisted labeling</li>
+          <li>Explore Label Studio&#39;s integrations</li>
+        </ul>
+        <h2 is-upgraded>Additional Resources</h2>
+        <ul>
+          <li><a href="https://labelstud.io/guide/" target="_blank">Label Studio Documentation</a></li>
+          <li><a href="https://github.com/heartexlabs/label-studio" target="_blank">Label Studio GitHub</a></li>
+          <li><a href="https://github.com/MichaelAkridge-NOAA/optics-si-cloud" target="_blank">Optics SI Cloud Repository</a></li>
+        </ul>
+        <aside class="special">
+          <p>For Docker-based installation, see the &#34;Install Label Studio via Docker&#34; codelab.</p>
+        </aside>
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud/codelabs/assets/close-button-patch.js"></script>
+
+</body>
+</html>

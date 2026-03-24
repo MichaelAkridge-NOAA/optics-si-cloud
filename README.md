@@ -1,13 +1,13 @@
-# CorAI (Coral AI)
+# Optics SI Cloud
 
-<a href="https://michaelakridge-noaa.github.io/CorAI/" target="_blank"><img src="./documents/images/v2.png" align="right" alt="logo" height="250"/></a>
+<a href="https://michaelakridge-noaa.github.io/optics-si-cloud/" target="_blank"><img src="./docs/logo/optics_si_logo_v1.png" align="right" alt="logo" height="250"/></a>
 
-CorAI (Coral AI) is a project focused on applying AI/ML to coral reef research, monitoring, and conservation. This repository is structured to support data science workflows, cloud deployment, documentation, and reproducible research.
+Optics SI Cloud repository is to support data science workflows, cloud deployment, documentation, and reproducible research using cloud workstations and resources.
 
 ### Main Folders
+- **cloud/**: Cloud deployment resources (e.g., Terraform, AWS, Azure, GCP configs).
 - **scripts/**: Python and shell scripts for data processing, model training, and automation.
 - **notebooks/**: Jupyter notebooks for exploration, analysis, and prototyping.
-- **cloud/**: Cloud deployment resources (e.g., Terraform, AWS, Azure, GCP configs).
 - **documents/**: Project documentation, reports, and references.
 - **data/**: Example datasets, data schemas, and data management scripts.
 - **models/**: Pretrained models, model checkpoints, and training logs.
