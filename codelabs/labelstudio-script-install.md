@@ -257,31 +257,11 @@ sleep 10
 tail -50 ~/label-studio.log
 
 # Test locally
-curl -v http://localhost:8080
-```
-
-**Step 7: For Cloud Workstation port forwarding, you may need to allow external origins**
-
-Create or edit `~/.label-studio/config.json`:
-```bash
-cat > ~/.label-studio/config.json << 'EOF'
-{
-  "allow_cors": true,
-  "cors_origin": "*"
-}
-EOF
-```
-
-Then restart:
-```bash
-pkill -f label-studio
-cd ~/.label-studio
-source venv/bin/activate
-nohup label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data --allow-origins '*' > ~/label-studio.log 2>&1 &
+curl -I http://localhost:8080
 ```
 
 <aside class="positive">
-Cloud Workstation port forwarding should work automatically without manual port mapping if Label Studio is listening on 0.0.0.0:8080. The --allow-origins flag helps with CORS issues in the Cloud Workstation proxy.
+Cloud Workstation port forwarding should work automatically without manual configuration if Label Studio is listening on 0.0.0.0:8080 and responding to HTTP requests.
 </aside>
 
 <aside class="positive">

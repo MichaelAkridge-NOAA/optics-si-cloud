@@ -84,12 +84,21 @@ fi
 echo "Starting Label Studio..." | tee -a "$LOG_FILE"
 cd "$LABEL_STUDIO_HOME"
 
+# Set environment variables for Cloud Workstation proxy compatibility
+# This allows CSRF to work through the Cloud Workstation port forwarding proxy
+export LABEL_STUDIO_HOST="https://*.cloudworkstations.dev"
+export CSRF_TRUSTED_ORIGINS="https://*.cloudworkstations.dev,https://*.cluster-*.cloudworkstations.dev"
+export LABEL_STUDIO_DISABLE_PROXY_HEADER_VALIDATION="true"
+
 # Run Label Studio in the background as the actual user
-su - "$ACTUAL_USER" -c "cd '$LABEL_STUDIO_HOME' && nohup '$LABEL_STUDIO_HOME/venv/bin/label-studio' start \
+su - "$ACTUAL_USER" -c "cd '$LABEL_STUDIO_HOME' && \
+    export LABEL_STUDIO_HOST='https://*.cloudworkstations.dev' && \
+    export CSRF_TRUSTED_ORIGINS='https://*.cloudworkstations.dev,https://*.cluster-*.cloudworkstations.dev' && \
+    export LABEL_STUDIO_DISABLE_PROXY_HEADER_VALIDATION='true' && \
+    nohup '$LABEL_STUDIO_HOME/venv/bin/label-studio' start \
     --host 0.0.0.0 \
     --port 8080 \
     --data-dir '$LABEL_STUDIO_HOME/data' \
-    --allow-origins '*' \
     >> '$LOG_FILE' 2>&1 &"
 
 echo "Label Studio started. PID: $!" | tee -a "$LOG_FILE"
@@ -171,4 +180,29 @@ echo ""
 echo "Starting Label Studio now..."
 /etc/workstation-startup.d/50-start-label-studio
 echo ""
-echo "Label Studio should now be accessible at: http://localhost:8080"
+echo "Waiting for Label Studio to initialize (this may take 30-60 seconds on first run)..."
+echo ""
+
+# Wait for Label Studio to be ready
+MAX_WAIT=90
+WAITED=0
+while [ $WAITED -lt $MAX_WAIT ]; do
+    if curl -s -o /dev/null -w "%{http_code}" http://localhost:8080 2>/dev/null | grep -q "200\|302"; then
+        echo ""
+        echo "✓ Label Studio is ready!"
+        echo ""
+        echo "Access Label Studio at: http://localhost:8080"
+        echo "For Cloud Workstations, use your workstation's port 8080 URL."
+        exit 0
+    fi
+    sleep 5
+    WAITED=$((WAITED + 5))
+    echo "  Still waiting... ($WAITED seconds)"
+done
+
+echo ""
+echo "Label Studio is starting but may need more time."
+echo "Check status with: label-studio-status"
+echo "View logs with: label-studio-logs"
+echo ""
+echo "Once ready, access at: http://localhost:8080"
