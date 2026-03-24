@@ -565,6 +565,16 @@ echo ""
 echo "NOTE: Commands persist across workstation restarts (stored in ~/.local/bin)."
 echo "      To use commands in this terminal session, run: source ~/.bashrc"
 echo ""
+
+# Verify critical CSRF setting before starting
+echo "Verifying configuration..."
+if grep -q "USE_ENFORCE_CSRF_CHECKS=0" "$LABEL_STUDIO_HOME/.env"; then
+    echo "✓ CSRF bypass configured"
+else
+    echo "⚠ Warning: USE_ENFORCE_CSRF_CHECKS not found in .env - CSRF errors may occur"
+fi
+
+echo ""
 echo "Starting Label Studio now..."
 "$LABEL_STUDIO_HOME/startup.sh"
 echo ""
