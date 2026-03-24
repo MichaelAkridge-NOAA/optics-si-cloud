@@ -84,17 +84,15 @@ fi
 echo "Starting Label Studio..." | tee -a "$LOG_FILE"
 cd "$LABEL_STUDIO_HOME"
 
-# Set environment variables for Cloud Workstation proxy compatibility
-# This allows CSRF to work through the Cloud Workstation port forwarding proxy
-export LABEL_STUDIO_HOST="https://*.cloudworkstations.dev"
-export CSRF_TRUSTED_ORIGINS="https://*.cloudworkstations.dev,https://*.cluster-*.cloudworkstations.dev"
-export LABEL_STUDIO_DISABLE_PROXY_HEADER_VALIDATION="true"
-
 # Run Label Studio in the background as the actual user
+# Environment variables for Cloud Workstation proxy compatibility:
+# - CSRF_TRUSTED_ORIGINS: Allows login through Cloud Workstation proxy
+# - USE_X_FORWARDED_HOST: Trusts the proxy's forwarded host header
+# - LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED: Enables proper static file serving
 su - "$ACTUAL_USER" -c "cd '$LABEL_STUDIO_HOME' && \
-    export LABEL_STUDIO_HOST='https://*.cloudworkstations.dev' && \
     export CSRF_TRUSTED_ORIGINS='https://*.cloudworkstations.dev,https://*.cluster-*.cloudworkstations.dev' && \
-    export LABEL_STUDIO_DISABLE_PROXY_HEADER_VALIDATION='true' && \
+    export USE_X_FORWARDED_HOST='true' && \
+    export LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED='true' && \
     nohup '$LABEL_STUDIO_HOME/venv/bin/label-studio' start \
     --host 0.0.0.0 \
     --port 8080 \
