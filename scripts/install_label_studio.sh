@@ -3,8 +3,12 @@ set -e
 
 # =============================================================================
 # Label Studio Installation Script for Google Cloud Workstations
-# Version: 2.0.5 (2024-03-24)
+# Version: 2.0.6 (2024-03-24)
 # =============================================================================
+# Changes in 2.0.6:
+#   - CRITICAL FIX: .env now written to ~/.local/share/label-studio/.env
+#     where Label Studio actually reads it (was only in ~/.label-studio/)
+#   - This was the root cause of CSRF 403 errors persisting
 # Changes in 2.0.5:
 #   - Added: SSRF_PROTECTION_ENABLED=false and EXPERIMENTAL_FEATURES=1
 # Changes in 2.0.4:
@@ -26,7 +30,7 @@ set -e
 #   - Dynamic URL detection from DNS/resolv.conf
 #   - New commands: label-studio-set-url, label-studio-diagnostics
 # =============================================================================
-SCRIPT_VERSION="2.0.5"
+SCRIPT_VERSION="2.0.6"
 
 echo "=============================================="
 echo "Label Studio Installer v${SCRIPT_VERSION}"
@@ -111,6 +115,13 @@ echo "✓ Label Studio version: $LS_VERSION"
 # Write environment config file for Cloud Workstation proxy compatibility
 echo "Writing environment config..."
 
+# IMPORTANT: Label Studio reads .env from its BASE_DATA_DIR, which defaults to
+# ~/.local/share/label-studio/ on Linux. We write .env to BOTH our directory
+# AND Label Studio's default data directory so env vars are always loaded.
+LS_DATA_DIR="$ACTUAL_HOME/.local/share/label-studio"
+sudo -u "$ACTUAL_USER" mkdir -p "$LS_DATA_DIR"
+sudo -u "$ACTUAL_USER" mkdir -p "$LABEL_STUDIO_HOME/data"
+
 # Note: We use a regular heredoc (not 'ENVEOF') so variables expand
 cat > "$LABEL_STUDIO_HOME/.env" << ENVEOF
 # Label Studio environment configuration
@@ -152,9 +163,15 @@ ENVEOF
 chown "$ACTUAL_USER:$ACTUAL_USER" "$LABEL_STUDIO_HOME/.env"
 echo "✓ Environment config written to $LABEL_STUDIO_HOME/.env"
 
-# Verify .env was written
-if [ ! -f "$LABEL_STUDIO_HOME/.env" ]; then
-    echo "Error: Failed to write .env file"
+# Copy .env to Label Studio's default data directory so it's always loaded
+# Label Studio reads: ~/.local/share/label-studio/.env on startup
+cp "$LABEL_STUDIO_HOME/.env" "$LS_DATA_DIR/.env"
+chown "$ACTUAL_USER:$ACTUAL_USER" "$LS_DATA_DIR/.env"
+echo "✓ Environment config also written to $LS_DATA_DIR/.env"
+
+# Verify .env was written to both locations
+if [ ! -f "$LABEL_STUDIO_HOME/.env" ] || [ ! -f "$LS_DATA_DIR/.env" ]; then
+    echo "Error: Failed to write .env file(s)"
     exit 1
 fi
 
@@ -276,6 +293,17 @@ DYNEOF
     echo "      Run 'label-studio-set-url https://PORT-HOST.CLUSTER.cloudworkstations.dev' if login fails." | tee -a "$LOG_FILE"
 fi
 chown "$ACTUAL_USER" "$RUNTIME_ENV_FILE" 2>/dev/null || true
+
+# Also merge and copy final env to Label Studio's default data directory
+# This is where Label Studio actually reads .env on startup
+LS_DATA_DIR="$ACTUAL_HOME/.local/share/label-studio"
+mkdir -p "$LS_DATA_DIR"
+# Combine static .env + runtime overrides into the LS data dir .env
+cat "$ENV_FILE" > "$LS_DATA_DIR/.env" 2>/dev/null || true
+echo "" >> "$LS_DATA_DIR/.env"
+cat "$RUNTIME_ENV_FILE" >> "$LS_DATA_DIR/.env" 2>/dev/null || true
+chown "$ACTUAL_USER" "$LS_DATA_DIR/.env" 2>/dev/null || true
+echo "Environment merged to $LS_DATA_DIR/.env" | tee -a "$LOG_FILE"
 
 # Start Label Studio as a background service
 echo "Starting Label Studio..." | tee -a "$LOG_FILE"
