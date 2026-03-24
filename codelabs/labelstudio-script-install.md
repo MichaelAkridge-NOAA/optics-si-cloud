@@ -88,25 +88,29 @@ The installation script performs the following operations:
 
 ### System Setup
 - Installs Python 3, pip, and venv packages
-- Creates a persistent directory at `/home/user/.label-studio`
+- Creates a persistent directory at `~/.label-studio`
 
 ### Virtual Environment
 - Creates an isolated Python virtual environment
 - Installs the latest version of Label Studio
 
 ### Startup Configuration
-- Creates a startup script at `/etc/workstation-startup.d/50-start-label-studio`
+- Creates a startup script at `~/.label-studio/startup.sh` (persists across restarts)
+- Adds auto-start fallback to `~/.bashrc`
 - Configures Label Studio to:
   - Listen on all network interfaces (0.0.0.0)
   - Run on port 8080
-  - Store data in `/home/user/.label-studio`
-  - Log output to `label-studio.log`
+  - Store data in `~/.label-studio/data`
+  - Log output to `~/.label-studio/label-studio.log`
 
 ### Data Persistence
-The script ensures your data is preserved by:
-- Storing all Label Studio data in your home directory
-- Using a persistent virtual environment
-- Logging all activity for troubleshooting
+Cloud Workstations only persist your home directory (`~/`). The script stores everything there:
+- All Label Studio data and config: `~/.label-studio/`
+- Management commands: `~/.local/bin/` (added to PATH)
+- Virtual environment: `~/.label-studio/venv/`
+- Activity logs: `~/.label-studio/label-studio.log`
+
+This means your installation, data, and commands survive workstation restarts.
 
 ## Access Label Studio
 Duration: 2
@@ -125,7 +129,7 @@ Once the installation completes, Label Studio should be accessible:
    - Password: Choose a secure password
 
 <aside class="positive">
-Label Studio will automatically start when your workstation boots, so you don't need to manually start it each time.
+Label Studio will automatically start when your workstation boots. Commands like `label-studio-status` persist across restarts.
 </aside>
 
 ## Verify Installation
@@ -181,6 +185,24 @@ Stops the Label Studio service.
 label-studio-logs
 ```
 Displays real-time Label Studio logs. Press `Ctrl+C` to exit.
+
+### Set External URL (for CSRF fix)
+```bash
+label-studio-set-url https://8080-YOUR-HOST.YOUR-CLUSTER.cloudworkstations.dev
+```
+Sets the Cloud Workstation external URL for CSRF/proxy compatibility. Saves to `~/.label-studio/.env.custom` and restarts automatically.
+
+### Run Diagnostics
+```bash
+label-studio-diagnostics
+```
+Shows the auto-detected URL, active config files, hostname, DNS info, and recent log lines. Use this first when troubleshooting CSRF or connectivity issues.
+
+### Update Label Studio
+```bash
+label-studio-update
+```
+Updates Label Studio to the latest version.
 
 ### Manual Start (if needed)
 ```bash
@@ -267,6 +289,47 @@ Cloud Workstation port forwarding should work automatically without manual confi
 <aside class="positive">
 After restarting, wait at least 30 seconds before trying to access through the Cloud Workstation port forwarding URL. Label Studio can take time to fully initialize.
 </aside>
+
+### CSRF / 403 Forbidden Error on Login
+
+**Problem**: The login page loads but clicking "Sign In" returns a `403 CSRF verification failed` error.
+
+This happens because Django's CSRF middleware doesn't recognize requests forwarded through the Cloud Workstation proxy.
+
+**Solution 1 — Run diagnostics** to see what URL was auto-detected:
+```bash
+label-studio-diagnostics
+```
+
+This shows:
+- Whether Label Studio is running
+- What URL the startup script detected
+- What's in each config file
+- The DNS-detected Cloud Workstation domain
+
+**Solution 2 — Manually set your workstation URL** (most reliable fix):
+```bash
+# Find your URL: open port 8080 in Cloud Workstations and copy the URL from the browser.
+# It looks like: https://8080-w-username-abc123.cluster-xyz456.cloudworkstations.dev
+
+label-studio-set-url https://8080-YOUR-HOSTNAME.YOUR-CLUSTER.cloudworkstations.dev
+```
+
+This saves the URL to `~/.label-studio/.env.custom` and restarts Label Studio automatically.
+
+**Solution 3 — Quick manual restart** (to re-run URL auto-detection):
+```bash
+label-studio-restart
+```
+
+The startup script re-detects your workstation URL on every boot via `/etc/resolv.conf` DNS search domains.
+
+<aside class="negative">
+The URL changes when a workstation is recreated. If you get 403 errors after recreating your workstation, run `label-studio-set-url` again with the new URL.
+</aside>
+
+**How CSRF protection works here:**
+The install script sets `USE_ENFORCE_CSRF_CHECKS=0` in `~/.label-studio/.env`. This disables Django's CSRF enforcement using Label Studio's built-in `DisableCSRF` middleware — the same mechanism Label Studio uses for API access. This is safe because Cloud Workstations already enforces access via Google IAM.
 
 ### GPG Key Warnings During Installation
 
