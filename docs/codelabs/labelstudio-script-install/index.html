@@ -194,7 +194,77 @@ label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data
       </google-codelab-step>
     
       <google-codelab-step label="Troubleshooting" duration="3">
-        <h2 is-upgraded>GPG Key Warnings During Installation</h2>
+        <h2 is-upgraded>Cloud Workstation Port Forwarding Issues</h2>
+<p><strong>Problem</strong>: &#34;Unable to forward your request to a backend&#34; or &#34;Couldn&#39;t connect to a server on port 8080&#34;</p>
+<p>This is the most common issue with Cloud Workstations. Try these steps in order:</p>
+<p><strong>Step 1: Check if Label Studio is actually running</strong></p>
+<pre><code language="language-bash" class="language-bash">label-studio-status
+</code></pre>
+<p><strong>Step 2: Check the logs for errors</strong></p>
+<pre><code language="language-bash" class="language-bash">label-studio-logs
+# Press Ctrl+C to exit
+# Or view the entire log:
+cat ~/.label-studio/label-studio.log
+</code></pre>
+<p><strong>Step 3: Verify Label Studio is listening on the correct interface</strong></p>
+<pre><code language="language-bash" class="language-bash">sudo netstat -tlnp | grep 8080
+# If netstat is not available, try:
+ps aux | grep label-studio
+</code></pre>
+<p>You should see <code>0.0.0.0:8080</code> (listening on all interfaces), NOT <code>127.0.0.1:8080</code>.</p>
+<p><strong>Step 4: Check if the log file exists and what it says</strong></p>
+<pre><code language="language-bash" class="language-bash"># Find where Label Studio is actually logging
+ls -la ~/.label-studio/
+# Check if log file exists
+if [ -f ~/.label-studio/label-studio.log ]; then
+  tail -100 ~/.label-studio/label-studio.log
+else
+  echo &#34;Log file does not exist - Label Studio may not be starting properly&#34;
+fi
+</code></pre>
+<p><strong>Step 5: Manually verify Label Studio can start</strong></p>
+<pre><code language="language-bash" class="language-bash"># Stop any existing processes
+pkill -f label-studio
+sleep 2
+
+# Try starting Label Studio manually and watch for errors
+cd ~/.label-studio
+source venv/bin/activate
+label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data
+</code></pre>
+<p>This will run in foreground so you can see any errors. If it starts successfully, press <code>Ctrl+C</code> and restart with the background command.</p>
+<p><strong>Step 6: Start in background with proper logging</strong></p>
+<pre><code language="language-bash" class="language-bash">cd ~/.label-studio
+source venv/bin/activate
+nohup label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data &gt; ~/label-studio.log 2&gt;&amp;1 &amp;
+
+# Wait and check the log
+sleep 10
+tail -50 ~/label-studio.log
+
+# Test locally
+curl -v http://localhost:8080
+</code></pre>
+<p><strong>Step 7: For Cloud Workstation port forwarding, you may need to allow external origins</strong></p>
+<p>Create or edit <code>~/.label-studio/config.json</code>:</p>
+<pre><code language="language-bash" class="language-bash">cat &gt; ~/.label-studio/config.json &lt;&lt; &#39;EOF&#39;
+{
+  &#34;allow_cors&#34;: true,
+  &#34;cors_origin&#34;: &#34;*&#34;
+}
+EOF
+</code></pre>
+<p>Then restart:</p>
+<pre><code language="language-bash" class="language-bash">pkill -f label-studio
+cd ~/.label-studio
+source venv/bin/activate
+nohup label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data --allow-origins &#39;*&#39; &gt; ~/label-studio.log 2&gt;&amp;1 &amp;
+</code></pre>
+<aside class="special"><p> Cloud Workstation port forwarding should work automatically without manual port mapping if Label Studio is listening on 0.0.0.0:8080. The --allow-origins flag helps with CORS issues in the Cloud Workstation proxy. </p>
+</aside>
+<aside class="special"><p> After restarting, wait at least 30 seconds before trying to access through the Cloud Workstation port forwarding URL. Label Studio can take time to fully initialize. </p>
+</aside>
+<h2 is-upgraded>GPG Key Warnings During Installation</h2>
 <p>If you see errors like:</p>
 <pre><code>W: GPG error: https://dl.yarnpkg.com/debian stable InRelease: 
    The following signatures couldn&#39;t be verified because the public key is not available: NO_PUBKEY ...
@@ -212,6 +282,12 @@ cat ~/.label-studio/label-studio.log
 <p>Verify the virtual environment:</p>
 <pre><code language="language-bash" class="language-bash">ls -la ~/.label-studio/venv
 </code></pre>
+<p>Common issues in logs:</p>
+<ul>
+<li><strong>Database locked</strong>: Kill existing processes and restart</li>
+<li><strong>Permission denied</strong>: Run <code>sudo chown -R $USER:$USER ~/.label-studio</code></li>
+<li><strong>Module not found</strong>: Reinstall with <code>source ~/.label-studio/venv/bin/activate && pip install --upgrade label-studio</code></li>
+</ul>
 <h2 is-upgraded>Port 8080 Already in Use</h2>
 <p>Check what&#39;s using the port:</p>
 <pre><code language="language-bash" class="language-bash">sudo lsof -i :8080
