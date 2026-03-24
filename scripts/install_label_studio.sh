@@ -1,36 +1,28 @@
 #!/bin/bash
-set -e
+# NOTE: Do NOT use 'set -e' — it causes silent exits on Cloud Workstations
+# where many commands return non-zero unexpectedly.
 
 # =============================================================================
 # Label Studio Installation Script for Google Cloud Workstations
-# Version: 2.0.6 (2024-03-24)
+# Version: 2.0.7 (2024-03-24)
 # =============================================================================
+# Changes in 2.0.7:
+#   - REMOVED set -e (root cause of script silently stopping)
+#   - FIXED version check: use 'pip show' instead of 'label-studio --version'
+#     (--version starts Django server and hangs forever!)
+#   - Added step-by-step debug output so failures are visible
 # Changes in 2.0.6:
-#   - CRITICAL FIX: .env now written to ~/.local/share/label-studio/.env
-#     where Label Studio actually reads it (was only in ~/.label-studio/)
-#   - This was the root cause of CSRF 403 errors persisting
+#   - .env now written to ~/.local/share/label-studio/.env
 # Changes in 2.0.5:
 #   - Added: SSRF_PROTECTION_ENABLED=false and EXPERIMENTAL_FEATURES=1
-# Changes in 2.0.4:
-#   - Fixed: Version extraction now greps for exact line "Label Studio version:"
-# Changes in 2.0.3:
-#   - Fixed: sed regex using \+ (not POSIX) changed to -E flag with +
-#   - Fixed: Added || true to version check to prevent set -e exit
-# Changes in 2.0.2:
-#   - Fixed: Variable expansion in .env heredoc (LOCAL_FILES_DOCUMENT_ROOT)
-#   - Added: Verification that .env file was written
-# Changes in 2.0.1:
-#   - Fixed: grep -oP replaced with sed (PCRE not available on minimal Ubuntu)
-#   - Fixed: heredoc syntax for .env file writing
+# Changes in 2.0.4-2.0.1: Various POSIX compatibility fixes
 # Changes in 2.0.0:
 #   - Commands persist across workstation restarts (~/.local/bin/)
-#   - Auto-start via .bashrc fallback
 #   - USE_ENFORCE_CSRF_CHECKS=0 to disable CSRF (Cloud Workstations use IAM)
-#   - SECURE_PROXY_SSL_HEADER for proper HTTPS detection behind proxy
 #   - Dynamic URL detection from DNS/resolv.conf
 #   - New commands: label-studio-set-url, label-studio-diagnostics
 # =============================================================================
-SCRIPT_VERSION="2.0.6"
+SCRIPT_VERSION="2.0.7"
 
 echo "=============================================="
 echo "Label Studio Installer v${SCRIPT_VERSION}"
@@ -45,13 +37,15 @@ echo "Detected user: $ACTUAL_USER"
 echo "Home directory: $ACTUAL_HOME"
 
 # Fix common apt repository issues before proceeding
-echo "Checking apt repositories..."
-if sudo apt-get update 2>&1 | grep -q "NO_PUBKEY\|not signed"; then
-    echo "Warning: Some apt repositories have GPG key issues. These won't affect Label Studio installation."
-    echo "Continuing with Label Studio setup..."
+echo "[Step 1/10] Checking apt repositories..."
+apt_output=$(sudo apt-get update 2>&1 || true)
+if echo "$apt_output" | grep -q "NO_PUBKEY\|not signed"; then
+    echo "  Warning: Some apt repositories have GPG key issues. Won't affect Label Studio."
 fi
+echo "  ✓ apt update done"
 
 # Check Python version (Label Studio requires >= 3.10)
+echo "[Step 2/10] Checking Python version..."
 PYTHON_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null || echo "0.0")
 PYTHON_MAJOR=$(echo $PYTHON_VERSION | cut -d. -f1)
 PYTHON_MINOR=$(echo $PYTHON_VERSION | cut -d. -f2)
@@ -72,28 +66,30 @@ else
 fi
 
 # Install Python3 and pip if not already installed
-echo "Installing Python dependencies..."
+echo "[Step 3/10] Installing Python dependencies..."
 sudo apt-get install -y python3 python3-pip python3-venv || {
-    echo "Error: Failed to install Python dependencies"
+    echo "  ERROR: Failed to install Python dependencies"
     exit 1
 }
 
 # Create a persistent directory for Label Studio in the user's home
 LABEL_STUDIO_HOME="$ACTUAL_HOME/.label-studio"
-echo "Creating Label Studio directory at: $LABEL_STUDIO_HOME"
+echo "[Step 4/10] Creating Label Studio directory at: $LABEL_STUDIO_HOME"
 sudo -u "$ACTUAL_USER" mkdir -p "$LABEL_STUDIO_HOME"
 
 # Create a virtual environment for Label Studio
 if [ ! -d "$LABEL_STUDIO_HOME/venv" ]; then
-    echo "Creating Python virtual environment for Label Studio (using $PYTHON_BIN)..."
+    echo "[Step 5/10] Creating Python virtual environment (using $PYTHON_BIN)..."
     sudo -u "$ACTUAL_USER" $PYTHON_BIN -m venv "$LABEL_STUDIO_HOME/venv" || {
-        echo "Error: Failed to create virtual environment"
+        echo "  ERROR: Failed to create virtual environment"
         exit 1
     }
+else
+    echo "[Step 5/10] Virtual environment already exists, skipping."
 fi
 
 # Activate the virtual environment and install Label Studio
-echo "Installing Label Studio in virtual environment..."
+echo "[Step 6/10] Installing Label Studio in virtual environment..."
 sudo -u "$ACTUAL_USER" bash << EOFVENV
 source "$LABEL_STUDIO_HOME/venv/bin/activate"
 pip install --upgrade pip
@@ -105,15 +101,17 @@ if [ ! -f "$LABEL_STUDIO_HOME/venv/bin/label-studio" ]; then
     echo "Error: Label Studio installation failed"
     exit 1
 fi
-echo "✓ Label Studio installed successfully"
+echo "  ✓ Label Studio installed successfully"
 
-# Get and display the installed version
-# Look for the specific line "Label Studio version: X.X.X" in the output
-LS_VERSION=$(sudo -u "$ACTUAL_USER" bash -c "source '$LABEL_STUDIO_HOME/venv/bin/activate' && label-studio --version 2>&1" | grep "Label Studio version:" | head -1 | sed -E 's/.*version: ([0-9]+\.[0-9]+\.[0-9]+).*/\1/' || echo "unknown")
-echo "✓ Label Studio version: $LS_VERSION"
+# Get version using pip show (NOT label-studio --version which starts Django!)
+LS_VERSION=$(sudo -u "$ACTUAL_USER" bash -c "source '$LABEL_STUDIO_HOME/venv/bin/activate' && pip show label-studio 2>/dev/null" | grep -i '^Version:' | sed -E 's/Version: *//i' || echo "unknown")
+if [ -z "$LS_VERSION" ]; then
+    LS_VERSION="unknown"
+fi
+echo "  ✓ Label Studio version: $LS_VERSION"
 
 # Write environment config file for Cloud Workstation proxy compatibility
-echo "Writing environment config..."
+echo "[Step 7/10] Writing environment config..."
 
 # IMPORTANT: Label Studio reads .env from its BASE_DATA_DIR, which defaults to
 # ~/.local/share/label-studio/ on Linux. We write .env to BOTH our directory
@@ -178,11 +176,7 @@ fi
 # ============================================================
 # PERSISTENCE SETUP
 # ============================================================
-# Cloud Workstations only persist the home directory (~/).
-# We install everything to ~/.label-studio/ and ~/.local/bin/.
-# A small bootstrap in /etc/workstation-startup.d/ calls our
-# persisted startup script. We also add ~/.local/bin to PATH.
-# ============================================================
+echo "[Step 8/10] Setting up persistence (PATH, auto-start)..."
 
 # Create directories
 LOCAL_BIN="$ACTUAL_HOME/.local/bin"
@@ -360,7 +354,7 @@ BOOTSTRAP_EOF
 fi
 
 # Create management commands in ~/.local/bin/ (persists across restarts)
-echo "Creating management commands in ~/.local/bin/..."
+echo "[Step 9/10] Creating management commands in ~/.local/bin/..."
 
 sudo -u "$ACTUAL_USER" bash -c "cat > '$LOCAL_BIN/label-studio-status'" << 'EOF'
 #!/bin/bash
@@ -613,7 +607,7 @@ else
 fi
 
 echo ""
-echo "Starting Label Studio now..."
+echo "[Step 10/10] Starting Label Studio now..."
 "$LABEL_STUDIO_HOME/startup.sh"
 echo ""
 echo "Waiting for Label Studio to initialize..."
