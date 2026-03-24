@@ -49,16 +49,19 @@
     
       <google-codelab-step label="Download the Installation Script" duration="2">
         <p>The installation script is located in the <code>scripts</code> directory of the optics-si-cloud repository.</p>
-<p>You can download it directly or clone the repository:</p>
-<pre><code language="language-bash" class="language-bash"># Option 1: Download the script directly
+<p><strong>Option 1: Download the script directly</strong> (Recommended)</p>
+<pre><code language="language-bash" class="language-bash"># Download the script to your current directory
 wget https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud/main/scripts/install_label_studio.sh
 chmod +x install_label_studio.sh
 </code></pre>
-<p>Or if you have the repository cloned:</p>
+<p><strong>Option 2: Use the cloned repository</strong></p>
+<p>If you have already cloned the repository:</p>
 <pre><code language="language-bash" class="language-bash"># Navigate to the scripts directory
 cd optics-si-cloud/scripts
 chmod +x install_label_studio.sh
 </code></pre>
+<aside class="special"><p> Note: You don&#39;t need to clone the repository just to run the script. The direct download method (Option 1) is simpler. </p>
+</aside>
 
 
       </google-codelab-step>
@@ -69,14 +72,18 @@ chmod +x install_label_studio.sh
 </code></pre>
 <p>The script will:</p>
 <ol type="1">
-<li>Update system packages</li>
+<li>Detect your user and home directory automatically</li>
+<li>Check and update system packages</li>
 <li>Install Python 3 and pip if not already present</li>
-<li>Create a virtual environment for Label Studio at <code>/home/user/.label-studio</code></li>
+<li>Create a virtual environment for Label Studio at <code>~/.label-studio</code></li>
 <li>Install Label Studio in the virtual environment</li>
+<li>Create management commands (status, restart, stop, logs)</li>
 <li>Create a startup script that launches Label Studio automatically on workstation boot</li>
 <li>Start Label Studio on port 8080</li>
 </ol>
 <aside class="special"><p> The script runs Label Studio as a background service and configures it to start automatically when your workstation boots. </p>
+</aside>
+<aside class="special"><p> You may see GPG key warnings for some apt repositories (like yarn). These warnings are harmless and won&#39;t affect the Label Studio installation. </p>
 </aside>
 
 
@@ -156,30 +163,51 @@ chmod +x install_label_studio.sh
 
       </google-codelab-step>
     
-      <google-codelab-step label="Manual Control (Optional)" duration="2">
-        <p>If you need to manually control Label Studio:</p>
-<h2 is-upgraded>Stop Label Studio</h2>
-<pre><code language="language-bash" class="language-bash">sudo pkill -f label-studio
-</code></pre>
-<h2 is-upgraded>Start Label Studio Manually</h2>
-<pre><code language="language-bash" class="language-bash">cd /home/user/.label-studio
-source venv/bin/activate
-label-studio start --host 0.0.0.0 --port 8080 --data-dir /home/user/.label-studio
-</code></pre>
+      <google-codelab-step label="Management Commands" duration="2">
+        <p>The installation script creates convenient commands to manage Label Studio:</p>
 <h2 is-upgraded>Check Status</h2>
-<pre><code language="language-bash" class="language-bash">sudo systemctl status workstation-startup.service
+<pre><code language="language-bash" class="language-bash">label-studio-status
+</code></pre>
+<p>Shows if Label Studio is running, the process ID, URL, and log location.</p>
+<h2 is-upgraded>Restart Label Studio</h2>
+<pre><code language="language-bash" class="language-bash">label-studio-restart
+</code></pre>
+<p>Stops and restarts Label Studio. Useful after configuration changes.</p>
+<h2 is-upgraded>Stop Label Studio</h2>
+<pre><code language="language-bash" class="language-bash">label-studio-stop
+</code></pre>
+<p>Stops the Label Studio service.</p>
+<h2 is-upgraded>View Logs</h2>
+<pre><code language="language-bash" class="language-bash">label-studio-logs
+</code></pre>
+<p>Displays real-time Label Studio logs. Press <code>Ctrl+C</code> to exit.</p>
+<h2 is-upgraded>Manual Start (if needed)</h2>
+<pre><code language="language-bash" class="language-bash">cd ~/.label-studio
+source venv/bin/activate
+label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data
 </code></pre>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Troubleshooting" duration="3">
-        <h2 is-upgraded>Label Studio Won&#39;t Start</h2>
+        <h2 is-upgraded>GPG Key Warnings During Installation</h2>
+<p>If you see errors like:</p>
+<pre><code>W: GPG error: https://dl.yarnpkg.com/debian stable InRelease: 
+   The following signatures couldn&#39;t be verified because the public key is not available: NO_PUBKEY ...
+</code></pre>
+<p><strong>Solution</strong>: These warnings are harmless and don&#39;t affect Label Studio installation. The script will continue and install Label Studio successfully. These errors come from other apt repositories on your system (like yarn, nodejs) and can be safely ignored.</p>
+<h2 is-upgraded>Label Studio Won&#39;t Start</h2>
 <p>Check the logs:</p>
-<pre><code language="language-bash" class="language-bash">cat /home/user/.label-studio/label-studio.log
+<pre><code language="language-bash" class="language-bash">label-studio-logs
+# Or directly:
+cat ~/.label-studio/label-studio.log
+</code></pre>
+<p>Check the status:</p>
+<pre><code language="language-bash" class="language-bash">label-studio-status
 </code></pre>
 <p>Verify the virtual environment:</p>
-<pre><code language="language-bash" class="language-bash">ls -la /home/user/.label-studio/venv
+<pre><code language="language-bash" class="language-bash">ls -la ~/.label-studio/venv
 </code></pre>
 <h2 is-upgraded>Port 8080 Already in Use</h2>
 <p>Check what&#39;s using the port:</p>
@@ -187,10 +215,14 @@ label-studio start --host 0.0.0.0 --port 8080 --data-dir /home/user/.label-studi
 </code></pre>
 <p>You can modify the port in the startup script:</p>
 <pre><code language="language-bash" class="language-bash">sudo nano /etc/workstation-startup.d/50-start-label-studio
+# Change --port 8080 to another port like --port 8081
+</code></pre>
+<p>Then restart:</p>
+<pre><code language="language-bash" class="language-bash">label-studio-restart
 </code></pre>
 <h2 is-upgraded>Permission Issues</h2>
 <p>Ensure proper ownership:</p>
-<pre><code language="language-bash" class="language-bash">sudo chown -R $USER:$USER /home/user/.label-studio
+<pre><code language="language-bash" class="language-bash">sudo chown -R $USER:$USER ~/.label-studio
 </code></pre>
 <h2 is-upgraded>Script Fails to Install</h2>
 <p>Make sure you have sudo access:</p>
@@ -198,6 +230,9 @@ label-studio start --host 0.0.0.0 --port 8080 --data-dir /home/user/.label-studi
 </code></pre>
 <p>Check internet connectivity:</p>
 <pre><code language="language-bash" class="language-bash">ping -c 3 pypi.org
+</code></pre>
+<p>Verify Python is available:</p>
+<pre><code language="language-bash" class="language-bash">python3 --version
 </code></pre>
 
 
