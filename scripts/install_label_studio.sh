@@ -3,8 +3,11 @@ set -e
 
 # =============================================================================
 # Label Studio Installation Script for Google Cloud Workstations
-# Version: 2.0.2 (2024-03-24)
+# Version: 2.0.3 (2024-03-24)
 # =============================================================================
+# Changes in 2.0.3:
+#   - Fixed: sed regex using \+ (not POSIX) changed to -E flag with +
+#   - Fixed: Added || true to version check to prevent set -e exit
 # Changes in 2.0.2:
 #   - Fixed: Variable expansion in .env heredoc (LOCAL_FILES_DOCUMENT_ROOT)
 #   - Added: Verification that .env file was written
@@ -19,7 +22,7 @@ set -e
 #   - Dynamic URL detection from DNS/resolv.conf
 #   - New commands: label-studio-set-url, label-studio-diagnostics
 # =============================================================================
-SCRIPT_VERSION="2.0.2"
+SCRIPT_VERSION="2.0.3"
 
 echo "=============================================="
 echo "Label Studio Installer v${SCRIPT_VERSION}"
@@ -97,8 +100,9 @@ fi
 echo "✓ Label Studio installed successfully"
 
 # Get and display the installed version
-# Note: Use sed instead of grep -P since Cloud Workstations may not have PCRE support
-LS_VERSION=$(sudo -u "$ACTUAL_USER" bash -c "source '$LABEL_STUDIO_HOME/venv/bin/activate' && label-studio --version 2>/dev/null" | sed -n 's/.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p' | head -1)
+# Note: Use sed -E for extended regex (POSIX ERE) since basic sed doesn't support +
+# The || true ensures we don't exit on failure (set -e is active)
+LS_VERSION=$(sudo -u "$ACTUAL_USER" bash -c "source '$LABEL_STUDIO_HOME/venv/bin/activate' && label-studio --version 2>/dev/null" | sed -nE 's/.*([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' | head -1 || true)
 if [ -z "$LS_VERSION" ]; then
     LS_VERSION="unknown"
 fi
