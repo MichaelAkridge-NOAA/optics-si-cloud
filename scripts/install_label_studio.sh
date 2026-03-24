@@ -3,8 +3,12 @@ set -e
 
 # =============================================================================
 # Label Studio Installation Script for Google Cloud Workstations
-# Version: 2.0.3 (2024-03-24)
+# Version: 2.0.5 (2024-03-24)
 # =============================================================================
+# Changes in 2.0.5:
+#   - Added: SSRF_PROTECTION_ENABLED=false and EXPERIMENTAL_FEATURES=1
+# Changes in 2.0.4:
+#   - Fixed: Version extraction now greps for exact line "Label Studio version:"
 # Changes in 2.0.3:
 #   - Fixed: sed regex using \+ (not POSIX) changed to -E flag with +
 #   - Fixed: Added || true to version check to prevent set -e exit
@@ -22,7 +26,7 @@ set -e
 #   - Dynamic URL detection from DNS/resolv.conf
 #   - New commands: label-studio-set-url, label-studio-diagnostics
 # =============================================================================
-SCRIPT_VERSION="2.0.3"
+SCRIPT_VERSION="2.0.5"
 
 echo "=============================================="
 echo "Label Studio Installer v${SCRIPT_VERSION}"
@@ -100,12 +104,8 @@ fi
 echo "✓ Label Studio installed successfully"
 
 # Get and display the installed version
-# Note: Use sed -E for extended regex (POSIX ERE) since basic sed doesn't support +
-# The || true ensures we don't exit on failure (set -e is active)
-LS_VERSION=$(sudo -u "$ACTUAL_USER" bash -c "source '$LABEL_STUDIO_HOME/venv/bin/activate' && label-studio --version 2>/dev/null" | sed -nE 's/.*([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' | head -1 || true)
-if [ -z "$LS_VERSION" ]; then
-    LS_VERSION="unknown"
-fi
+# Look for the specific line "Label Studio version: X.X.X" in the output
+LS_VERSION=$(sudo -u "$ACTUAL_USER" bash -c "source '$LABEL_STUDIO_HOME/venv/bin/activate' && label-studio --version 2>&1" | grep "Label Studio version:" | head -1 | sed -E 's/.*version: ([0-9]+\.[0-9]+\.[0-9]+).*/\1/' || echo "unknown")
 echo "✓ Label Studio version: $LS_VERSION"
 
 # Write environment config file for Cloud Workstation proxy compatibility
@@ -125,6 +125,12 @@ cat > "$LABEL_STUDIO_HOME/.env" << ENVEOF
 # control, so CSRF protection is redundant. See Label Studio source:
 # core.middleware.DisableCSRF + USE_ENFORCE_CSRF_CHECKS setting.
 USE_ENFORCE_CSRF_CHECKS=0
+
+# Disable SSRF protection (safe in Cloud Workstation isolated environment)
+SSRF_PROTECTION_ENABLED=false
+
+# Enable experimental features (optional, enables preview features)
+EXPERIMENTAL_FEATURES=1
 
 # Trust the proxy's forwarded headers for correct URL/protocol detection
 USE_X_FORWARDED_HOST=true
