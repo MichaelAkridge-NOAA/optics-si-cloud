@@ -53,7 +53,25 @@ if [ ! -f "$LABEL_STUDIO_HOME/venv/bin/label-studio" ]; then
 fi
 echo "✓ Label Studio installed successfully"
 
-# Create a startup script that will run Label Studio on boot
+# Get and display the installed version
+LS_VERSION=$(sudo -u "$ACTUAL_USER" bash -c "source '$LABEL_STUDIO_HOME/venv/bin/activate' && label-studio --version 2>/dev/null" | grep -oP '\d+\.\d+\.\d+' || echo "unknown")
+echo "✓ Label Studio version: $LS_VERSION"
+
+# Write environment config file for Cloud Workstation proxy compatibility
+echo "Writing environment config..."
+sudo -u "$ACTUAL_USER" bash -c "cat > '$LABEL_STUDIO_HOME/.env'" << 'ENVEOF'
+# Label Studio environment configuration
+# Cloud Workstation proxy compatibility settings
+
+# Allows CSRF-protected login through Cloud Workstation port forwarding proxy
+CSRF_TRUSTED_ORIGINS=https://*.cloudworkstations.dev,https://*.cluster-*.cloudworkstations.dev
+
+# Trust the proxy's forwarded host header for correct URL generation
+USE_X_FORWARDED_HOST=true
+
+# Enable static file serving (CSS/JS)
+LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED=true
+ENVEOF
 echo "Creating startup script..."
 STARTUP_SCRIPT="/etc/workstation-startup.d/50-start-label-studio"
 sudo bash -c "cat > $STARTUP_SCRIPT" << 'EOF'
@@ -70,12 +88,14 @@ ACTUAL_HOME=$(eval echo ~$ACTUAL_USER)
 
 LABEL_STUDIO_HOME="$ACTUAL_HOME/.label-studio"
 LOG_FILE="$LABEL_STUDIO_HOME/label-studio.log"
+ENV_FILE="$LABEL_STUDIO_HOME/.env"
 
 # Ensure the directory exists
 mkdir -p "$LABEL_STUDIO_HOME"
+mkdir -p "$LABEL_STUDIO_HOME/data"
 
 # Check if Label Studio is already running
-if pgrep -f "label-studio" > /dev/null; then
+if pgrep -f "label-studio start" > /dev/null; then
     echo "Label Studio is already running."
     exit 0
 fi
@@ -84,20 +104,22 @@ fi
 echo "Starting Label Studio..." | tee -a "$LOG_FILE"
 cd "$LABEL_STUDIO_HOME"
 
-# Run Label Studio in the background as the actual user
-# Environment variables for Cloud Workstation proxy compatibility:
-# - CSRF_TRUSTED_ORIGINS: Allows login through Cloud Workstation proxy
-# - USE_X_FORWARDED_HOST: Trusts the proxy's forwarded host header
-# - LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED: Enables proper static file serving
-su - "$ACTUAL_USER" -c "cd '$LABEL_STUDIO_HOME' && \
-    export CSRF_TRUSTED_ORIGINS='https://*.cloudworkstations.dev,https://*.cluster-*.cloudworkstations.dev' && \
-    export USE_X_FORWARDED_HOST='true' && \
-    export LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED='true' && \
+# Source the .env file and run Label Studio as the actual user
+su - "$ACTUAL_USER" -c "
+    cd '$LABEL_STUDIO_HOME'
+    # Load environment config if it exists
+    if [ -f '$ENV_FILE' ]; then
+        set -a
+        source '$ENV_FILE'
+        set +a
+    fi
     nohup '$LABEL_STUDIO_HOME/venv/bin/label-studio' start \
-    --host 0.0.0.0 \
-    --port 8080 \
-    --data-dir '$LABEL_STUDIO_HOME/data' \
-    >> '$LOG_FILE' 2>&1 &"
+        --host 0.0.0.0 \
+        --port 8080 \
+        --data-dir '$LABEL_STUDIO_HOME/data' \
+        >> '$LOG_FILE' 2>&1 &
+    echo \$! > '$LABEL_STUDIO_HOME/label-studio.pid'
+"
 
 echo "Label Studio started. PID: $!" | tee -a "$LOG_FILE"
 echo "Access at: http://localhost:8080" | tee -a "$LOG_FILE"
@@ -111,96 +133,157 @@ sudo chmod +x "$STARTUP_SCRIPT"
 echo "Creating management commands..."
 sudo bash -c 'cat > /usr/local/bin/label-studio-status' << 'EOF'
 #!/bin/bash
-# Detect the actual user
 ACTUAL_USER="${SUDO_USER:-$USER}"
 if [ "$ACTUAL_USER" = "root" ]; then
     ACTUAL_USER=$(awk -F: '$3>=1000 && $3<60000 && $1!="nobody" {print $1; exit}' /etc/passwd)
 fi
 ACTUAL_HOME=$(eval echo ~$ACTUAL_USER)
+LABEL_STUDIO_HOME="$ACTUAL_HOME/.label-studio"
 
-if pgrep -f "label-studio" > /dev/null; then
-    echo "Label Studio is running"
-    echo "PID: $(pgrep -f 'label-studio')"
-    echo "Access at: http://localhost:8080"
-    echo "Logs: $ACTUAL_HOME/.label-studio/label-studio.log"
+if pgrep -f "label-studio start" > /dev/null; then
+    VERSION=$("$LABEL_STUDIO_HOME/venv/bin/label-studio" --version 2>/dev/null | grep -oP '\d+\.\d+\.\d+' || echo "unknown")
+    echo "✓ Label Studio is running"
+    echo "  PID:     $(pgrep -f 'label-studio start')"
+    echo "  Version: $VERSION"
+    echo "  URL:     http://localhost:8080"
+    echo "  Logs:    $LABEL_STUDIO_HOME/label-studio.log"
 else
-    echo "Label Studio is not running"
+    echo "✗ Label Studio is not running"
+    echo "  Start with: label-studio-restart"
 fi
 EOF
 sudo chmod +x /usr/local/bin/label-studio-status
 
-# Create a command to restart Label Studio
 sudo bash -c 'cat > /usr/local/bin/label-studio-restart' << 'EOF'
 #!/bin/bash
 echo "Stopping Label Studio..."
-pkill -f "label-studio" || true
-sleep 2
+pkill -f "label-studio start" || true
+sleep 3
 echo "Starting Label Studio..."
 /etc/workstation-startup.d/50-start-label-studio
+echo "Waiting for Label Studio to be ready..."
+for i in $(seq 1 18); do
+    sleep 10
+    HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080 2>/dev/null)
+    if echo "$HTTP_CODE" | grep -q "200\|302"; then
+        echo "✓ Label Studio is ready at http://localhost:8080"
+        exit 0
+    fi
+    echo "  Still starting... ($((i * 10))s)"
+done
+echo "Label Studio is taking longer than expected. Check logs with: label-studio-logs"
 EOF
 sudo chmod +x /usr/local/bin/label-studio-restart
 
-# Create a command to stop Label Studio
 sudo bash -c 'cat > /usr/local/bin/label-studio-stop' << 'EOF'
 #!/bin/bash
-echo "Stopping Label Studio..."
-pkill -f "label-studio"
-echo "Label Studio stopped."
+if pgrep -f "label-studio start" > /dev/null; then
+    echo "Stopping Label Studio..."
+    pkill -f "label-studio start"
+    echo "✓ Label Studio stopped."
+else
+    echo "Label Studio is not running."
+fi
 EOF
 sudo chmod +x /usr/local/bin/label-studio-stop
 
-# Create a command to view logs
 sudo bash -c 'cat > /usr/local/bin/label-studio-logs' << 'EOF'
 #!/bin/bash
-# Detect the actual user
 ACTUAL_USER="${SUDO_USER:-$USER}"
 if [ "$ACTUAL_USER" = "root" ]; then
     ACTUAL_USER=$(awk -F: '$3>=1000 && $3<60000 && $1!="nobody" {print $1; exit}' /etc/passwd)
 fi
 ACTUAL_HOME=$(eval echo ~$ACTUAL_USER)
+LOG_FILE="$ACTUAL_HOME/.label-studio/label-studio.log"
 
-tail -f "$ACTUAL_HOME/.label-studio/label-studio.log"
+if [ -f "$LOG_FILE" ]; then
+    echo "=== Label Studio Logs ($LOG_FILE) ==="
+    tail -f "$LOG_FILE"
+else
+    echo "Log file not found at: $LOG_FILE"
+    echo "Label Studio may still be starting for the first time."
+fi
 EOF
 sudo chmod +x /usr/local/bin/label-studio-logs
+
+sudo bash -c 'cat > /usr/local/bin/label-studio-update' << 'EOF'
+#!/bin/bash
+ACTUAL_USER="${SUDO_USER:-$USER}"
+if [ "$ACTUAL_USER" = "root" ]; then
+    ACTUAL_USER=$(awk -F: '$3>=1000 && $3<60000 && $1!="nobody" {print $1; exit}' /etc/passwd)
+fi
+ACTUAL_HOME=$(eval echo ~$ACTUAL_USER)
+LABEL_STUDIO_HOME="$ACTUAL_HOME/.label-studio"
+
+echo "Stopping Label Studio..."
+pkill -f "label-studio start" || true
+sleep 2
+
+echo "Updating Label Studio..."
+sudo -u "$ACTUAL_USER" bash -c "
+    source '$LABEL_STUDIO_HOME/venv/bin/activate'
+    pip install --upgrade label-studio
+"
+
+echo "Restarting Label Studio..."
+/etc/workstation-startup.d/50-start-label-studio
+echo "✓ Update complete. Check version with: label-studio-status"
+EOF
+sudo chmod +x /usr/local/bin/label-studio-update
 
 echo ""
 echo "✓ Label Studio installation complete!"
 echo ""
 echo "Label Studio has been installed and will auto-start on workstation boot."
 echo "All data is stored in: $LABEL_STUDIO_HOME"
+echo "Config file:          $LABEL_STUDIO_HOME/.env"
 echo ""
 echo "Available commands:"
 echo "  label-studio-status   - Check if Label Studio is running"
 echo "  label-studio-restart  - Restart Label Studio"
 echo "  label-studio-stop     - Stop Label Studio"
 echo "  label-studio-logs     - View Label Studio logs"
+echo "  label-studio-update   - Update Label Studio to latest version"
 echo ""
 echo "Starting Label Studio now..."
 /etc/workstation-startup.d/50-start-label-studio
 echo ""
-echo "Waiting for Label Studio to initialize (this may take 30-60 seconds on first run)..."
+echo "Waiting for Label Studio to initialize..."
+echo "Note: First run may take 2-3 minutes while the database is set up."
 echo ""
 
-# Wait for Label Studio to be ready
-MAX_WAIT=90
+# Wait for Label Studio to be ready (first run needs longer due to DB migrations)
+MAX_WAIT=180
 WAITED=0
 while [ $WAITED -lt $MAX_WAIT ]; do
-    if curl -s -o /dev/null -w "%{http_code}" http://localhost:8080 2>/dev/null | grep -q "200\|302"; then
+    HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080 2>/dev/null)
+    if echo "$HTTP_CODE" | grep -q "200\|302"; then
         echo ""
-        echo "✓ Label Studio is ready!"
+        echo "✓ Label Studio is ready! ($WAITED seconds)"
         echo ""
         echo "Access Label Studio at: http://localhost:8080"
         echo "For Cloud Workstations, use your workstation's port 8080 URL."
         exit 0
     fi
-    sleep 5
-    WAITED=$((WAITED + 5))
+    sleep 10
+    WAITED=$((WAITED + 10))
+    # Show log tail every 30 seconds to help debug
+    if [ $((WAITED % 30)) -eq 0 ]; then
+        LOG_FILE="$LABEL_STUDIO_HOME/label-studio.log"
+        if [ -f "$LOG_FILE" ]; then
+            echo "  --- Recent log output ---"
+            tail -3 "$LOG_FILE"
+            echo "  -------------------------"
+        fi
+    fi
     echo "  Still waiting... ($WAITED seconds)"
 done
 
 echo ""
-echo "Label Studio is starting but may need more time."
-echo "Check status with: label-studio-status"
-echo "View logs with: label-studio-logs"
+echo "Label Studio is taking longer than expected to start."
+echo ""
+echo "Check the process:  ps aux | grep label-studio"
+echo "Check status:       label-studio-status"
+echo "Check logs:         label-studio-logs"
 echo ""
 echo "Once ready, access at: http://localhost:8080"
