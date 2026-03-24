@@ -3,8 +3,11 @@ set -e
 
 # =============================================================================
 # Label Studio Installation Script for Google Cloud Workstations
-# Version: 2.0.1 (2024-03-24)
+# Version: 2.0.2 (2024-03-24)
 # =============================================================================
+# Changes in 2.0.2:
+#   - Fixed: Variable expansion in .env heredoc (LOCAL_FILES_DOCUMENT_ROOT)
+#   - Added: Verification that .env file was written
 # Changes in 2.0.1:
 #   - Fixed: grep -oP replaced with sed (PCRE not available on minimal Ubuntu)
 #   - Fixed: heredoc syntax for .env file writing
@@ -16,7 +19,7 @@ set -e
 #   - Dynamic URL detection from DNS/resolv.conf
 #   - New commands: label-studio-set-url, label-studio-diagnostics
 # =============================================================================
-SCRIPT_VERSION="2.0.1"
+SCRIPT_VERSION="2.0.2"
 
 echo "=============================================="
 echo "Label Studio Installer v${SCRIPT_VERSION}"
