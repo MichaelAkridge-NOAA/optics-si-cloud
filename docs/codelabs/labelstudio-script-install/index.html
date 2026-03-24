@@ -97,7 +97,7 @@ chmod +x install_label_studio.sh
 <h2 is-upgraded>System Setup</h2>
 <ul>
 <li>Installs Python 3, pip, and venv packages</li>
-<li>Creates a persistent directory at <code>/home/user/.label-studio</code></li>
+<li>Creates a persistent directory at <code>~/.label-studio</code></li>
 </ul>
 <h2 is-upgraded>Virtual Environment</h2>
 <ul>
@@ -106,22 +106,25 @@ chmod +x install_label_studio.sh
 </ul>
 <h2 is-upgraded>Startup Configuration</h2>
 <ul>
-<li>Creates a startup script at <code>/etc/workstation-startup.d/50-start-label-studio</code></li>
+<li>Creates a startup script at <code>~/.label-studio/startup.sh</code> (persists across restarts)</li>
+<li>Adds auto-start fallback to <code>~/.bashrc</code></li>
 <li>Configures Label Studio to: <ul>
 <li>Listen on all network interfaces (0.0.0.0)</li>
 <li>Run on port 8080</li>
-<li>Store data in <code>/home/user/.label-studio</code></li>
-<li>Log output to <code>label-studio.log</code></li>
+<li>Store data in <code>~/.label-studio/data</code></li>
+<li>Log output to <code>~/.label-studio/label-studio.log</code></li>
 </ul>
 </li>
 </ul>
 <h2 is-upgraded>Data Persistence</h2>
-<p>The script ensures your data is preserved by:</p>
+<p>Cloud Workstations only persist your home directory (<code>~/</code>). The script stores everything there:</p>
 <ul>
-<li>Storing all Label Studio data in your home directory</li>
-<li>Using a persistent virtual environment</li>
-<li>Logging all activity for troubleshooting</li>
+<li>All Label Studio data and config: <code>~/.label-studio/</code></li>
+<li>Management commands: <code>~/.local/bin/</code> (added to PATH)</li>
+<li>Virtual environment: <code>~/.label-studio/venv/</code></li>
+<li>Activity logs: <code>~/.label-studio/label-studio.log</code></li>
 </ul>
+<p>This means your installation, data, and commands survive workstation restarts.</p>
 
 
       </google-codelab-step>
@@ -139,7 +142,7 @@ chmod +x install_label_studio.sh
 </ul>
 </li>
 </ol>
-<aside class="special"><p> Label Studio will automatically start when your workstation boots, so you don&#39;t need to manually start it each time. </p>
+<aside class="special"><p> Label Studio will automatically start when your workstation boots. Commands like `label-studio-status` persist across restarts. </p>
 </aside>
 
 
@@ -184,6 +187,18 @@ chmod +x install_label_studio.sh
 <pre><code language="language-bash" class="language-bash">label-studio-logs
 </code></pre>
 <p>Displays real-time Label Studio logs. Press <code>Ctrl+C</code> to exit.</p>
+<h2 is-upgraded>Set External URL (for CSRF fix)</h2>
+<pre><code language="language-bash" class="language-bash">label-studio-set-url https://8080-YOUR-HOST.YOUR-CLUSTER.cloudworkstations.dev
+</code></pre>
+<p>Sets the Cloud Workstation external URL for CSRF/proxy compatibility. Saves to <code>~/.label-studio/.env.custom</code> and restarts automatically.</p>
+<h2 is-upgraded>Run Diagnostics</h2>
+<pre><code language="language-bash" class="language-bash">label-studio-diagnostics
+</code></pre>
+<p>Shows the auto-detected URL, active config files, hostname, DNS info, and recent log lines. Use this first when troubleshooting CSRF or connectivity issues.</p>
+<h2 is-upgraded>Update Label Studio</h2>
+<pre><code language="language-bash" class="language-bash">label-studio-update
+</code></pre>
+<p>Updates Label Studio to the latest version.</p>
 <h2 is-upgraded>Manual Start (if needed)</h2>
 <pre><code language="language-bash" class="language-bash">cd ~/.label-studio
 source venv/bin/activate
@@ -249,6 +264,33 @@ curl -I http://localhost:8080
 </aside>
 <aside class="special"><p> After restarting, wait at least 30 seconds before trying to access through the Cloud Workstation port forwarding URL. Label Studio can take time to fully initialize. </p>
 </aside>
+<h2 is-upgraded>CSRF / 403 Forbidden Error on Login</h2>
+<p><strong>Problem</strong>: The login page loads but clicking &#34;Sign In&#34; returns a <code>403 CSRF verification failed</code> error.</p>
+<p>This happens because Django&#39;s CSRF middleware doesn&#39;t recognize requests forwarded through the Cloud Workstation proxy.</p>
+<p><strong>Solution 1 — Run diagnostics</strong> to see what URL was auto-detected:</p>
+<pre><code language="language-bash" class="language-bash">label-studio-diagnostics
+</code></pre>
+<p>This shows:</p>
+<ul>
+<li>Whether Label Studio is running</li>
+<li>What URL the startup script detected</li>
+<li>What&#39;s in each config file</li>
+<li>The DNS-detected Cloud Workstation domain</li>
+</ul>
+<p><strong>Solution 2 — Manually set your workstation URL</strong> (most reliable fix):</p>
+<pre><code language="language-bash" class="language-bash"># Find your URL: open port 8080 in Cloud Workstations and copy the URL from the browser.
+# It looks like: https://8080-w-username-abc123.cluster-xyz456.cloudworkstations.dev
+
+label-studio-set-url https://8080-YOUR-HOSTNAME.YOUR-CLUSTER.cloudworkstations.dev
+</code></pre>
+<p>This saves the URL to <code>~/.label-studio/.env.custom</code> and restarts Label Studio automatically.</p>
+<p><strong>Solution 3 — Quick manual restart</strong> (to re-run URL auto-detection):</p>
+<pre><code language="language-bash" class="language-bash">label-studio-restart
+</code></pre>
+<p>The startup script re-detects your workstation URL on every boot via <code>/etc/resolv.conf</code> DNS search domains.</p>
+<aside class="warning"><p> The URL changes when a workstation is recreated. If you get 403 errors after recreating your workstation, run `label-studio-set-url` again with the new URL. </p>
+</aside>
+<p><strong>How CSRF protection works here:</strong> The install script sets <code>USE_ENFORCE_CSRF_CHECKS=0</code> in <code>~/.label-studio/.env</code>. This disables Django&#39;s CSRF enforcement using Label Studio&#39;s built-in <code>DisableCSRF</code> middleware — the same mechanism Label Studio uses for API access. This is safe because Cloud Workstations already enforces access via Google IAM.</p>
 <h2 is-upgraded>GPG Key Warnings During Installation</h2>
 <p>If you see errors like:</p>
 <pre><code>W: GPG error: https://dl.yarnpkg.com/debian stable InRelease: 
