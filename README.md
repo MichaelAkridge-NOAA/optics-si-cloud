@@ -14,7 +14,7 @@ Optics SI cloud tools repository is to support data science workflows, cloud dep
 | View | Screenshot |
 |---|---|
 | Codelabs homepage | [![Optics SI Cloud Codelabs homepage](./documents/images/site-home-hero.png)](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/) |
-| Google Cloud Workstations 101 codelab | [![Google Cloud Workstations 101 codelab](./documents/images/workstations-101-codelab.png)](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/codelabs/google-cloud-workstations-101/) |
+| Google Cloud Workstations 101 codelab | [![Google Cloud Workstations 101 codelab](./documents/images/workstations-101-codelab-v2.png)](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/codelabs/google-cloud-workstations-101/) |
 | JetStream Setup codelab | [![JetStream Setup codelab overview](./documents/images/jetstream-overview-codelab.png)](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/codelabs/jetstream-setup/#0) |
 
 ### Main Folders

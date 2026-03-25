@@ -14,6 +14,17 @@ Duration: 3
 
 This guide explains the most important Cloud Workstations behaviors before installing tools.
 
+### At-a-glance architecture
+
+![Cloud Workstations 101 overview diagram](assets/cloud-workstations-101-overview.svg)
+
+### What this guide helps you do quickly
+
+- Choose the right connection path: **Web IDE**, **forwarded app ports**, or **SSH**.
+- Understand what persists across restarts (`~/`) and what does not.
+- Fix the most common startup and port access issues (`503`, auth, ADC).
+- Verify storage access and cloud auth before installing larger tools.
+
 ## Official Google Cloud Links
 Duration: 2
 
