@@ -1,6 +1,31 @@
 {
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-03-25T19:00:33Z",
+  "id": "workstation-backup",
+  "duration": 12,
   "title": "Workstation Backup to GCS",
-  "summary": "Back up your Cloud Workstation home directory to Google Cloud Storage",
-  "url": "workstation-backup",
-  "tags": ["backup", "gcs", "cloud-workstation", "disaster-recovery"]
+  "authors": "Michael Akridge",
+  "summary": "Back up your Cloud Workstation home directory to Google Cloud Storage.",
+  "source": "codelabs/workstation-backup.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "cloud",
+    "backup",
+    "tools"
+  ],
+  "tags": [
+    "backup",
+    "cloud",
+    "gcs",
+    "web",
+    "workstations"
+  ],
+  "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
+  "url": "workstation-backup"
 }

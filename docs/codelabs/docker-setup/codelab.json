@@ -1,6 +1,31 @@
 {
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-03-25T19:00:33Z",
+  "id": "docker-setup",
+  "duration": 12,
   "title": "Docker Setup for Cloud Workstations",
-  "summary": "Install Docker Engine with persistence helpers for Cloud Workstations",
-  "url": "docker-setup",
-  "tags": ["docker", "containers", "cloud-workstation", "setup"]
+  "authors": "Michael Akridge",
+  "summary": "Install Docker Engine with persistence helpers for saving images across restarts.",
+  "source": "codelabs/docker-setup.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "cloud",
+    "docker",
+    "tools"
+  ],
+  "tags": [
+    "cloud",
+    "containers",
+    "docker",
+    "web",
+    "workstations"
+  ],
+  "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
+  "url": "docker-setup"
 }

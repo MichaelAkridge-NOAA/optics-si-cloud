@@ -26,7 +26,7 @@
                   id="gcs-fuse-mount"
                   title="Install GCS FUSE Mount"
                   environment="web"
-                  feedback-link="https://github.com/MichaelAkridge-NOAA/CorAI/issues">
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
     
       <google-codelab-step label="Overview" duration="0">
         <p>Google Cloud Storage FUSE (gcsfuse) allows you to mount Cloud Storage buckets as file systems on Linux or macOS systems. This enables applications to access objects in Cloud Storage through standard file system operations.</p>
@@ -94,7 +94,7 @@ sudo apt-get install gcsfuse
     
       <google-codelab-step label="Unmounting Bucket" duration="0">
         <p>When you&#39;re finished working with the mounted bucket, unmount it using:</p>
-<pre><code language="language-bash" class="language-bash">fusermount -u ~/gcs/genomics
+<pre><code language="language-bash" class="language-bash">fusermount -u ~/gcs/mount-point
 </code></pre>
 
 

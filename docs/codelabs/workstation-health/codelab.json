@@ -1,6 +1,31 @@
 {
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-03-25T19:00:33Z",
+  "id": "workstation-health",
+  "duration": 9,
   "title": "Workstation Health Check",
-  "summary": "Monitor all services and system resources on your Cloud Workstation",
-  "url": "workstation-health",
-  "tags": ["monitoring", "health", "cloud-workstation", "devops"]
+  "authors": "Michael Akridge",
+  "summary": "Monitor all services and system resources on your Cloud Workstation.",
+  "source": "codelabs/workstation-health.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "cloud",
+    "monitoring",
+    "tools"
+  ],
+  "tags": [
+    "cloud",
+    "health",
+    "monitoring",
+    "web",
+    "workstations"
+  ],
+  "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
+  "url": "workstation-health"
 }

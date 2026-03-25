@@ -1,112 +1,208 @@
-<!DOCTYPE html>
+
+<!doctype html>
+
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JupyterLab Setup | Cloud Workstation</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>JupyterLab Setup for Cloud Workstations</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
   <style>
-    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
-    .header { background: #F37626; color: #fff; padding: 2rem; text-align: center; }
-    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
-    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
-    .step h2 { color: #F37626; margin-top: 0; border-bottom: 2px solid #fde3d0; padding-bottom: 0.5rem; }
-    .step h3 { color: #2a3b6b; }
-    pre { background: #263238; color: #aed581; padding: 1rem; border-radius: 4px; overflow-x: auto; }
-    code { font-family: 'Roboto Mono', monospace; }
-    .inline-code { background: #fde3d0; padding: 0.2em 0.5em; border-radius: 4px; color: #5a3e36; }
-    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    a { color: #F37626; }
-    ul, ol { line-height: 1.8; }
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>📓 JupyterLab Setup</h1>
-    <p>Interactive notebooks on Cloud Workstations (port 8888)</p>
-  </div>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="jupyter-setup"
+                  title="JupyterLab Setup for Cloud Workstations"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="3">
+        <p>This guide installs <strong>JupyterLab</strong> with useful extensions in a persistent location on your Cloud Workstation.</p>
+<h2 is-upgraded>What you&#39;ll get</h2>
+<ul>
+<li>JupyterLab on <strong>port 8888</strong></li>
+<li>Extensions: Git integration, LSP (code intelligence), widgets</li>
+<li>Management commands: <code>jupyter-start</code>, <code>jupyter-stop</code>, <code>jupyter-status</code>, <code>jupyter-logs</code></li>
+<li>Pre-installed: pandas, numpy, matplotlib, seaborn, plotly</li>
+</ul>
+<h2 is-upgraded>Prerequisites</h2>
+<ul>
+<li>A Google Cloud Workstation</li>
+<li>Terminal access</li>
+</ul>
 
-  <div class="content">
-    <div class="step">
-      <h2>Overview</h2>
-      <p>This guide installs <strong>JupyterLab</strong> with useful extensions in a persistent location.</p>
-      <p><strong>What you'll get:</strong></p>
-      <ul>
-        <li>JupyterLab on port <strong>8888</strong></li>
-        <li>Extensions: Git integration, LSP, widgets</li>
-        <li>Management commands: <span class="inline-code">jupyter-start</span>, <span class="inline-code">jupyter-stop</span>, etc.</li>
-        <li>Pre-installed: pandas, numpy, matplotlib, seaborn, plotly</li>
-      </ul>
-      <p><strong>Time:</strong> ~3 minutes</p>
-    </div>
 
-    <div class="step">
-      <h2>Step 1: Run the Setup Script</h2>
-      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_jupyter.sh | bash</code></pre>
-      <p>The script will install JupyterLab and start it automatically.</p>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Run the Setup Script" duration="0">
+        <pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_jupyter.sh | bash
+</code></pre>
+<p>The script installs JupyterLab and starts it automatically.</p>
 
-    <div class="step">
-      <h2>Step 2: Access JupyterLab</h2>
-      <p>JupyterLab runs on <strong>port 8888</strong>. Access it via Cloud Workstation port forwarding:</p>
-      <ol>
-        <li>In the Cloud Workstations console, find your workstation</li>
-        <li>Click on the port forwarding URL for port 8888</li>
-        <li>Or use: <span class="inline-code">https://8888-YOUR-WORKSTATION.cloudworkstations.dev</span></li>
-      </ol>
-      <div class="note">
-        <strong>No password required</strong> — Cloud Workstation IAM handles authentication.
-      </div>
-    </div>
 
-    <div class="step">
-      <h2>Step 3: Reload Shell (for commands)</h2>
-      <pre><code>source ~/.bashrc</code></pre>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Access JupyterLab" duration="0">
+        <p>JupyterLab runs on <strong>port 8888</strong>.</p>
+<h2 is-upgraded>Via Cloud Workstation Port Forwarding</h2>
+<ol type="1">
+<li>Go to the Cloud Workstations console</li>
+<li>Find your workstation</li>
+<li>Click on the port forwarding URL for port 8888</li>
+</ol>
+<p>Or construct the URL:</p>
+<pre><code>https://8888-YOUR-WORKSTATION-NAME.CLUSTER.cloudworkstations.dev
+</code></pre>
+<p><strong>No password required</strong> — Cloud Workstation IAM handles authentication.</p>
 
-    <div class="step">
-      <h2>Management Commands</h2>
-      <table style="width:100%; border-collapse: collapse;">
-        <tr style="background: #fde3d0;">
-          <th style="padding: 0.5rem; text-align: left;">Command</th>
-          <th style="padding: 0.5rem; text-align: left;">Description</th>
-        </tr>
-        <tr><td style="padding: 0.5rem;"><code>jupyter-start</code></td><td style="padding: 0.5rem;">Start JupyterLab</td></tr>
-        <tr><td style="padding: 0.5rem;"><code>jupyter-stop</code></td><td style="padding: 0.5rem;">Stop JupyterLab</td></tr>
-        <tr><td style="padding: 0.5rem;"><code>jupyter-status</code></td><td style="padding: 0.5rem;">Check if running</td></tr>
-        <tr><td style="padding: 0.5rem;"><code>jupyter-logs</code></td><td style="padding: 0.5rem;">View logs</td></tr>
-      </table>
-    </div>
 
-    <div class="step">
-      <h2>Included Extensions</h2>
-      <ul>
-        <li><strong>jupyterlab-git</strong> — Git integration in sidebar</li>
-        <li><strong>jupyterlab-lsp</strong> — Code intelligence (autocomplete, go-to-definition)</li>
-        <li><strong>ipywidgets</strong> — Interactive widgets</li>
-      </ul>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Management Commands" duration="0">
+        <p>First, reload your shell:</p>
+<pre><code language="language-bash" class="language-bash">source ~/.bashrc
+</code></pre>
+<p>Then use these commands:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Command</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>jupyter-start</code></p>
+</td><td colspan="1" rowspan="1"><p>Start JupyterLab</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>jupyter-stop</code></p>
+</td><td colspan="1" rowspan="1"><p>Stop JupyterLab</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>jupyter-status</code></p>
+</td><td colspan="1" rowspan="1"><p>Check if running</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>jupyter-logs</code></p>
+</td><td colspan="1" rowspan="1"><p>View logs (tail -f)</p>
+</td></tr>
+</table>
 
-    <div class="step">
-      <h2>Enable Auto-Start (Optional)</h2>
-      <p>To start JupyterLab automatically on workstation boot:</p>
-      <pre><code>nano ~/.bashrc</code></pre>
-      <p>Find and uncomment the JupyterLab auto-start section near the bottom.</p>
-    </div>
 
-    <div class="step">
-      <h2>Persistence</h2>
-      <div class="success">
-        <strong>✓ Everything persists across restarts!</strong>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Included Extensions" duration="0">
         <ul>
-          <li>JupyterLab environment: <span class="inline-code">~/.jupyter-env</span></li>
-          <li>Configuration: <span class="inline-code">~/.jupyter</span></li>
-          <li>Notebooks: Save in <span class="inline-code">~/</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
+<li><strong>jupyterlab-git</strong> — Git integration in the sidebar</li>
+<li><strong>jupyterlab-lsp</strong> — Code intelligence (autocomplete, go-to-definition)</li>
+<li><strong>ipywidgets</strong> — Interactive widgets</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Installing Additional Packages" duration="0">
+        <p>Activate the JupyterLab environment and install packages:</p>
+<pre><code language="language-bash" class="language-bash">source ~/.jupyter-env/bin/activate
+pip install your-package
+</code></pre>
+<p>Or install directly:</p>
+<pre><code language="language-bash" class="language-bash">~/.jupyter-env/bin/pip install your-package
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Enable Auto-Start (Optional)" duration="0">
+        <p>To start JupyterLab automatically when your workstation boots:</p>
+<ol type="1">
+<li>Edit <code>~/.bashrc</code>:<pre><code language="language-bash" class="language-bash">nano ~/.bashrc
+</code></pre>
+</li>
+<li>Find the JupyterLab auto-start section near the bottom</li>
+<li>Uncomment the lines (remove the <code>#</code> at the start)</li>
+<li>Save and exit</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configuration" duration="0">
+        <p>JupyterLab config is at:</p>
+<pre><code>~/.jupyter/jupyter_lab_config.py
+</code></pre>
+<p>Key settings:</p>
+<ul>
+<li><strong>Port:</strong> 8888</li>
+<li><strong>Bind:</strong> 0.0.0.0 (all interfaces)</li>
+<li><strong>Auth:</strong> Disabled (IAM handles it)</li>
+<li><strong>Root directory:</strong> /home/user</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Persistence" duration="0">
+        <p>Everything persists across Cloud Workstation restarts:</p>
+<ul>
+<li><strong>JupyterLab environment: </strong><code>~/.jupyter-env</code></li>
+<li><strong>Configuration: </strong><code>~/.jupyter</code></li>
+<li><strong>Notebooks:</strong> Save anywhere in <code>~/</code></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Troubleshooting" duration="0">
+        <h2 is-upgraded>JupyterLab won&#39;t start</h2>
+<p>Check the logs:</p>
+<pre><code language="language-bash" class="language-bash">jupyter-logs
+</code></pre>
+<p>Or:</p>
+<pre><code language="language-bash" class="language-bash">cat ~/.jupyter/jupyter.log
+</code></pre>
+<h2 is-upgraded>Port 8888 already in use</h2>
+<p>Stop any existing JupyterLab:</p>
+<pre><code language="language-bash" class="language-bash">jupyter-stop
+</code></pre>
+<p>Then start again:</p>
+<pre><code language="language-bash" class="language-bash">jupyter-start
+</code></pre>
+<h2 is-upgraded>Extensions not showing</h2>
+<p>Rebuild JupyterLab:</p>
+<pre><code language="language-bash" class="language-bash">~/.jupyter-env/bin/jupyter lab build
+</code></pre>
+<h2 is-upgraded>Kernel dies immediately</h2>
+<p>Check available memory. JupyterLab needs ~500MB RAM.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Using with Label Studio" duration="0">
+        <p>If you have Label Studio running on port 8080, both can run simultaneously:</p>
+<ul>
+<li><strong>Label Studio:</strong> port 8080</li>
+<li><strong>JupyterLab:</strong> port 8888</li>
+</ul>
+<p>Use port forwarding for both.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
 </body>
 </html>

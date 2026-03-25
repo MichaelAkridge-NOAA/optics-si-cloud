@@ -1,6 +1,31 @@
 {
-  "title": "Workstation Cleanup",
-  "summary": "Clean logs, caches, and temporary files to free disk space",
-  "url": "workstation-cleanup",
-  "tags": ["cleanup", "maintenance", "cloud-workstation", "disk"]
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-03-25T19:00:33Z",
+  "id": "workstation-cleanup",
+  "duration": 10,
+  "title": "Workstation Cleanup Guide",
+  "authors": "Michael Akridge",
+  "summary": "Clean logs, caches, and temporary files to free disk space.",
+  "source": "codelabs/workstation-cleanup.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "cloud",
+    "maintenance",
+    "tools"
+  ],
+  "tags": [
+    "cleanup",
+    "cloud",
+    "maintenance",
+    "web",
+    "workstations"
+  ],
+  "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
+  "url": "workstation-cleanup"
 }

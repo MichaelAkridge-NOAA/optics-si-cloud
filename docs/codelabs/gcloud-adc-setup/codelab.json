@@ -1,6 +1,32 @@
 {
-  "title": "GCloud ADC Setup",
-  "summary": "Configure Application Default Credentials with proper scopes for GCS access",
-  "url": "gcloud-adc-setup",
-  "tags": ["gcloud", "gcs", "cloud-workstation", "setup"]
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-03-25T19:00:33Z",
+  "id": "gcloud-adc-setup",
+  "duration": 3,
+  "title": "GCloud ADC Setup for Cloud Workstations",
+  "authors": "Michael Akridge",
+  "summary": "Configure Application Default Credentials with proper scopes to fix GCS access issues.",
+  "source": "codelabs/gcloud-adc-setup.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "cloud",
+    "gcloud",
+    "authentication"
+  ],
+  "tags": [
+    "adc",
+    "authentication",
+    "cloud",
+    "gcloud",
+    "web",
+    "workstations"
+  ],
+  "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
+  "url": "gcloud-adc-setup"
 }

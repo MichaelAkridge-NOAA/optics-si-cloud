@@ -1,127 +1,172 @@
-<!DOCTYPE html>
+
+<!doctype html>
+
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Docker Setup | Cloud Workstation</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Docker Setup for Cloud Workstations</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
   <style>
-    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
-    .header { background: #4F7DC9; color: #fff; padding: 2rem; text-align: center; }
-    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
-    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
-    .step h2 { color: #4F7DC9; margin-top: 0; border-bottom: 2px solid #e3eafc; padding-bottom: 0.5rem; }
-    .step h3 { color: #2a3b6b; }
-    pre { background: #263238; color: #aed581; padding: 1rem; border-radius: 4px; overflow-x: auto; }
-    code { font-family: 'Roboto Mono', monospace; }
-    .inline-code { background: #e3eafc; padding: 0.2em 0.5em; border-radius: 4px; color: #2a3b6b; }
-    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    .warning { background: #f8d7da; border-left: 4px solid #dc3545; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    a { color: #4F7DC9; }
-    ul, ol { line-height: 1.8; }
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>🐳 Docker Setup</h1>
-    <p>Docker Engine with persistence helpers for Cloud Workstations</p>
-  </div>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="docker-setup"
+                  title="Docker Setup for Cloud Workstations"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <p>This guide walks you through installing Docker Engine on Google Cloud Workstations, with persistence helpers for saving images across restarts.</p>
+<h2 class="checklist" is-upgraded>What you&#39;ll learn</h2>
+<ul class="checklist">
+<li>Install Docker Engine</li>
+<li>Configure Docker for Cloud Workstations</li>
+<li>Save and restore Docker images across restarts</li>
+<li>Manage containers with helper commands</li>
+</ul>
+<h2 is-upgraded>Prerequisites</h2>
+<ul>
+<li>Google Cloud Workstation (Ubuntu-based)</li>
+<li><code>sudo</code> access</li>
+</ul>
 
-  <div class="content">
-    <div class="step">
-      <h2>Overview</h2>
-      <p>This guide installs Docker Engine on your Cloud Workstation with helpers for managing image persistence across restarts.</p>
-      <p><strong>What you'll get:</strong></p>
-      <ul>
-        <li>Docker Engine and Docker Compose</li>
-        <li>Log rotation configured</li>
-        <li>Management commands: <span class="inline-code">docker-status</span>, <span class="inline-code">docker-cleanup</span></li>
-        <li>Image save/load for persistence</li>
-      </ul>
-      <p><strong>Time:</strong> ~3 minutes</p>
-    </div>
 
-    <div class="step">
-      <h2>Step 1: Run the Setup Script</h2>
-      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_docker.sh | bash</code></pre>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install Docker" duration="3">
+        <p>Run the setup script:</p>
+<pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_docker.sh | bash
+</code></pre>
+<p>Or clone and run locally:</p>
+<pre><code language="language-bash" class="language-bash">git clone https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools.git
+cd optics-si-cloud-tools
+bash scripts/setup_docker.sh
+</code></pre>
+<p>The script will:</p>
+<ol type="1">
+<li>Install Docker Engine and Docker Compose</li>
+<li>Add your user to the <code>docker</code> group</li>
+<li>Configure log rotation</li>
+<li>Create management commands</li>
+</ol>
 
-    <div class="step">
-      <h2>Step 2: Apply Group Changes</h2>
-      <p>After installation, apply the docker group:</p>
-      <pre><code>newgrp docker</code></pre>
-      <p>Or log out and back in.</p>
-    </div>
 
-    <div class="step">
-      <h2>Step 3: Test Docker</h2>
-      <pre><code>docker run hello-world</code></pre>
-      <div class="success">
-        <strong>Success!</strong> You should see "Hello from Docker!"
-      </div>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Apply Group Changes" duration="1">
+        <p>After installation, apply the docker group membership:</p>
+<pre><code language="language-bash" class="language-bash">newgrp docker
+</code></pre>
+<p>Or log out and back in.</p>
+<p>Test Docker:</p>
+<pre><code language="language-bash" class="language-bash">docker run hello-world
+</code></pre>
 
-    <div class="step">
-      <h2>Understanding Persistence</h2>
-      <div class="warning">
-        <strong>Important:</strong> Docker data in <span class="inline-code">/var/lib/docker</span> does NOT persist across Cloud Workstation restarts. Downloaded images and stopped containers will be lost.
-      </div>
-      <h3>Solutions</h3>
-      <p><strong>Option 1:</strong> Save images before restart</p>
-      <pre><code>docker-save-images</code></pre>
-      <p><strong>Option 2:</strong> Use container registries</p>
-      <pre><code>docker tag myimage gcr.io/PROJECT/myimage
-docker push gcr.io/PROJECT/myimage</code></pre>
-    </div>
 
-    <div class="step">
-      <h2>Management Commands</h2>
-      <h3>Check Status</h3>
-      <pre><code>docker-status</code></pre>
-      <p>Shows version, running containers, images, and disk usage.</p>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Understanding Persistence" duration="2">
+        <p><strong>Important:</strong> Docker data in <code>/var/lib/docker</code> does <strong>NOT</strong> persist across Cloud Workstation restarts.</p>
+<p>This means:</p>
+<ul>
+<li>Downloaded images are lost on restart</li>
+<li>Stopped containers are lost on restart</li>
+<li>Only running containers may survive (with live-restore)</li>
+</ul>
+<h2 is-upgraded>Solutions</h2>
+<p><strong>Option 1: Save images before restart</strong></p>
+<pre><code language="language-bash" class="language-bash">docker-save-images
+</code></pre>
+<p><strong>Option 2: Use container registries</strong></p>
+<pre><code language="language-bash" class="language-bash"># Push to Google Container Registry
+docker tag myimage gcr.io/PROJECT/myimage
+docker push gcr.io/PROJECT/myimage
+</code></pre>
 
-      <h3>Cleanup</h3>
-      <pre><code>docker-cleanup</code></pre>
-      <p>Removes stopped containers, unused networks, and dangling images.</p>
 
-      <h3>Save Images (before restart)</h3>
-      <pre><code>docker-save-images</code></pre>
-      <p>Saves all images to <span class="inline-code">~/.docker-images/</span></p>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Management Commands" duration="2">
+        <p>The setup script creates these commands in <code>~/.local/bin/</code>:</p>
+<h2 is-upgraded>Check Status</h2>
+<pre><code language="language-bash" class="language-bash">docker-status
+</code></pre>
+<p>Shows Docker version, running containers, images, and disk usage.</p>
+<h2 is-upgraded>Cleanup</h2>
+<pre><code language="language-bash" class="language-bash">docker-cleanup
+</code></pre>
+<p>Removes stopped containers, unused networks, and dangling images.</p>
+<h2 is-upgraded>Save Images</h2>
+<pre><code language="language-bash" class="language-bash">docker-save-images
+</code></pre>
+<p>Saves all images to <code>~/.docker-images/</code> for restoration after restart.</p>
+<h2 is-upgraded>Load Images</h2>
+<pre><code language="language-bash" class="language-bash">docker-load-images
+</code></pre>
+<p>Restores images from <code>~/.docker-images/</code> after a workstation restart.</p>
 
-      <h3>Load Images (after restart)</h3>
-      <pre><code>docker-load-images</code></pre>
-      <p>Restores images from <span class="inline-code">~/.docker-images/</span></p>
-    </div>
 
-    <div class="step">
-      <h2>Common Commands</h2>
-      <pre><code># Run a container
-docker run -d -p 8080:80 nginx
-
-# Build from Dockerfile
-docker build -t myapp .
-
-# Docker Compose
-docker compose up -d
+      </google-codelab-step>
+    
+      <google-codelab-step label="Common Tasks" duration="2">
+        <h2 is-upgraded>Run a container</h2>
+<pre><code language="language-bash" class="language-bash">docker run -d -p 8080:80 nginx
+</code></pre>
+<h2 is-upgraded>Build from Dockerfile</h2>
+<pre><code language="language-bash" class="language-bash">docker build -t myapp .
+</code></pre>
+<h2 is-upgraded>Use Docker Compose</h2>
+<pre><code language="language-bash" class="language-bash">docker compose up -d
 docker compose down
+</code></pre>
+<h2 is-upgraded>View logs</h2>
+<pre><code language="language-bash" class="language-bash">docker logs &lt;container-name&gt;
+docker logs -f &lt;container-name&gt;  # Follow
+</code></pre>
 
-# View logs
-docker logs -f container-name</code></pre>
-    </div>
 
-    <div class="step">
-      <h2>Next Steps</h2>
-      <ul>
-        <li>Build and run your containers</li>
-        <li>Run <span class="inline-code">docker-save-images</span> before workstation stops</li>
-        <li>Consider using GCR for important images</li>
-      </ul>
-      <p><a href="../">← Back to all codelabs</a></p>
-    </div>
-  </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Congratulations" duration="1">
+        <p>You&#39;ve successfully set up Docker on your Cloud Workstation!</p>
+<h2 is-upgraded>What you learned</h2>
+<ul>
+<li>Installing Docker Engine</li>
+<li>Managing Docker persistence</li>
+<li>Using helper commands</li>
+</ul>
+<h2 is-upgraded>Next steps</h2>
+<ul>
+<li>Build and run your containers</li>
+<li>Set up <code>docker-save-images</code> before workstation stops</li>
+<li>Consider using GCR for important images</li>
+</ul>
 
-  <script src="../assets/close-button-patch.js"></script>
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
 </body>
 </html>

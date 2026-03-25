@@ -1,6 +1,32 @@
 {
-  "title": "Git & SSH Setup",
-  "summary": "Configure Git identity and SSH keys for GitHub, GitLab, and Cloud Source Repos",
-  "url": "git-ssh-setup",
-  "tags": ["git", "ssh", "github", "cloud-workstation", "setup"]
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-03-25T19:00:33Z",
+  "id": "git-ssh-setup",
+  "duration": 2,
+  "title": "Git \u0026 SSH Setup for Cloud Workstations",
+  "authors": "Michael Akridge",
+  "summary": "Configure Git and SSH keys for secure authentication with GitHub, GitLab, and Cloud Source Repos.",
+  "source": "codelabs/git-ssh-setup.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "cloud",
+    "git",
+    "ssh"
+  ],
+  "tags": [
+    "cloud",
+    "git",
+    "github",
+    "ssh",
+    "web",
+    "workstations"
+  ],
+  "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
+  "url": "git-ssh-setup"
 }

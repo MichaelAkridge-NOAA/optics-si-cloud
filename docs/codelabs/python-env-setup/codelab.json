@@ -1,6 +1,32 @@
 {
-  "title": "Python Environment Setup",
-  "summary": "Install pyenv and create persistent Python virtual environments on Cloud Workstations",
-  "url": "python-env-setup",
-  "tags": ["python", "cloud-workstation", "setup"]
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-03-25T19:00:33Z",
+  "id": "python-env-setup",
+  "duration": 5,
+  "title": "Python Environment Setup for Cloud Workstations",
+  "authors": "Michael Akridge",
+  "summary": "Install pyenv for Python version management and create persistent virtual environments.",
+  "source": "codelabs/python-env-setup.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "cloud",
+    "python",
+    "development"
+  ],
+  "tags": [
+    "cloud",
+    "pyenv",
+    "python",
+    "venv",
+    "web",
+    "workstations"
+  ],
+  "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
+  "url": "python-env-setup"
 }

@@ -1,130 +1,191 @@
-<!DOCTYPE html>
+
+<!doctype html>
+
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Python Environment Setup | Cloud Workstation</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Python Environment Setup for Cloud Workstations</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
   <style>
-    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
-    .header { background: #4F7DC9; color: #fff; padding: 2rem; text-align: center; }
-    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
-    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
-    .step h2 { color: #4F7DC9; margin-top: 0; border-bottom: 2px solid #e3eafc; padding-bottom: 0.5rem; }
-    .step h3 { color: #2a3b6b; }
-    pre { background: #263238; color: #aed581; padding: 1rem; border-radius: 4px; overflow-x: auto; }
-    code { font-family: 'Roboto Mono', monospace; }
-    .inline-code { background: #e3eafc; padding: 0.2em 0.5em; border-radius: 4px; color: #2a3b6b; }
-    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    a { color: #4F7DC9; }
-    ul, ol { line-height: 1.8; }
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>🐍 Python Environment Setup</h1>
-    <p>Persistent pyenv + virtual environments for Cloud Workstations</p>
-  </div>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="python-env-setup"
+                  title="Python Environment Setup for Cloud Workstations"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="5">
+        <p>This guide installs <strong>pyenv</strong> for Python version management and creates persistent virtual environments that survive Cloud Workstation restarts.</p>
+<h2 is-upgraded>What you&#39;ll get</h2>
+<ul>
+<li>pyenv installed in <code>~/.pyenv</code> (persists across restarts)</li>
+<li>Python 3.12 (or your choice) installed</li>
+<li>Default venv in <code>~/.venvs/default</code> with common packages</li>
+<li>Helper commands: <code>venv-default</code>, <code>venv-create</code>, <code>venv-list</code></li>
+</ul>
+<h2 is-upgraded>Prerequisites</h2>
+<ul>
+<li>A Google Cloud Workstation</li>
+<li>Terminal access</li>
+</ul>
 
-  <div class="content">
-    <div class="step">
-      <h2>Overview</h2>
-      <p>This guide installs <strong>pyenv</strong> for Python version management and creates persistent virtual environments that survive Cloud Workstation restarts.</p>
-      <p><strong>What you'll get:</strong></p>
-      <ul>
-        <li>pyenv installed in <span class="inline-code">~/.pyenv</span> (persists)</li>
-        <li>Python 3.12 (or your choice) installed</li>
-        <li>Default venv in <span class="inline-code">~/.venvs/default</span></li>
-        <li>Helper commands: <span class="inline-code">venv-default</span>, <span class="inline-code">venv-create</span>, <span class="inline-code">venv-list</span></li>
-      </ul>
-      <p><strong>Time:</strong> ~5 minutes</p>
-    </div>
 
-    <div class="step">
-      <h2>Step 1: Run the Setup Script</h2>
-      <p>Download and run the setup script:</p>
-      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_python_env.sh | bash</code></pre>
-      <p>Or to install a specific Python version:</p>
-      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_python_env.sh | bash -s -- 3.11</code></pre>
-      <div class="note">
-        <strong>Note:</strong> The script will install build dependencies (requires sudo) and compile Python from source. This takes a few minutes.
-      </div>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Run the Setup Script" duration="0">
+        <p>Download and run the setup script:</p>
+<pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_python_env.sh | bash
+</code></pre>
+<p>To install a specific Python version (e.g., 3.11):</p>
+<pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_python_env.sh | bash -s -- 3.11
+</code></pre>
+<p><strong>Note:</strong> The script installs build dependencies and compiles Python from source. This takes a few minutes.</p>
 
-    <div class="step">
-      <h2>Step 2: Reload Your Shell</h2>
-      <p>After installation, reload your shell to use the new commands:</p>
-      <pre><code>source ~/.bashrc</code></pre>
-    </div>
 
-    <div class="step">
-      <h2>Step 3: Activate the Default Environment</h2>
-      <p>Activate the pre-created default virtual environment:</p>
-      <pre><code>venv-default</code></pre>
-      <p>You should see <span class="inline-code">(default)</span> in your prompt.</p>
-      <p>Verify Python:</p>
-      <pre><code>python --version
-which python</code></pre>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Reload Your Shell" duration="0">
+        <p>After installation, reload your shell to use the new commands:</p>
+<pre><code language="language-bash" class="language-bash">source ~/.bashrc
+</code></pre>
 
-    <div class="step">
-      <h2>Using Virtual Environments</h2>
-      <h3>List Available Environments</h3>
-      <pre><code>venv-list</code></pre>
 
-      <h3>Create a New Environment</h3>
-      <pre><code>venv-create myproject</code></pre>
-      <p>Then activate it:</p>
-      <pre><code>source ~/.venvs/myproject/bin/activate</code></pre>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Using Virtual Environments" duration="0">
+        <h2 is-upgraded>Activate the Default Environment</h2>
+<pre><code language="language-bash" class="language-bash">venv-default
+</code></pre>
+<p>You should see <code>(default)</code> in your prompt. Verify:</p>
+<pre><code language="language-bash" class="language-bash">python --version
+which python
+</code></pre>
+<h2 is-upgraded>List Available Environments</h2>
+<pre><code language="language-bash" class="language-bash">venv-list
+</code></pre>
+<h2 is-upgraded>Create a New Environment</h2>
+<pre><code language="language-bash" class="language-bash">venv-create myproject
+</code></pre>
+<p>Activate it:</p>
+<pre><code language="language-bash" class="language-bash">source ~/.venvs/myproject/bin/activate
+</code></pre>
+<h2 is-upgraded>Deactivate</h2>
+<pre><code language="language-bash" class="language-bash">deactivate
+</code></pre>
 
-      <h3>Deactivate</h3>
-      <pre><code>deactivate</code></pre>
-    </div>
 
-    <div class="step">
-      <h2>Managing Python Versions with pyenv</h2>
-      <h3>List Installed Versions</h3>
-      <pre><code>pyenv versions</code></pre>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Managing Python Versions" duration="0">
+        <h2 is-upgraded>List Installed Versions</h2>
+<pre><code language="language-bash" class="language-bash">pyenv versions
+</code></pre>
+<h2 is-upgraded>Install a New Version</h2>
+<pre><code language="language-bash" class="language-bash">pyenv install 3.11.8
+</code></pre>
+<h2 is-upgraded>Set Global Default</h2>
+<pre><code language="language-bash" class="language-bash">pyenv global 3.11.8
+</code></pre>
+<h2 is-upgraded>See Available Versions</h2>
+<pre><code language="language-bash" class="language-bash">pyenv install --list | grep &#34;^\s*3\.&#34;
+</code></pre>
 
-      <h3>Install a New Version</h3>
-      <pre><code>pyenv install 3.11.8</code></pre>
 
-      <h3>Set Global Default</h3>
-      <pre><code>pyenv global 3.11.8</code></pre>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Pre-installed Packages" duration="0">
+        <p>The default environment includes:</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>Package</p>
+</td><td colspan="1" rowspan="1"><p>Purpose</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>numpy</p>
+</td><td colspan="1" rowspan="1"><p>Numerical computing</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>pandas</p>
+</td><td colspan="1" rowspan="1"><p>Data manipulation</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>matplotlib</p>
+</td><td colspan="1" rowspan="1"><p>Plotting</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>scikit-learn</p>
+</td><td colspan="1" rowspan="1"><p>Machine learning</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>requests</p>
+</td><td colspan="1" rowspan="1"><p>HTTP client</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>ipython</p>
+</td><td colspan="1" rowspan="1"><p>Enhanced Python shell</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>black</p>
+</td><td colspan="1" rowspan="1"><p>Code formatter</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>ruff</p>
+</td><td colspan="1" rowspan="1"><p>Fast linter</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>pytest</p>
+</td><td colspan="1" rowspan="1"><p>Testing framework</p>
+</td></tr>
+</table>
 
-      <h3>List Available Versions</h3>
-      <pre><code>pyenv install --list | grep "^\s*3\."</code></pre>
-    </div>
 
-    <div class="step">
-      <h2>Pre-installed Packages</h2>
-      <p>The default environment comes with these packages:</p>
-      <ul>
-        <li><strong>numpy</strong> - Numerical computing</li>
-        <li><strong>pandas</strong> - Data manipulation</li>
-        <li><strong>matplotlib</strong> - Plotting</li>
-        <li><strong>scikit-learn</strong> - Machine learning</li>
-        <li><strong>requests</strong> - HTTP client</li>
-        <li><strong>ipython</strong> - Enhanced Python shell</li>
-        <li><strong>black</strong> - Code formatter</li>
-        <li><strong>ruff</strong> - Fast linter</li>
-        <li><strong>pytest</strong> - Testing framework</li>
-      </ul>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Persistence" duration="0">
+        <p>Everything persists across Cloud Workstation restarts:</p>
+<ul>
+<li><strong>pyenv: </strong><code>~/.pyenv</code></li>
+<li><strong>Virtual environments: </strong><code>~/.venvs/</code></li>
+<li><strong>Shell config: </strong><code>~/.bashrc</code></li>
+</ul>
 
-    <div class="step">
-      <h2>Persistence</h2>
-      <div class="success">
-        <strong>✓ Everything persists across restarts!</strong>
-        <ul>
-          <li>pyenv: <span class="inline-code">~/.pyenv</span></li>
-          <li>Virtual environments: <span class="inline-code">~/.venvs/</span></li>
-          <li>Shell config: <span class="inline-code">~/.bashrc</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Troubleshooting" duration="0">
+        <h2 is-upgraded>pyenv command not found</h2>
+<p>Run <code>source ~/.bashrc</code> or start a new terminal.</p>
+<h2 is-upgraded>Python build fails</h2>
+<p>The script installs build dependencies, but if it fails:</p>
+<pre><code language="language-bash" class="language-bash">sudo apt-get install -y build-essential libssl-dev zlib1g-dev \
+    libbz2-dev libreadline-dev libsqlite3-dev curl \
+    libncursesw5-dev xz-utils tk-dev libxml2-dev \
+    libxmlsec1-dev libffi-dev liblzma-dev
+</code></pre>
+<h2 is-upgraded>Using with VS Code</h2>
+<p>VS Code should automatically detect pyenv environments. If not:</p>
+<ol type="1">
+<li>Open Command Palette (Ctrl+Shift+P)</li>
+<li>Type &#34;Python: Select Interpreter&#34;</li>
+<li>Choose from <code>~/.pyenv/versions/</code> or <code>~/.venvs/</code></li>
+</ol>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
 </body>
 </html>

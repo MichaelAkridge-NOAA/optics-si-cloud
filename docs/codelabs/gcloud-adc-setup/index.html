@@ -1,118 +1,224 @@
-<!DOCTYPE html>
+
+<!doctype html>
+
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GCloud ADC Setup | Cloud Workstation</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>GCloud ADC Setup for Cloud Workstations</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
   <style>
-    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
-    .header { background: #4285F4; color: #fff; padding: 2rem; text-align: center; }
-    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
-    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
-    .step h2 { color: #4285F4; margin-top: 0; border-bottom: 2px solid #d2e3fc; padding-bottom: 0.5rem; }
-    .step h3 { color: #2a3b6b; }
-    pre { background: #263238; color: #aed581; padding: 1rem; border-radius: 4px; overflow-x: auto; }
-    code { font-family: 'Roboto Mono', monospace; }
-    .inline-code { background: #d2e3fc; padding: 0.2em 0.5em; border-radius: 4px; color: #1a3b6b; }
-    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    .warning { background: #f8d7da; border-left: 4px solid #dc3545; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    a { color: #4285F4; }
-    ul, ol { line-height: 1.8; }
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>☁️ GCloud ADC Setup</h1>
-    <p>Fix GCS access issues with Application Default Credentials</p>
-  </div>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="gcloud-adc-setup"
+                  title="GCloud ADC Setup for Cloud Workstations"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="3">
+        <p>This guide configures <strong>Application Default Credentials (ADC)</strong> with proper scopes to fix GCS access issues on Cloud Workstations.</p>
+<h2 is-upgraded>The Problem</h2>
+<p>Cloud Workstation VMs often have <strong>limited OAuth scopes</strong>. You might see errors like:</p>
+<pre><code>403 Forbidden: Provided scope(s) are not authorized
+</code></pre>
+<p>This happens when applications (Label Studio, Python scripts, etc.) try to access Google Cloud Storage.</p>
+<p><strong>Common symptoms:</strong></p>
+<ul>
+<li>Can read from GCS but can&#39;t write</li>
+<li>Can list buckets but can&#39;t upload</li>
+<li>&#34;Permission denied&#34; when saving annotations</li>
+</ul>
+<h2 is-upgraded>The Solution</h2>
+<p>ADC lets you authenticate with your own user account and full scopes, bypassing VM limitations.</p>
+<h2 is-upgraded>Prerequisites</h2>
+<ul>
+<li>A Google Cloud Workstation</li>
+<li><code>gcloud</code> CLI (pre-installed on workstations)</li>
+<li>A Google account with access to your GCS buckets</li>
+</ul>
 
-  <div class="content">
-    <div class="step">
-      <h2>The Problem</h2>
-      <p>Cloud Workstation VMs often have <strong>limited OAuth scopes</strong>. You might see errors like:</p>
-      <pre><code>403 Forbidden: Provided scope(s) are not authorized</code></pre>
-      <p>This happens when applications (like Label Studio, Python scripts) try to access GCS.</p>
-      <div class="warning">
-        <strong>Common symptom:</strong> You can read from GCS but can't write, or vice versa.
-      </div>
-    </div>
 
-    <div class="step">
-      <h2>The Solution</h2>
-      <p><strong>Application Default Credentials (ADC)</strong> let you authenticate with your own user account and full scopes, bypassing VM limitations.</p>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Run the Setup Script" duration="0">
+        <pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_gcloud_adc.sh | bash
+</code></pre>
+<p>The script will:</p>
+<ol type="1">
+<li>Check your current gcloud configuration</li>
+<li>Show VM OAuth scopes (if on GCE)</li>
+<li>Check existing ADC credentials</li>
+<li>Set up ADC with full scopes</li>
+</ol>
 
-    <div class="step">
-      <h2>Step 1: Run the Setup Script</h2>
-      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_gcloud_adc.sh | bash</code></pre>
-      <p>The script will:</p>
-      <ol>
-        <li>Check your current gcloud configuration</li>
-        <li>Show VM OAuth scopes (if on GCE)</li>
-        <li>Check existing ADC credentials</li>
-        <li>Set up ADC with full scopes</li>
-      </ol>
-    </div>
 
-    <div class="step">
-      <h2>Step 2: Authenticate</h2>
-      <p>When prompted, a browser will open. Sign in with your Google account and grant the requested permissions:</p>
-      <ul>
-        <li>Cloud Platform (full access)</li>
-        <li>Cloud Storage (full control)</li>
-        <li>BigQuery</li>
-      </ul>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Authenticate" duration="0">
+        <p>When prompted, a browser window will open.</p>
+<ol type="1">
+<li>Sign in with your Google account</li>
+<li>Grant the requested permissions: <ul>
+<li>Cloud Platform (full access)</li>
+<li>Cloud Storage (full control)</li>
+<li>BigQuery</li>
+</ul>
+</li>
+</ol>
 
-    <div class="step">
-      <h2>Step 3: Test Access</h2>
-      <p>Verify GCS access:</p>
-      <pre><code># List buckets
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Test Access" duration="0">
+        <h2 is-upgraded>Test with gsutil</h2>
+<pre><code language="language-bash" class="language-bash"># List your buckets
 gsutil ls
 
-# List contents of a bucket
-gsutil ls gs://your-bucket-name/</code></pre>
+# List contents of a specific bucket
+gsutil ls gs://your-bucket-name/
 
-      <p>Test in Python:</p>
-      <pre><code>from google.cloud import storage
+# Upload a test file
+echo &#34;test&#34; &gt; /tmp/test.txt
+gsutil cp /tmp/test.txt gs://your-bucket-name/
+</code></pre>
+<h2 is-upgraded>Test in Python</h2>
+<pre><code language="language-python" class="language-python">from google.cloud import storage
+
 client = storage.Client()
+
+# List buckets
 for bucket in client.list_buckets():
-    print(bucket.name)</code></pre>
-    </div>
+    print(bucket.name)
 
-    <div class="step">
-      <h2>Manual Setup (Alternative)</h2>
-      <p>If you prefer to run the command directly:</p>
-      <pre><code>gcloud auth application-default login \
-    --scopes="https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/devstorage.full_control,https://www.googleapis.com/auth/bigquery"</code></pre>
-    </div>
+# Upload a file
+bucket = client.bucket(&#39;your-bucket-name&#39;)
+blob = bucket.blob(&#39;test.txt&#39;)
+blob.upload_from_string(&#39;Hello, World!&#39;)
+</code></pre>
 
-    <div class="step">
-      <h2>How It Works</h2>
-      <p>ADC credentials are stored in:</p>
-      <pre><code>~/.config/gcloud/application_default_credentials.json</code></pre>
-      <p>Applications using Google Cloud client libraries automatically find and use this file.</p>
-      <div class="success">
-        <strong>✓ Persists across restarts</strong> — The credentials file is in your home directory.
-      </div>
-    </div>
 
-    <div class="step">
-      <h2>Troubleshooting</h2>
-      <h3>Still getting 403 errors?</h3>
-      <ul>
-        <li>Make sure you authenticated with an account that has access to the bucket</li>
-        <li>Check bucket IAM permissions in the Cloud Console</li>
-        <li>Verify the project: <span class="inline-code">gcloud config get-value project</span></li>
-      </ul>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Manual Setup (Alternative)" duration="0">
+        <p>If you prefer to run the command directly:</p>
+<pre><code language="language-bash" class="language-bash">gcloud auth application-default login \
+    --scopes=&#34;https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/devstorage.full_control,https://www.googleapis.com/auth/bigquery&#34;
+</code></pre>
 
-      <h3>Revoke and re-authenticate</h3>
-      <pre><code>gcloud auth application-default revoke
-gcloud auth application-default login --scopes=...</code></pre>
-    </div>
-  </div>
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="How It Works" duration="0">
+        <p>ADC credentials are stored in:</p>
+<pre><code>~/.config/gcloud/application_default_credentials.json
+</code></pre>
+<p>Applications using Google Cloud client libraries (Python, Node.js, Go, etc.) automatically find and use this file.</p>
+<h2 is-upgraded>Credential Hierarchy</h2>
+<p>Google Cloud libraries check credentials in this order:</p>
+<ol type="1">
+<li><code>GOOGLE_APPLICATION_CREDENTIALS</code> environment variable</li>
+<li>ADC file (<code>~/.config/gcloud/application_default_credentials.json</code>)</li>
+<li>GCE metadata service (VM service account)</li>
+</ol>
+<p>By setting up ADC, your user credentials take precedence over limited VM scopes.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Persistence" duration="0">
+        <p>✓ <strong>ADC persists across restarts</strong> — The credentials file is in your home directory.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Troubleshooting" duration="0">
+        <h2 is-upgraded>Still getting 403 errors</h2>
+<ol type="1">
+<li><strong>Check account access:</strong><pre><code language="language-bash" class="language-bash">gcloud config get-value account
+</code></pre>
+Make sure this account has IAM permissions on the bucket.</li>
+<li><strong>Check bucket permissions:</strong><ul>
+<li>Go to Cloud Console → Cloud Storage → Your Bucket</li>
+<li>Click &#34;Permissions&#34; tab</li>
+<li>Verify your account has the needed role (e.g., Storage Admin)</li>
+</ul>
+</li>
+<li><strong>Check the project:</strong><pre><code language="language-bash" class="language-bash">gcloud config get-value project
+</code></pre>
+Ensure you&#39;re working in the correct project.</li>
+</ol>
+<h2 is-upgraded>Revoke and re-authenticate</h2>
+<pre><code language="language-bash" class="language-bash">gcloud auth application-default revoke
+gcloud auth application-default login --scopes=&#34;https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/devstorage.full_control&#34;
+</code></pre>
+<h2 is-upgraded>View current ADC info</h2>
+<pre><code language="language-bash" class="language-bash">cat ~/.config/gcloud/application_default_credentials.json
+</code></pre>
+<h2 is-upgraded>Test token generation</h2>
+<pre><code language="language-bash" class="language-bash">gcloud auth application-default print-access-token
+</code></pre>
+<p>If this fails, your ADC is not properly configured.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Using with Label Studio" duration="0">
+        <p>After setting up ADC, Label Studio can:</p>
+<ul>
+<li><strong>Read images from GCS:</strong> Use <code>gs://bucket/path</code> as source storage</li>
+<li><strong>Write annotations to GCS:</strong> Use <code>gs://bucket/path</code> as target storage</li>
+</ul>
+<p>Make sure your bucket has CORS configured:</p>
+<pre><code language="language-bash" class="language-bash">cat &gt; /tmp/cors.json &lt;&lt; &#39;EOF&#39;
+[
+  {
+    &#34;origin&#34;: [&#34;*&#34;],
+    &#34;method&#34;: [&#34;GET&#34;, &#34;HEAD&#34;, &#34;PUT&#34;, &#34;POST&#34;, &#34;DELETE&#34;],
+    &#34;responseHeader&#34;: [&#34;Content-Type&#34;, &#34;Access-Control-Allow-Origin&#34;],
+    &#34;maxAgeSeconds&#34;: 3600
+  }
+]
+EOF
+
+gsutil cors set /tmp/cors.json gs://your-bucket-name
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Security Notes" duration="0">
+        <ul>
+<li>ADC credentials are tied to <strong>your user account</strong>, not the VM</li>
+<li>Credentials are stored locally in <code>~/</code> (not shared)</li>
+<li>Revoke when no longer needed: <code>gcloud auth application-default revoke</code></li>
+<li>For production, consider using a service account instead</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
 </body>
 </html>

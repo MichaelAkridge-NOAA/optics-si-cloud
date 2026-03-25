@@ -1,120 +1,206 @@
-<!DOCTYPE html>
+
+<!doctype html>
+
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workstation Cleanup | Cloud Workstation</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Workstation Cleanup Guide</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
   <style>
-    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
-    .header { background: #4F7DC9; color: #fff; padding: 2rem; text-align: center; }
-    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
-    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
-    .step h2 { color: #4F7DC9; margin-top: 0; border-bottom: 2px solid #e3eafc; padding-bottom: 0.5rem; }
-    .step h3 { color: #2a3b6b; }
-    pre { background: #263238; color: #aed581; padding: 1rem; border-radius: 4px; overflow-x: auto; }
-    code { font-family: 'Roboto Mono', monospace; }
-    .inline-code { background: #e3eafc; padding: 0.2em 0.5em; border-radius: 4px; color: #2a3b6b; }
-    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
-    a { color: #4F7DC9; }
-    ul, ol { line-height: 1.8; }
-    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-    th, td { border: 1px solid #e3eafc; padding: 0.75rem; text-align: left; }
-    th { background: #e3eafc; }
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>🧹 Workstation Cleanup</h1>
-    <p>Clean logs, caches, and temporary files</p>
-  </div>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="workstation-cleanup"
+                  title="Workstation Cleanup Guide"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <p>This guide covers cleaning up logs, caches, and temporary files on your Cloud Workstation to free disk space.</p>
+<h2 class="checklist" is-upgraded>What you&#39;ll learn</h2>
+<ul class="checklist">
+<li>Preview cleanup with dry-run mode</li>
+<li>Clean specific categories interactively</li>
+<li>Automate cleanup with flags</li>
+<li>Understand what&#39;s safe to delete</li>
+</ul>
+<h2 is-upgraded>Prerequisites</h2>
+<ul>
+<li>Google Cloud Workstation</li>
+<li>Basic terminal knowledge</li>
+</ul>
 
-  <div class="content">
-    <div class="step">
-      <h2>Overview</h2>
-      <p>The cleanup script helps free disk space by removing logs, caches, and temporary files. It's safe by default and won't delete user data without confirmation.</p>
-      <p><strong>Categories cleaned:</strong></p>
-      <ul>
-        <li>Package caches (pip, npm, yarn)</li>
-        <li>Application logs (older than 7 days)</li>
-        <li>Python bytecode (<span class="inline-code">__pycache__</span>)</li>
-        <li>Trash folder</li>
-        <li>Docker unused resources</li>
-      </ul>
-    </div>
 
-    <div class="step">
-      <h2>Preview (Dry Run)</h2>
-      <p>See what would be deleted without removing anything:</p>
-      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/workstation_cleanup.sh | bash -s -- --dry-run</code></pre>
-      <p>This shows each category and how much space it uses.</p>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Preview Cleanup (Dry Run)" duration="1">
+        <p>First, see what would be deleted without actually removing anything:</p>
+<pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/workstation_cleanup.sh | bash -s -- --dry-run
+</code></pre>
+<p>Or locally:</p>
+<pre><code language="language-bash" class="language-bash">bash scripts/workstation_cleanup.sh --dry-run
+</code></pre>
+<p>This shows each category and how much space it uses.</p>
 
-    <div class="step">
-      <h2>Interactive Cleanup</h2>
-      <p>Run cleanup and choose what to delete:</p>
-      <pre><code>bash workstation_cleanup.sh</code></pre>
-      <p>For each category, you'll be prompted:</p>
-      <pre><code>  pip cache: 245M
-    Clean? (y/n)</code></pre>
-    </div>
 
-    <div class="step">
-      <h2>Automatic Cleanup</h2>
-      <p>Clean everything without prompts:</p>
-      <pre><code>bash workstation_cleanup.sh --all</code></pre>
-      <div class="note">
-        <strong>Note:</strong> This is useful for scripts and automation.
-      </div>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Interactive Cleanup" duration="2">
+        <p>Run cleanup interactively to choose what to delete:</p>
+<pre><code language="language-bash" class="language-bash">bash workstation_cleanup.sh
+</code></pre>
+<p>For each category, you&#39;ll be prompted:</p>
+<pre><code>  pip cache: 245M
+    Clean? (y/n)
+</code></pre>
+<p>Press <code>y</code> to clean or <code>n</code> to skip.</p>
+<h2 is-upgraded>Categories Cleaned</h2>
+<p><strong>System Caches</strong></p>
+<ul>
+<li>APT package cache</li>
+<li>Systemd journal logs</li>
+</ul>
+<p><strong>User Caches</strong></p>
+<ul>
+<li>pip cache (<code>~/.cache/pip</code>)</li>
+<li>npm cache (<code>~/.npm/_cacache</code>)</li>
+<li>yarn cache</li>
+<li>Go build cache</li>
+<li>Python bytecode (<code>__pycache__</code>)</li>
+</ul>
+<p><strong>Application Logs</strong></p>
+<ul>
+<li>Label Studio logs (older than 7 days)</li>
+<li>Jupyter logs</li>
+<li>code-server logs</li>
+<li>GCloud logs</li>
+</ul>
+<p><strong>Temporary Files</strong></p>
+<ul>
+<li><code>~/tmp</code> directory</li>
+<li>Vim swap files</li>
+<li>Core dumps</li>
+</ul>
+<p><strong>Trash</strong></p>
+<ul>
+<li><code>~/.local/share/Trash</code></li>
+</ul>
 
-    <div class="step">
-      <h2>What Gets Cleaned</h2>
-      <table>
-        <tr><th>Category</th><th>Location</th><th>Safe?</th></tr>
-        <tr><td>pip cache</td><td>~/.cache/pip</td><td>✓ Always safe</td></tr>
-        <tr><td>npm cache</td><td>~/.npm/_cacache</td><td>✓ Always safe</td></tr>
-        <tr><td>Python bytecode</td><td>__pycache__/</td><td>✓ Always safe</td></tr>
-        <tr><td>Old logs</td><td>~/.label-studio/*.log</td><td>✓ Always safe</td></tr>
-        <tr><td>Trash</td><td>~/.local/share/Trash</td><td>✓ Always safe</td></tr>
-        <tr><td>Docker unused</td><td>/var/lib/docker</td><td>⚠ Review first</td></tr>
-      </table>
-    </div>
 
-    <div class="step">
-      <h2>What's Never Deleted</h2>
-      <ul>
-        <li>Source code and projects</li>
-        <li>Virtual environments (preserved)</li>
-        <li>Configuration files</li>
-        <li>SSH keys</li>
-        <li>Git repositories</li>
-      </ul>
-    </div>
+      </google-codelab-step>
+    
+      <google-codelab-step label="Automatic Cleanup" duration="1">
+        <p>Clean everything without prompts:</p>
+<pre><code language="language-bash" class="language-bash">bash workstation_cleanup.sh --all
+</code></pre>
+<p>This is useful for:</p>
+<ul>
+<li>Scheduled cleanup tasks</li>
+<li>Scripts and automation</li>
+<li>Quick space recovery</li>
+</ul>
 
-    <div class="step">
-      <h2>Schedule Regular Cleanup</h2>
-      <p>Add weekly cleanup to cron:</p>
-      <pre><code># Edit crontab
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Docker Cleanup" duration="1">
+        <p>If Docker is installed, the script also offers:</p>
+<pre><code language="language-bash" class="language-bash">docker system prune
+</code></pre>
+<p>This removes:</p>
+<ul>
+<li>Stopped containers</li>
+<li>Unused networks</li>
+<li>Dangling images</li>
+<li>Build cache</li>
+</ul>
+<p>For more aggressive Docker cleanup:</p>
+<pre><code language="language-bash" class="language-bash">docker system prune -a  # Also removes unused images
+docker volume prune     # Removes unused volumes
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Schedule Regular Cleanup" duration="1">
+        <p>Add automatic cleanup to cron:</p>
+<pre><code language="language-bash" class="language-bash"># Edit crontab
 crontab -e
 
 # Weekly cleanup (Sundays at 3 AM)
-0 3 * * 0 ~/scripts/workstation_cleanup.sh --all >> ~/.local/share/cleanup.log 2>&1</code></pre>
-    </div>
+0 3 * * 0 /home/user/scripts/workstation_cleanup.sh --all &gt;&gt; /home/user/.local/share/cleanup.log 2&gt;&amp;1
+</code></pre>
 
-    <div class="step">
-      <h2>Next Steps</h2>
-      <ul>
-        <li>Run <span class="inline-code">--dry-run</span> first to preview</li>
-        <li>Set up weekly cleanup</li>
-        <li>Use <span class="inline-code">workstation_health.sh</span> to monitor disk</li>
-      </ul>
-      <p><a href="../">← Back to all codelabs</a></p>
-    </div>
-  </div>
 
-  <script src="../assets/close-button-patch.js"></script>
+      </google-codelab-step>
+    
+      <google-codelab-step label="What&#39;s Safe to Delete" duration="2">
+        <h2 is-upgraded>Always Safe</h2>
+<ul>
+<li>Package manager caches (pip, npm, yarn)</li>
+<li>Python bytecode (<code>__pycache__</code>, <code>.pyc</code>)</li>
+<li>Old log files</li>
+<li>Trash</li>
+<li>Temporary files</li>
+</ul>
+<h2 is-upgraded>Check First</h2>
+<ul>
+<li>Downloads folder (might have important files)</li>
+<li>Docker images (need to re-pull)</li>
+</ul>
+<h2 is-upgraded>Never Deleted by Script</h2>
+<ul>
+<li>Source code</li>
+<li>Virtual environments (preserved)</li>
+<li>Configuration files</li>
+<li>SSH keys</li>
+<li>Git repositories</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Congratulations" duration="1">
+        <p>You now know how to keep your workstation clean!</p>
+<h2 is-upgraded>What you learned</h2>
+<ul>
+<li>Preview cleanup with <code>--dry-run</code></li>
+<li>Interactive vs automatic cleanup</li>
+<li>What&#39;s safe to delete</li>
+<li>Scheduling regular cleanup</li>
+</ul>
+<h2 is-upgraded>Next steps</h2>
+<ul>
+<li>Set up weekly cleanup cron job</li>
+<li>Run cleanup when disk usage is high</li>
+<li>Use <code>workstation_health.sh</code> to monitor disk</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
 </body>
 </html>

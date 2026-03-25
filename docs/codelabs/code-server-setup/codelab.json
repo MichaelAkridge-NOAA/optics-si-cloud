@@ -1,6 +1,32 @@
 {
-  "title": "VS Code Server Setup",
-  "summary": "Install code-server for browser-based VS Code on Cloud Workstations (port 8443)",
-  "url": "code-server-setup",
-  "tags": ["vscode", "code-server", "cloud-workstation", "setup"]
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-03-25T19:00:33Z",
+  "id": "code-server-setup",
+  "duration": 3,
+  "title": "VS Code Server (code-server) Setup for Cloud Workstations",
+  "authors": "Michael Akridge",
+  "summary": "Install code-server to run VS Code in your browser as a lightweight alternative.",
+  "source": "codelabs/code-server-setup.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "cloud",
+    "vscode",
+    "development"
+  ],
+  "tags": [
+    "cloud",
+    "code-server",
+    "ide",
+    "vscode",
+    "web",
+    "workstations"
+  ],
+  "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
+  "url": "code-server-setup"
 }
