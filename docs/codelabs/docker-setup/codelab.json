@@ -1,0 +1,6 @@
+{
+  "title": "Docker Setup for Cloud Workstations",
+  "summary": "Install Docker Engine with persistence helpers for Cloud Workstations",
+  "url": "docker-setup",
+  "tags": ["docker", "containers", "cloud-workstation", "setup"]
+}

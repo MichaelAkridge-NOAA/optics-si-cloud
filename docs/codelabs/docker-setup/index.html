@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docker Setup | Cloud Workstation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <style>
+    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
+    .header { background: #4F7DC9; color: #fff; padding: 2rem; text-align: center; }
+    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
+    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
+    .step h2 { color: #4F7DC9; margin-top: 0; border-bottom: 2px solid #e3eafc; padding-bottom: 0.5rem; }
+    .step h3 { color: #2a3b6b; }
+    pre { background: #263238; color: #aed581; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+    code { font-family: 'Roboto Mono', monospace; }
+    .inline-code { background: #e3eafc; padding: 0.2em 0.5em; border-radius: 4px; color: #2a3b6b; }
+    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    .warning { background: #f8d7da; border-left: 4px solid #dc3545; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    a { color: #4F7DC9; }
+    ul, ol { line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🐳 Docker Setup</h1>
+    <p>Docker Engine with persistence helpers for Cloud Workstations</p>
+  </div>
+
+  <div class="content">
+    <div class="step">
+      <h2>Overview</h2>
+      <p>This guide installs Docker Engine on your Cloud Workstation with helpers for managing image persistence across restarts.</p>
+      <p><strong>What you'll get:</strong></p>
+      <ul>
+        <li>Docker Engine and Docker Compose</li>
+        <li>Log rotation configured</li>
+        <li>Management commands: <span class="inline-code">docker-status</span>, <span class="inline-code">docker-cleanup</span></li>
+        <li>Image save/load for persistence</li>
+      </ul>
+      <p><strong>Time:</strong> ~3 minutes</p>
+    </div>
+
+    <div class="step">
+      <h2>Step 1: Run the Setup Script</h2>
+      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_docker.sh | bash</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Step 2: Apply Group Changes</h2>
+      <p>After installation, apply the docker group:</p>
+      <pre><code>newgrp docker</code></pre>
+      <p>Or log out and back in.</p>
+    </div>
+
+    <div class="step">
+      <h2>Step 3: Test Docker</h2>
+      <pre><code>docker run hello-world</code></pre>
+      <div class="success">
+        <strong>Success!</strong> You should see "Hello from Docker!"
+      </div>
+    </div>
+
+    <div class="step">
+      <h2>Understanding Persistence</h2>
+      <div class="warning">
+        <strong>Important:</strong> Docker data in <span class="inline-code">/var/lib/docker</span> does NOT persist across Cloud Workstation restarts. Downloaded images and stopped containers will be lost.
+      </div>
+      <h3>Solutions</h3>
+      <p><strong>Option 1:</strong> Save images before restart</p>
+      <pre><code>docker-save-images</code></pre>
+      <p><strong>Option 2:</strong> Use container registries</p>
+      <pre><code>docker tag myimage gcr.io/PROJECT/myimage
+docker push gcr.io/PROJECT/myimage</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Management Commands</h2>
+      <h3>Check Status</h3>
+      <pre><code>docker-status</code></pre>
+      <p>Shows version, running containers, images, and disk usage.</p>
+
+      <h3>Cleanup</h3>
+      <pre><code>docker-cleanup</code></pre>
+      <p>Removes stopped containers, unused networks, and dangling images.</p>
+
+      <h3>Save Images (before restart)</h3>
+      <pre><code>docker-save-images</code></pre>
+      <p>Saves all images to <span class="inline-code">~/.docker-images/</span></p>
+
+      <h3>Load Images (after restart)</h3>
+      <pre><code>docker-load-images</code></pre>
+      <p>Restores images from <span class="inline-code">~/.docker-images/</span></p>
+    </div>
+
+    <div class="step">
+      <h2>Common Commands</h2>
+      <pre><code># Run a container
+docker run -d -p 8080:80 nginx
+
+# Build from Dockerfile
+docker build -t myapp .
+
+# Docker Compose
+docker compose up -d
+docker compose down
+
+# View logs
+docker logs -f container-name</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Next Steps</h2>
+      <ul>
+        <li>Build and run your containers</li>
+        <li>Run <span class="inline-code">docker-save-images</span> before workstation stops</li>
+        <li>Consider using GCR for important images</li>
+      </ul>
+      <p><a href="../">← Back to all codelabs</a></p>
+    </div>
+  </div>
+
+  <script src="../assets/close-button-patch.js"></script>
+</body>
+</html>

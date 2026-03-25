@@ -1,0 +1,6 @@
+{
+  "title": "Git & SSH Setup",
+  "summary": "Configure Git identity and SSH keys for GitHub, GitLab, and Cloud Source Repos",
+  "url": "git-ssh-setup",
+  "tags": ["git", "ssh", "github", "cloud-workstation", "setup"]
+}

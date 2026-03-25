@@ -4,13 +4,32 @@
 
 Optics SI cloud tools repository is to support data science workflows, cloud deployment, documentation, and reproducible research using cloud workstations and resources.
 
+### 🚀 Quick Start - Cloud Workstation Setup
+
+Install common tools with one command:
+
+```bash
+# Label Studio (data annotation)
+curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/install_label_studio.sh | bash
+
+# JupyterLab
+curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_jupyter.sh | bash
+
+# Python environment (pyenv + venvs)
+curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_python_env.sh | bash
+```
+
+📚 **[Full Setup Guides & Codelabs →](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/)**
+
 ### Main Folders
 - **cloud/**: Cloud deployment resources (e.g., Terraform, AWS, Azure, GCP configs).
-- **scripts/**: Python and shell scripts for data processing, model training, and automation.
+- **scripts/**: Setup scripts for Cloud Workstations ([see README](./scripts/README.md)).
 - **notebooks/**: Jupyter notebooks for exploration, analysis, and prototyping.
 - **documents/**: Project documentation, reports, and references.
 - **data/**: Example datasets, data schemas, and data management scripts.
 - **models/**: Pretrained models, model checkpoints, and training logs.
+- **codelabs/**: Source markdown for step-by-step tutorials.
+- **docs/**: GitHub Pages site with interactive codelabs.
 
 ----------
 #### Disclaimer

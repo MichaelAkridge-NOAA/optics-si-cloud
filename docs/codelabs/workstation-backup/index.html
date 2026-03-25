@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workstation Backup to GCS | Cloud Workstation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <style>
+    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
+    .header { background: #4F7DC9; color: #fff; padding: 2rem; text-align: center; }
+    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
+    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
+    .step h2 { color: #4F7DC9; margin-top: 0; border-bottom: 2px solid #e3eafc; padding-bottom: 0.5rem; }
+    .step h3 { color: #2a3b6b; }
+    pre { background: #263238; color: #aed581; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+    code { font-family: 'Roboto Mono', monospace; }
+    .inline-code { background: #e3eafc; padding: 0.2em 0.5em; border-radius: 4px; color: #2a3b6b; }
+    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    a { color: #4F7DC9; }
+    ul, ol { line-height: 1.8; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { border: 1px solid #e3eafc; padding: 0.75rem; text-align: left; }
+    th { background: #e3eafc; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>💾 Workstation Backup</h1>
+    <p>Back up your home directory to Google Cloud Storage</p>
+  </div>
+
+  <div class="content">
+    <div class="step">
+      <h2>Overview</h2>
+      <p>This guide covers backing up your Cloud Workstation to GCS for disaster recovery.</p>
+      <p><strong>What gets backed up:</strong></p>
+      <ul>
+        <li>Configuration files (.bashrc, .gitconfig)</li>
+        <li>SSH keys (~/.ssh)</li>
+        <li>Project files and notebooks</li>
+        <li>Scripts and custom tools</li>
+      </ul>
+      <p><strong>What's excluded:</strong></p>
+      <ul>
+        <li>Package caches (pip, npm)</li>
+        <li>Virtual environments (can be recreated)</li>
+        <li>Log files and temp files</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h2>Prerequisites</h2>
+      <ul>
+        <li>GCS bucket with write access</li>
+        <li>ADC configured (run <span class="inline-code">setup_gcloud_adc.sh</span>)</li>
+      </ul>
+      <div class="note">
+        <strong>Note:</strong> Create a dedicated bucket for backups, e.g., <span class="inline-code">gs://my-project-backups/workstations/</span>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2>Create a Backup</h2>
+      <pre><code>bash workstation_backup.sh backup gs://your-bucket/workstation-backups</code></pre>
+      <p>Or download and run:</p>
+      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/workstation_backup.sh | bash -s -- backup gs://your-bucket/backups</code></pre>
+      <p>Backups are named with timestamps: <span class="inline-code">backup-20260325-103045</span></p>
+    </div>
+
+    <div class="step">
+      <h2>List Available Backups</h2>
+      <pre><code>bash workstation_backup.sh list gs://your-bucket/workstation-backups</code></pre>
+      <p>Output:</p>
+      <pre><code>Available backups:
+  backup-20260325-103045  (2026-03-25T10:30:45)
+  backup-20260324-140000  (2026-03-24T14:00:00)</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Restore from Backup</h2>
+      <pre><code>bash workstation_backup.sh restore gs://your-bucket/workstation-backups/backup-20260325-103045</code></pre>
+      <p>The script will:</p>
+      <ol>
+        <li>Show backup metadata</li>
+        <li>Ask for confirmation</li>
+        <li>Sync files from GCS</li>
+      </ol>
+      <div class="note">
+        <strong>After restore:</strong> Run <span class="inline-code">source ~/.bashrc</span> and reinstall any virtual environments.
+      </div>
+    </div>
+
+    <div class="step">
+      <h2>Schedule Automatic Backups</h2>
+      <p>Set up daily backups at 2:00 AM:</p>
+      <pre><code>bash workstation_backup.sh schedule gs://your-bucket/workstation-backups</code></pre>
+      <p>View scheduled backups:</p>
+      <pre><code>crontab -l | grep backup</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Best Practices</h2>
+      <h3>Storage Location</h3>
+      <p>Use a consistent path:</p>
+      <pre><code>gs://my-project-backups/workstations/USERNAME/</code></pre>
+
+      <h3>Retention Policy</h3>
+      <p>Set up lifecycle rules to delete old backups:</p>
+      <pre><code># lifecycle.json
+{
+  "rule": [{
+    "action": {"type": "Delete"},
+    "condition": {"age": 30}
+  }]
+}
+
+gsutil lifecycle set lifecycle.json gs://your-bucket</code></pre>
+
+      <h3>When to Backup</h3>
+      <ul>
+        <li>Before major software updates</li>
+        <li>Before configuration changes</li>
+        <li>Daily via scheduled backups</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h2>Next Steps</h2>
+      <ul>
+        <li>Create your first backup</li>
+        <li>Set up scheduled daily backups</li>
+        <li>Configure GCS lifecycle rules</li>
+      </ul>
+      <p><a href="../">← Back to all codelabs</a></p>
+    </div>
+  </div>
+
+  <script src="../assets/close-button-patch.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "title": "Workstation Cleanup",
+  "summary": "Clean logs, caches, and temporary files to free disk space",
+  "url": "workstation-cleanup",
+  "tags": ["cleanup", "maintenance", "cloud-workstation", "disk"]
+}

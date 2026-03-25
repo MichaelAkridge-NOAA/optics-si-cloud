@@ -1,0 +1,6 @@
+{
+  "title": "Workstation Health Check",
+  "summary": "Monitor all services and system resources on your Cloud Workstation",
+  "url": "workstation-health",
+  "tags": ["monitoring", "health", "cloud-workstation", "devops"]
+}

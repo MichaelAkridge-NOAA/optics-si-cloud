@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git & SSH Setup | Cloud Workstation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <style>
+    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
+    .header { background: #24292e; color: #fff; padding: 2rem; text-align: center; }
+    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
+    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
+    .step h2 { color: #24292e; margin-top: 0; border-bottom: 2px solid #e1e4e8; padding-bottom: 0.5rem; }
+    .step h3 { color: #2a3b6b; }
+    pre { background: #263238; color: #aed581; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+    code { font-family: 'Roboto Mono', monospace; }
+    .inline-code { background: #e1e4e8; padding: 0.2em 0.5em; border-radius: 4px; color: #24292e; }
+    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    a { color: #0366d6; }
+    ul, ol { line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🔐 Git & SSH Setup</h1>
+    <p>Configure Git and SSH keys for GitHub, GitLab, and Cloud Source Repos</p>
+  </div>
+
+  <div class="content">
+    <div class="step">
+      <h2>Overview</h2>
+      <p>This guide configures:</p>
+      <ul>
+        <li>Git identity (name, email)</li>
+        <li>Useful Git defaults and aliases</li>
+        <li>SSH key for secure authentication</li>
+        <li>SSH config for GitHub, GitLab, Cloud Source Repos</li>
+      </ul>
+      <p><strong>Time:</strong> ~2 minutes</p>
+    </div>
+
+    <div class="step">
+      <h2>Step 1: Run the Setup Script</h2>
+      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_git_ssh.sh | bash</code></pre>
+      <p>Or with your name and email pre-filled:</p>
+      <pre><code>bash setup_git_ssh.sh "Your Name" "your@email.com"</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Step 2: Copy Your Public Key</h2>
+      <p>The script outputs your public SSH key. Copy it:</p>
+      <pre><code>cat ~/.ssh/id_ed25519.pub</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Step 3: Add Key to Git Providers</h2>
+      <h3>GitHub</h3>
+      <ol>
+        <li>Go to <a href="https://github.com/settings/ssh/new" target="_blank">github.com/settings/ssh/new</a></li>
+        <li>Paste your public key</li>
+        <li>Give it a title (e.g., "Cloud Workstation")</li>
+        <li>Click "Add SSH key"</li>
+      </ol>
+
+      <h3>GitLab</h3>
+      <ol>
+        <li>Go to <a href="https://gitlab.com/-/user_settings/ssh_keys" target="_blank">gitlab.com/-/user_settings/ssh_keys</a></li>
+        <li>Paste your public key</li>
+        <li>Click "Add key"</li>
+      </ol>
+
+      <h3>Google Cloud Source Repositories</h3>
+      <ol>
+        <li>Go to <a href="https://source.cloud.google.com/user/ssh_keys" target="_blank">source.cloud.google.com/user/ssh_keys</a></li>
+        <li>Click "Register SSH Key"</li>
+        <li>Paste your public key</li>
+      </ol>
+    </div>
+
+    <div class="step">
+      <h2>Step 4: Test the Connection</h2>
+      <pre><code># GitHub
+ssh -T git@github.com
+
+# GitLab
+ssh -T git@gitlab.com</code></pre>
+      <p>You should see a welcome message like:</p>
+      <pre><code>Hi username! You've successfully authenticated...</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Git Aliases</h2>
+      <p>The script adds these handy aliases:</p>
+      <table style="width:100%; border-collapse: collapse;">
+        <tr style="background: #e1e4e8;">
+          <th style="padding: 0.5rem; text-align: left;">Alias</th>
+          <th style="padding: 0.5rem; text-align: left;">Command</th>
+          <th style="padding: 0.5rem; text-align: left;">Description</th>
+        </tr>
+        <tr><td style="padding: 0.5rem;"><code>git st</code></td><td style="padding: 0.5rem;">status -sb</td><td style="padding: 0.5rem;">Short status</td></tr>
+        <tr><td style="padding: 0.5rem;"><code>git co</code></td><td style="padding: 0.5rem;">checkout</td><td style="padding: 0.5rem;">Checkout</td></tr>
+        <tr><td style="padding: 0.5rem;"><code>git br</code></td><td style="padding: 0.5rem;">branch</td><td style="padding: 0.5rem;">Branch</td></tr>
+        <tr><td style="padding: 0.5rem;"><code>git ci</code></td><td style="padding: 0.5rem;">commit</td><td style="padding: 0.5rem;">Commit</td></tr>
+        <tr><td style="padding: 0.5rem;"><code>git lg</code></td><td style="padding: 0.5rem;">log --oneline --graph</td><td style="padding: 0.5rem;">Pretty log</td></tr>
+        <tr><td style="padding: 0.5rem;"><code>git last</code></td><td style="padding: 0.5rem;">log -1 HEAD --stat</td><td style="padding: 0.5rem;">Last commit</td></tr>
+        <tr><td style="padding: 0.5rem;"><code>git unstage</code></td><td style="padding: 0.5rem;">reset HEAD --</td><td style="padding: 0.5rem;">Unstage files</td></tr>
+      </table>
+    </div>
+
+    <div class="step">
+      <h2>Cloning Repositories</h2>
+      <p>Now you can clone using SSH:</p>
+      <pre><code># GitHub
+git clone git@github.com:username/repo.git
+
+# GitLab
+git clone git@gitlab.com:username/repo.git
+
+# Cloud Source Repos
+git clone ssh://source.developers.google.com/p/PROJECT/r/REPO</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Persistence</h2>
+      <div class="success">
+        <strong>✓ Everything persists across restarts!</strong>
+        <ul>
+          <li>SSH keys: <span class="inline-code">~/.ssh/</span></li>
+          <li>Git config: <span class="inline-code">~/.gitconfig</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "title": "GCloud ADC Setup",
+  "summary": "Configure Application Default Credentials with proper scopes for GCS access",
+  "url": "gcloud-adc-setup",
+  "tags": ["gcloud", "gcs", "cloud-workstation", "setup"]
+}

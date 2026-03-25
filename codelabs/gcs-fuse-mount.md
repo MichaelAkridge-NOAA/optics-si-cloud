@@ -83,13 +83,13 @@ sudo apt-get install gcsfuse
 Mount the specific directory from the bucket to your local filesystem:
 
 ```bash
-gcsfuse --only-dir PIFSC/ESD/ARP/genomics nmfs_odp_pifsc ~/gcs/genomics
+gcsfuse --only-dir path/to/folder your-bucket-name ~/gcs/mount-point
 ```
 
 **Command breakdown:**
-- `--only-dir PIFSC/ESD/ARP/genomics`: Only mount specific directory from the bucket
-- `nmfs_odp_pifsc`: The name of the Google Cloud Storage bucket
-- `~/gcs/genomics`: Local/cloud machine mount point directory
+- `--only-dir path/to/folder`: Only mount specific directory from the bucket
+- `your-bucket-name`: The name of the Google Cloud Storage bucket
+- `~/gcs/mount-point`: Local/cloud machine mount point directory
 
 Once mounted, you can access the bucket contents through standard file operations.
 
@@ -98,7 +98,7 @@ Once mounted, you can access the bucket contents through standard file operation
 When you're finished working with the mounted bucket, unmount it using:
 
 ```bash
-fusermount -u ~/gcs/genomics
+fusermount -u ~/gcs/mount-point
 ```
 
 ## Important Notes

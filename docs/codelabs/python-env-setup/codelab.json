@@ -1,0 +1,6 @@
+{
+  "title": "Python Environment Setup",
+  "summary": "Install pyenv and create persistent Python virtual environments on Cloud Workstations",
+  "url": "python-env-setup",
+  "tags": ["python", "cloud-workstation", "setup"]
+}

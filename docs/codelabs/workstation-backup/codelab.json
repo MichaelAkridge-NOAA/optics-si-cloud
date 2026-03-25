@@ -1,0 +1,6 @@
+{
+  "title": "Workstation Backup to GCS",
+  "summary": "Back up your Cloud Workstation home directory to Google Cloud Storage",
+  "url": "workstation-backup",
+  "tags": ["backup", "gcs", "cloud-workstation", "disaster-recovery"]
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GCloud ADC Setup | Cloud Workstation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <style>
+    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
+    .header { background: #4285F4; color: #fff; padding: 2rem; text-align: center; }
+    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
+    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
+    .step h2 { color: #4285F4; margin-top: 0; border-bottom: 2px solid #d2e3fc; padding-bottom: 0.5rem; }
+    .step h3 { color: #2a3b6b; }
+    pre { background: #263238; color: #aed581; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+    code { font-family: 'Roboto Mono', monospace; }
+    .inline-code { background: #d2e3fc; padding: 0.2em 0.5em; border-radius: 4px; color: #1a3b6b; }
+    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    .warning { background: #f8d7da; border-left: 4px solid #dc3545; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    a { color: #4285F4; }
+    ul, ol { line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>☁️ GCloud ADC Setup</h1>
+    <p>Fix GCS access issues with Application Default Credentials</p>
+  </div>
+
+  <div class="content">
+    <div class="step">
+      <h2>The Problem</h2>
+      <p>Cloud Workstation VMs often have <strong>limited OAuth scopes</strong>. You might see errors like:</p>
+      <pre><code>403 Forbidden: Provided scope(s) are not authorized</code></pre>
+      <p>This happens when applications (like Label Studio, Python scripts) try to access GCS.</p>
+      <div class="warning">
+        <strong>Common symptom:</strong> You can read from GCS but can't write, or vice versa.
+      </div>
+    </div>
+
+    <div class="step">
+      <h2>The Solution</h2>
+      <p><strong>Application Default Credentials (ADC)</strong> let you authenticate with your own user account and full scopes, bypassing VM limitations.</p>
+    </div>
+
+    <div class="step">
+      <h2>Step 1: Run the Setup Script</h2>
+      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_gcloud_adc.sh | bash</code></pre>
+      <p>The script will:</p>
+      <ol>
+        <li>Check your current gcloud configuration</li>
+        <li>Show VM OAuth scopes (if on GCE)</li>
+        <li>Check existing ADC credentials</li>
+        <li>Set up ADC with full scopes</li>
+      </ol>
+    </div>
+
+    <div class="step">
+      <h2>Step 2: Authenticate</h2>
+      <p>When prompted, a browser will open. Sign in with your Google account and grant the requested permissions:</p>
+      <ul>
+        <li>Cloud Platform (full access)</li>
+        <li>Cloud Storage (full control)</li>
+        <li>BigQuery</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h2>Step 3: Test Access</h2>
+      <p>Verify GCS access:</p>
+      <pre><code># List buckets
+gsutil ls
+
+# List contents of a bucket
+gsutil ls gs://your-bucket-name/</code></pre>
+
+      <p>Test in Python:</p>
+      <pre><code>from google.cloud import storage
+client = storage.Client()
+for bucket in client.list_buckets():
+    print(bucket.name)</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Manual Setup (Alternative)</h2>
+      <p>If you prefer to run the command directly:</p>
+      <pre><code>gcloud auth application-default login \
+    --scopes="https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/devstorage.full_control,https://www.googleapis.com/auth/bigquery"</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>How It Works</h2>
+      <p>ADC credentials are stored in:</p>
+      <pre><code>~/.config/gcloud/application_default_credentials.json</code></pre>
+      <p>Applications using Google Cloud client libraries automatically find and use this file.</p>
+      <div class="success">
+        <strong>✓ Persists across restarts</strong> — The credentials file is in your home directory.
+      </div>
+    </div>
+
+    <div class="step">
+      <h2>Troubleshooting</h2>
+      <h3>Still getting 403 errors?</h3>
+      <ul>
+        <li>Make sure you authenticated with an account that has access to the bucket</li>
+        <li>Check bucket IAM permissions in the Cloud Console</li>
+        <li>Verify the project: <span class="inline-code">gcloud config get-value project</span></li>
+      </ul>
+
+      <h3>Revoke and re-authenticate</h3>
+      <pre><code>gcloud auth application-default revoke
+gcloud auth application-default login --scopes=...</code></pre>
+    </div>
+  </div>
+</body>
+</html>

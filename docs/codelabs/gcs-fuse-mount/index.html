@@ -79,13 +79,13 @@ sudo apt-get install gcsfuse
     
       <google-codelab-step label="Mount a Bucket Folder" duration="0">
         <p>Mount the specific directory from the bucket to your local filesystem:</p>
-<pre><code language="language-bash" class="language-bash">gcsfuse --only-dir PIFSC/ESD/ARP/genomics nmfs_odp_pifsc ~/gcs/genomics
+<pre><code language="language-bash" class="language-bash">gcsfuse --only-dir path/to/folder your-bucket-name ~/gcs/mount-point
 </code></pre>
 <p><strong>Command breakdown:</strong></p>
 <ul>
-<li><code>--only-dir PIFSC/ESD/ARP/genomics</code>: Only mount specific directory from the bucket</li>
-<li><code>nmfs_odp_pifsc</code>: The name of the Google Cloud Storage bucket</li>
-<li><code>~/gcs/genomics</code>: Local/cloud machine mount point directory</li>
+<li><code>--only-dir path/to/folder</code>: Only mount specific directory from the bucket</li>
+<li><code>your-bucket-name</code>: The name of the Google Cloud Storage bucket</li>
+<li><code>~/gcs/mount-point</code>: Local/cloud machine mount point directory</li>
 </ul>
 <p>Once mounted, you can access the bucket contents through standard file operations.</p>
 

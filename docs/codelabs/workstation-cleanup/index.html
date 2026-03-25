@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workstation Cleanup | Cloud Workstation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <style>
+    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
+    .header { background: #4F7DC9; color: #fff; padding: 2rem; text-align: center; }
+    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
+    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
+    .step h2 { color: #4F7DC9; margin-top: 0; border-bottom: 2px solid #e3eafc; padding-bottom: 0.5rem; }
+    .step h3 { color: #2a3b6b; }
+    pre { background: #263238; color: #aed581; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+    code { font-family: 'Roboto Mono', monospace; }
+    .inline-code { background: #e3eafc; padding: 0.2em 0.5em; border-radius: 4px; color: #2a3b6b; }
+    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    a { color: #4F7DC9; }
+    ul, ol { line-height: 1.8; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { border: 1px solid #e3eafc; padding: 0.75rem; text-align: left; }
+    th { background: #e3eafc; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🧹 Workstation Cleanup</h1>
+    <p>Clean logs, caches, and temporary files</p>
+  </div>
+
+  <div class="content">
+    <div class="step">
+      <h2>Overview</h2>
+      <p>The cleanup script helps free disk space by removing logs, caches, and temporary files. It's safe by default and won't delete user data without confirmation.</p>
+      <p><strong>Categories cleaned:</strong></p>
+      <ul>
+        <li>Package caches (pip, npm, yarn)</li>
+        <li>Application logs (older than 7 days)</li>
+        <li>Python bytecode (<span class="inline-code">__pycache__</span>)</li>
+        <li>Trash folder</li>
+        <li>Docker unused resources</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h2>Preview (Dry Run)</h2>
+      <p>See what would be deleted without removing anything:</p>
+      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/workstation_cleanup.sh | bash -s -- --dry-run</code></pre>
+      <p>This shows each category and how much space it uses.</p>
+    </div>
+
+    <div class="step">
+      <h2>Interactive Cleanup</h2>
+      <p>Run cleanup and choose what to delete:</p>
+      <pre><code>bash workstation_cleanup.sh</code></pre>
+      <p>For each category, you'll be prompted:</p>
+      <pre><code>  pip cache: 245M
+    Clean? (y/n)</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Automatic Cleanup</h2>
+      <p>Clean everything without prompts:</p>
+      <pre><code>bash workstation_cleanup.sh --all</code></pre>
+      <div class="note">
+        <strong>Note:</strong> This is useful for scripts and automation.
+      </div>
+    </div>
+
+    <div class="step">
+      <h2>What Gets Cleaned</h2>
+      <table>
+        <tr><th>Category</th><th>Location</th><th>Safe?</th></tr>
+        <tr><td>pip cache</td><td>~/.cache/pip</td><td>✓ Always safe</td></tr>
+        <tr><td>npm cache</td><td>~/.npm/_cacache</td><td>✓ Always safe</td></tr>
+        <tr><td>Python bytecode</td><td>__pycache__/</td><td>✓ Always safe</td></tr>
+        <tr><td>Old logs</td><td>~/.label-studio/*.log</td><td>✓ Always safe</td></tr>
+        <tr><td>Trash</td><td>~/.local/share/Trash</td><td>✓ Always safe</td></tr>
+        <tr><td>Docker unused</td><td>/var/lib/docker</td><td>⚠ Review first</td></tr>
+      </table>
+    </div>
+
+    <div class="step">
+      <h2>What's Never Deleted</h2>
+      <ul>
+        <li>Source code and projects</li>
+        <li>Virtual environments (preserved)</li>
+        <li>Configuration files</li>
+        <li>SSH keys</li>
+        <li>Git repositories</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h2>Schedule Regular Cleanup</h2>
+      <p>Add weekly cleanup to cron:</p>
+      <pre><code># Edit crontab
+crontab -e
+
+# Weekly cleanup (Sundays at 3 AM)
+0 3 * * 0 ~/scripts/workstation_cleanup.sh --all >> ~/.local/share/cleanup.log 2>&1</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Next Steps</h2>
+      <ul>
+        <li>Run <span class="inline-code">--dry-run</span> first to preview</li>
+        <li>Set up weekly cleanup</li>
+        <li>Use <span class="inline-code">workstation_health.sh</span> to monitor disk</li>
+      </ul>
+      <p><a href="../">← Back to all codelabs</a></p>
+    </div>
+  </div>
+
+  <script src="../assets/close-button-patch.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workstation Health Check | Cloud Workstation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <style>
+    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
+    .header { background: #4F7DC9; color: #fff; padding: 2rem; text-align: center; }
+    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
+    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
+    .step h2 { color: #4F7DC9; margin-top: 0; border-bottom: 2px solid #e3eafc; padding-bottom: 0.5rem; }
+    .step h3 { color: #2a3b6b; }
+    pre { background: #263238; color: #aed581; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+    code { font-family: 'Roboto Mono', monospace; }
+    .inline-code { background: #e3eafc; padding: 0.2em 0.5em; border-radius: 4px; color: #2a3b6b; }
+    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    a { color: #4F7DC9; }
+    ul, ol { line-height: 1.8; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { border: 1px solid #e3eafc; padding: 0.75rem; text-align: left; }
+    th { background: #e3eafc; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🏥 Workstation Health Check</h1>
+    <p>Monitor all services and system resources</p>
+  </div>
+
+  <div class="content">
+    <div class="step">
+      <h2>Overview</h2>
+      <p>The health check script provides a unified view of all installed services and system resources on your Cloud Workstation.</p>
+      <p><strong>What it checks:</strong></p>
+      <ul>
+        <li>System resources (disk, memory, CPU)</li>
+        <li>Label Studio, JupyterLab, code-server</li>
+        <li>Docker, Python environment</li>
+        <li>Google Cloud (gcloud, ADC)</li>
+        <li>Git & SSH configuration</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h2>Run Health Check</h2>
+      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/workstation_health.sh | bash</code></pre>
+      <p>Or if cloned locally:</p>
+      <pre><code>bash scripts/workstation_health.sh</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Understanding the Output</h2>
+      <h3>Status Icons</h3>
+      <table>
+        <tr><th>Icon</th><th>Meaning</th><th>Action</th></tr>
+        <tr><td>✓ Green</td><td>Healthy</td><td>None needed</td></tr>
+        <tr><td>⚠ Yellow</td><td>Warning</td><td>Review when convenient</td></tr>
+        <tr><td>✗ Red</td><td>Failed</td><td>Action required</td></tr>
+      </table>
+
+      <h3>Resource Thresholds</h3>
+      <table>
+        <tr><th>Resource</th><th>Warning</th><th>Critical</th></tr>
+        <tr><td>Disk</td><td>&gt;80%</td><td>&gt;90%</td></tr>
+        <tr><td>Memory</td><td>&gt;80%</td><td>&gt;90%</td></tr>
+        <tr><td>CPU Load</td><td>&gt;100%</td><td>—</td></tr>
+      </table>
+    </div>
+
+    <div class="step">
+      <h2>JSON Output</h2>
+      <p>For automation and monitoring tools:</p>
+      <pre><code>workstation_health.sh --json</code></pre>
+      <p>Example output:</p>
+      <pre><code>{
+  "timestamp": "2026-03-25T10:30:00",
+  "summary": {"passed": 8, "warnings": 1, "failed": 0},
+  "resources": {"disk_percent": 45, "memory_percent": 62},
+  "services": [
+    {"name": "label-studio", "status": "running", "port": "8080"}
+  ]
+}</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Troubleshooting</h2>
+      <h3>Service Not Running</h3>
+      <pre><code># Label Studio
+label-studio-restart
+
+# JupyterLab
+jupyter-start
+
+# code-server
+code-server-start
+
+# Docker
+sudo systemctl start docker</code></pre>
+
+      <h3>High Disk Usage</h3>
+      <pre><code>workstation_cleanup.sh</code></pre>
+
+      <h3>ADC Not Configured</h3>
+      <pre><code>bash setup_gcloud_adc.sh</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Automate Health Checks</h2>
+      <p>Add to cron for regular monitoring:</p>
+      <pre><code># Edit crontab
+crontab -e
+
+# Hourly health check
+0 * * * * ~/scripts/workstation_health.sh --json >> ~/.local/share/health.log</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Next Steps</h2>
+      <ul>
+        <li>Run health checks regularly</li>
+        <li>Set up automated monitoring</li>
+        <li>Use <span class="inline-code">workstation_cleanup.sh</span> when disk is high</li>
+      </ul>
+      <p><a href="../">← Back to all codelabs</a></p>
+    </div>
+  </div>
+
+  <script src="../assets/close-button-patch.js"></script>
+</body>
+</html>

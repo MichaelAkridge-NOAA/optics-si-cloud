@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VS Code Server Setup | Cloud Workstation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Roboto:400,500,700">
+  <style>
+    body { font-family: Roboto, sans-serif; margin: 0; padding: 0; background: #f7f9fb; }
+    .header { background: #007ACC; color: #fff; padding: 2rem; text-align: center; }
+    .header h1 { margin: 0; font-family: 'Google Sans', sans-serif; }
+    .content { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    .step { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; margin-bottom: 2rem; }
+    .step h2 { color: #007ACC; margin-top: 0; border-bottom: 2px solid #cce5ff; padding-bottom: 0.5rem; }
+    .step h3 { color: #2a3b6b; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+    code { font-family: 'Roboto Mono', monospace; }
+    .inline-code { background: #cce5ff; padding: 0.2em 0.5em; border-radius: 4px; color: #004085; }
+    .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    .success { background: #d4edda; border-left: 4px solid #28a745; padding: 1rem; margin: 1rem 0; border-radius: 0 4px 4px 0; }
+    a { color: #007ACC; }
+    ul, ol { line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>💻 VS Code Server Setup</h1>
+    <p>Browser-based VS Code on Cloud Workstations (port 8443)</p>
+  </div>
+
+  <div class="content">
+    <div class="step">
+      <h2>Overview</h2>
+      <p><strong>code-server</strong> runs VS Code in your browser. It's useful as:</p>
+      <ul>
+        <li>An alternative when the Cloud Workstation IDE is slow</li>
+        <li>A way to access VS Code from any device with a browser</li>
+        <li>A lightweight option for quick edits</li>
+      </ul>
+      <p><strong>Port:</strong> 8443</p>
+      <p><strong>Time:</strong> ~3 minutes</p>
+    </div>
+
+    <div class="step">
+      <h2>Step 1: Run the Setup Script</h2>
+      <pre><code>curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_code_server.sh | bash</code></pre>
+      <p>The script downloads the latest code-server, configures it, and starts it automatically.</p>
+    </div>
+
+    <div class="step">
+      <h2>Step 2: Access code-server</h2>
+      <p>code-server runs on <strong>port 8443</strong>. Access it via Cloud Workstation port forwarding:</p>
+      <ol>
+        <li>In the Cloud Workstations console, find your workstation</li>
+        <li>Look for port 8443 in the port forwarding section</li>
+        <li>Click the forwarding URL</li>
+      </ol>
+      <p>Or construct the URL manually:</p>
+      <pre><code>https://8443-YOUR-WORKSTATION.cloudworkstations.dev</code></pre>
+      <div class="note">
+        <strong>No password required</strong> — Cloud Workstation IAM handles authentication.
+      </div>
+    </div>
+
+    <div class="step">
+      <h2>Step 3: Reload Shell (for commands)</h2>
+      <pre><code>source ~/.bashrc</code></pre>
+    </div>
+
+    <div class="step">
+      <h2>Management Commands</h2>
+      <table style="width:100%; border-collapse: collapse;">
+        <tr style="background: #cce5ff;">
+          <th style="padding: 0.5rem; text-align: left;">Command</th>
+          <th style="padding: 0.5rem; text-align: left;">Description</th>
+        </tr>
+        <tr><td style="padding: 0.5rem;"><code>code-server-start</code></td><td style="padding: 0.5rem;">Start code-server</td></tr>
+        <tr><td style="padding: 0.5rem;"><code>code-server-stop</code></td><td style="padding: 0.5rem;">Stop code-server</td></tr>
+        <tr><td style="padding: 0.5rem;"><code>code-server-status</code></td><td style="padding: 0.5rem;">Check if running</td></tr>
+        <tr><td style="padding: 0.5rem;"><code>code-server-logs</code></td><td style="padding: 0.5rem;">View logs</td></tr>
+      </table>
+    </div>
+
+    <div class="step">
+      <h2>Installing Extensions</h2>
+      <p>Install extensions from the command line:</p>
+      <pre><code>code-server --install-extension ms-python.python
+code-server --install-extension esbenp.prettier-vscode</code></pre>
+      <p>Or use the Extensions panel in the browser UI.</p>
+      <div class="note">
+        <strong>Note:</strong> Some VS Code extensions may not work in code-server. Check the <a href="https://open-vsx.org/" target="_blank">Open VSX Registry</a> for compatible extensions.
+      </div>
+    </div>
+
+    <div class="step">
+      <h2>Pre-installed Extensions</h2>
+      <p>The setup script installs these extensions:</p>
+      <ul>
+        <li><strong>Python</strong> — Python language support</li>
+        <li><strong>Prettier</strong> — Code formatter</li>
+        <li><strong>ESLint</strong> — JavaScript linter</li>
+        <li><strong>GitLens</strong> — Git supercharged</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h2>Configuration</h2>
+      <p>code-server config is at:</p>
+      <pre><code>~/.config/code-server/config.yaml</code></pre>
+      <p>Default settings:</p>
+      <ul>
+        <li>Bind: <span class="inline-code">0.0.0.0:8443</span></li>
+        <li>Auth: none (IAM handles it)</li>
+        <li>Telemetry: disabled</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h2>Persistence</h2>
+      <div class="success">
+        <strong>✓ Everything persists across restarts!</strong>
+        <ul>
+          <li>code-server: <span class="inline-code">~/.code-server</span></li>
+          <li>Extensions: <span class="inline-code">~/.code-server/extensions</span></li>
+          <li>User data: <span class="inline-code">~/.code-server/data</span></li>
+          <li>Config: <span class="inline-code">~/.config/code-server</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2>Cloud Workstation IDE vs code-server</h2>
+      <table style="width:100%; border-collapse: collapse;">
+        <tr style="background: #e1e4e8;">
+          <th style="padding: 0.5rem; text-align: left;">Feature</th>
+          <th style="padding: 0.5rem; text-align: left;">Workstation IDE</th>
+          <th style="padding: 0.5rem; text-align: left;">code-server</th>
+        </tr>
+        <tr><td style="padding: 0.5rem;">Setup</td><td style="padding: 0.5rem;">Pre-installed</td><td style="padding: 0.5rem;">Manual</td></tr>
+        <tr><td style="padding: 0.5rem;">Extensions</td><td style="padding: 0.5rem;">VS Code Marketplace</td><td style="padding: 0.5rem;">Open VSX</td></tr>
+        <tr><td style="padding: 0.5rem;">Performance</td><td style="padding: 0.5rem;">Heavier</td><td style="padding: 0.5rem;">Lighter</td></tr>
+        <tr><td style="padding: 0.5rem;">Port</td><td style="padding: 0.5rem;">80/443</td><td style="padding: 0.5rem;">8443</td></tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

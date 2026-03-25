@@ -1,0 +1,6 @@
+{
+  "title": "VS Code Server Setup",
+  "summary": "Install code-server for browser-based VS Code on Cloud Workstations (port 8443)",
+  "url": "code-server-setup",
+  "tags": ["vscode", "code-server", "cloud-workstation", "setup"]
+}
