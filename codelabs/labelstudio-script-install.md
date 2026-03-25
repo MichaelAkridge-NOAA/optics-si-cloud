@@ -222,6 +222,47 @@ label-studio start --host 0.0.0.0 --port 8080 --data-dir ~/.label-studio/data
 ## Troubleshooting
 Duration: 3
 
+### ⚠️ 503 Error on Web Port After Workstation Restart (Most Common)
+
+**Problem**: You open the workstation web URL on port 8080 and immediately get a **503 Service Unavailable** — but Label Studio works fine if you SSH in first.
+
+**Why this happens**: There are two autostart mechanisms:
+
+| Mechanism | When it fires | Reliable for web-only? |
+|---|---|---|
+| `~/.bashrc` hook | Only when an SSH/interactive shell opens | ✗ No |
+| `/etc/workstation-startup.d/50-start-label-studio` | Every time the workstation VM boots | ✓ Yes |
+
+The `~/.bashrc` hook is a fallback only. The **primary** autostart is the startup.d script. If you only ever SSH'd in before hitting port 8080, the startup.d script may have been missing or outdated.
+
+**Fix**: Re-run the installer to write the updated startup.d script, then restart the workstation:
+
+```bash
+wget --no-cache -O install_label_studio.sh \
+  https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/install_label_studio.sh
+chmod +x install_label_studio.sh
+sudo ./install_label_studio.sh
+```
+
+After that, restart the workstation and go straight to port 8080 — Label Studio should start automatically without any SSH session.
+
+**Check if the startup.d script is in place:**
+```bash
+ls -la /etc/workstation-startup.d/
+cat /etc/workstation-startup.d/50-start-label-studio
+```
+
+**Check the bootstrap log after a restart:**
+```bash
+sudo cat /var/log/label-studio-bootstrap.log
+```
+
+<aside class="positive">
+After a fresh workstation start, Label Studio may take 60–120 seconds to initialize. Wait a moment and refresh before assuming it failed.
+</aside>
+
+---
+
 ### Cloud Workstation Port Forwarding Issues
 
 **Problem**: "Unable to forward your request to a backend" or "Couldn't connect to a server on port 8080"
