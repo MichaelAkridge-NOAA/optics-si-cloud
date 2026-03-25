@@ -4,8 +4,11 @@
 
 # =============================================================================
 # Label Studio Installation Script for Google Cloud Workstations
-# Version: 2.1.0 (2024-03-25)
+# Version: 2.1.1 (2024-03-25)
 # =============================================================================
+# Changes in 2.1.1:
+#   - Fixed: .bashrc autostart block now cleaned before rewriting (prevents
+#     corruption from multiple installs)
 # Changes in 2.1.0:
 #   - Fixed: Startup script no longer uses LAUNCH_CMD variable (broke escaping)
 #   - Clean if/else: runs directly as user, or su only when running as root
@@ -31,7 +34,7 @@
 #   - Dynamic URL detection from DNS/resolv.conf
 #   - New commands: label-studio-set-url, label-studio-diagnostics
 # =============================================================================
-SCRIPT_VERSION="2.1.0"
+SCRIPT_VERSION="2.1.1"
 
 echo "=============================================="
 echo "Label Studio Installer v${SCRIPT_VERSION}"
@@ -202,8 +205,15 @@ fi
 
 # Also add auto-start check to .bashrc as a fallback
 # (runs on first login if startup.d didn't run)
-if ! grep -q 'label-studio-autostart' "$BASHRC" 2>/dev/null; then
-    sudo -u "$ACTUAL_USER" bash -c "cat >> '$BASHRC'" << 'BASHRC_EOF'
+# First: remove any old/corrupted autostart blocks from previous installs
+sudo -u "$ACTUAL_USER" bash -c "
+    sed -i '/Auto-start Label Studio/,/label-studio-autostart/d' '$BASHRC'
+    sed -i '/Starting Label Studio in background/d' '$BASHRC'
+    sed -i '/^1$/d' '$BASHRC'
+" 2>/dev/null || true
+
+# Write a clean autostart block
+sudo -u "$ACTUAL_USER" bash -c "cat >> '$BASHRC'" << 'BASHRC_EOF'
 
 # Auto-start Label Studio if not running (fallback for Cloud Workstation restarts)
 if [ -f "$HOME/.label-studio/startup.sh" ] && ! pgrep -f "label-studio start" > /dev/null 2>&1; then
@@ -212,7 +222,6 @@ if [ -f "$HOME/.label-studio/startup.sh" ] && ! pgrep -f "label-studio start" > 
 fi
 # label-studio-autostart marker
 BASHRC_EOF
-fi
 
 echo "Creating startup script..."
 
