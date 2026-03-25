@@ -4,28 +4,29 @@
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
   "updated": "2026-03-25T21:30:49Z",
-  "id": "gcs-fuse-mount",
-  "duration": 0,
-  "title": "Install GCS FUSE Mount",
+  "id": "njobvu-ai-docker-setup",
+  "duration": 6,
+  "title": "Njobvu-AI Docker Setup",
   "authors": "Michael Akridge",
-  "summary": "Step-by-step guide to mount Google Cloud Storage buckets as local filesystems using gcsfuse.",
-  "source": "codelabs/gcs-fuse-mount.md",
+  "summary": "Run Njobvu-AI quickly using the prebuilt Docker image.",
+  "source": "codelabs/njobvu-ai-docker-setup.md",
   "theme": "",
   "status": [
     "published"
   ],
   "category": [
-    "cloudstorage",
-    "fuse",
-    "setup"
+    "annotation",
+    "docker",
+    "computervision"
   ],
   "tags": [
-    "cloud-storage",
-    "fuse",
-    "gcs",
-    "mount",
+    "annotation",
+    "cv",
+    "docker",
+    "labeling",
+    "njobvu",
     "web"
   ],
   "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
-  "url": "gcs-fuse-mount"
+  "url": "njobvu-ai-docker-setup"
 }

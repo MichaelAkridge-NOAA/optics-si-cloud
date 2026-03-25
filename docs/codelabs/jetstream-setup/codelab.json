@@ -4,29 +4,29 @@
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
   "updated": "2026-03-25T21:30:49Z",
-  "id": "jupyter-setup",
-  "duration": 3,
-  "title": "JupyterLab Setup for Cloud Workstations",
+  "id": "jetstream-setup",
+  "duration": 9,
+  "title": "JetStream Setup",
   "authors": "Michael Akridge",
-  "summary": "Install JupyterLab with useful extensions in a persistent location.",
-  "source": "codelabs/jupyter-setup.md",
+  "summary": "Install and run NOAA JetStream for cloud data management and transfer workflows.",
+  "source": "codelabs/jetstream-setup.md",
   "theme": "",
   "status": [
     "published"
   ],
   "category": [
+    "datamanagement",
     "cloud",
-    "jupyter",
-    "python"
+    "dashboard"
   ],
   "tags": [
     "cloud",
-    "jupyter",
-    "notebooks",
-    "python",
-    "web",
-    "workstations"
+    "dashboard",
+    "gcs",
+    "jetstream",
+    "transfers",
+    "web"
   ],
   "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
-  "url": "jupyter-setup"
+  "url": "jetstream-setup"
 }

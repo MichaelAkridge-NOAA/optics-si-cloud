@@ -1,0 +1,121 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>CAT (Coral Annotation Tool) Setup</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="cat-install"
+                  title="CAT (Coral Annotation Tool) Setup"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="2">
+        <p>CAT (Coral Annotation Tool) is a lightweight, file-based annotation system for Structure-from-Motion orthomosaic workflows.</p>
+<p class="image-container"><img alt="CAT Logo" src="img/5323b3e3807ceaee.png"></p>
+<p>Project repo: https://github.com/MichaelAkridge-NOAA/cat</p>
+<h2 is-upgraded>Prerequisites</h2>
+<ul>
+<li>Python 3.9+</li>
+<li>Pip</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install from PyPI (Recommended)" duration="2">
+        <pre><code language="language-bash" class="language-bash">pip install coral-annotation-tool
+</code></pre>
+<p>Optional (desktop shortcuts):</p>
+<pre><code language="language-bash" class="language-bash">pip install coral-annotation-tool[shortcuts]
+cat-create-shortcuts
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Run CAT" duration="1">
+        <pre><code language="language-bash" class="language-bash">cat
+</code></pre>
+<p>Open:</p>
+<pre><code language="language-text" class="language-text">http://localhost:8000
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install from Source (Optional)" duration="2">
+        <pre><code language="language-bash" class="language-bash">git clone https://github.com/MichaelAkridge-NOAA/cat
+cd cat
+pip install -e .
+</code></pre>
+<p>Optional source shortcuts:</p>
+<pre><code language="language-bash" class="language-bash">pip install -e .[shortcuts]
+cat-create-shortcuts
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Quick First Workflow" duration="2">
+        <ol type="1">
+<li>Open CAT at <code>http://localhost:8000</code></li>
+<li>Create a project</li>
+<li>Drag/drop TIFF/GeoTIFF files</li>
+<li>Add metadata and generate project JSON</li>
+<li>Open the annotation interface and start labeling</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Notes" duration="1">
+        <ul>
+<li>CAT uses file-based project storage (no DB required)</li>
+<li>GeoJSON export is supported</li>
+<li>COG conversion tools are included (<code>cat-convert</code>, <code>cat-batch-convert</code>)</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="References" duration="1">
+        <ul>
+<li>CAT repo: https://github.com/MichaelAkridge-NOAA/cat</li>
+<li>CAT PyPI: https://pypi.org/project/coral-annotation-tool</li>
+<li>CAT Lite demo: https://michaelakridge-noaa.github.io/cat-web-lite/</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
+</body>
+</html>

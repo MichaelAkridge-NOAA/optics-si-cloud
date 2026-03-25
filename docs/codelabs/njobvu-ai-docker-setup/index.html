@@ -1,0 +1,94 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Njobvu-AI Docker Setup</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="njobvu-ai-docker-setup"
+                  title="Njobvu-AI Docker Setup"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <p>This guide runs containerized Njobvu-AI using prebuilt Docker images.</p>
+<p class="image-container"><img alt="Njobvu-AI Docker" src="img/46d71e8ce4e281f4.png"></p>
+<p>Project repo: https://github.com/MichaelAkridge-NOAA/njobvu-ai-docker</p>
+<h2 is-upgraded>Prerequisites</h2>
+<ul>
+<li>Docker installed and running</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Quick Start" duration="2">
+        <pre><code language="language-bash" class="language-bash">docker run -p 8080:8080 michaelakridge326/njobvu-ai
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Access the App" duration="1">
+        <p>Open:</p>
+<pre><code language="language-text" class="language-text">http://localhost:8080
+</code></pre>
+<p>For Cloud Workstations, use your forwarded port URL for <code>8080</code>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Optional: Run Detached" duration="1">
+        <pre><code language="language-bash" class="language-bash">docker run -d --name njobvu-ai -p 8080:8080 michaelakridge326/njobvu-ai
+</code></pre>
+<p>View logs:</p>
+<pre><code language="language-bash" class="language-bash">docker logs -f njobvu-ai
+</code></pre>
+<p>Stop/remove:</p>
+<pre><code language="language-bash" class="language-bash">docker stop njobvu-ai &amp;&amp; docker rm njobvu-ai
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="References" duration="1">
+        <ul>
+<li>Repo: https://github.com/MichaelAkridge-NOAA/njobvu-ai-docker</li>
+<li>Docker Hub image: https://hub.docker.com/r/michaelakridge326/njobvu-ai</li>
+<li>GHCR package: https://github.com/MichaelAkridge-NOAA/njobvu-ai-docker/pkgs/container/njobvu-ai</li>
+<li>Upstream project: https://github.com/sullichrosu/Njobvu-AI</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
+</body>
+</html>
