@@ -21,6 +21,17 @@ Optics SI cloud tools repository is to support data science workflows, cloud dep
 		```
 	- Default URL: `http://localhost:8080`
 
+- **Tator:** https://github.com/mbari-org/tator
+	- Install/Run (single node):
+		```bash
+		git clone --recurse-submodules https://github.com/mbari-org/tator.git
+		cd tator
+		cp example-env .env
+		make tator
+		make superuser
+		```
+	- Default URL: `http://localhost:8080`
+
 - **JetStream:** https://github.com/MichaelAkridge-NOAA/jetstream/tree/main
 	- Install + auth + run:
 		```bash

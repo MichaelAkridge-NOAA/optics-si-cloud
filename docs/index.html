@@ -71,6 +71,17 @@
     }
     .layout-btn:hover { background: #edf3ff; }
     .layout-btn.active { background: #4F7DC9; color: #fff; border-color: #4F7DC9; }
+    .section-controls { display: flex; justify-content: center; gap: 0.55rem; margin: -0.2rem 0 0.8rem; }
+    .section-control-btn {
+      border: 1px solid #c9dafd;
+      background: #fff;
+      color: #2b467f;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+    .section-control-btn:hover { background: #edf3ff; }
     .results-summary { text-align: center; color: #506385; font-size: 0.95rem; margin-bottom: 0.8rem; }
     .tags { display: none; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.2rem; }
     .tag { background: #e5eefc; color: #2a3b6b; border-radius: 16px; padding: 0.3em 1em; cursor: pointer; font-size: 0.95em; transition: background 0.2s; }
@@ -83,11 +94,27 @@
       padding: 1rem;
     }
     .section-heading {
-      margin: 0 0 0.2rem;
+      margin: 0;
       color: #22407d;
-      font-size: 1.15rem;
+      font-size: 1.03rem;
       font-weight: 700;
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      user-select: none;
     }
+    .section-heading::-webkit-details-marker { display: none; }
+    .section-heading::after {
+      content: '▾';
+      color: #5e77a8;
+      font-size: 0.9rem;
+      transition: transform 0.2s;
+    }
+    .codelab-section:not([open]) .section-heading::after { transform: rotate(-90deg); }
+    .section-body { margin-top: 0.35rem; }
     .section-subtitle {
       margin: 0 0 0.9rem;
       color: #536b96;
@@ -142,6 +169,10 @@
       <button id="sectionedBtn" class="layout-btn active" type="button">Sectioned</button>
       <button id="allBtn" class="layout-btn" type="button">All</button>
     </div>
+    <div class="section-controls" id="sectionControls">
+      <button id="expandAllBtn" class="section-control-btn" type="button">Expand all sections</button>
+      <button id="collapseAllBtn" class="section-control-btn" type="button">Collapse all sections</button>
+    </div>
     <div class="results-summary" id="resultsSummary"></div>
     <div class="tags" id="tagFilters"></div>
     <div class="codelab-sections" id="codelabList"></div>
@@ -164,6 +195,14 @@
       {
         path: 'codelabs/jetstream-setup/codelab.json',
         logo: './logo/jetstream_logo_400px.png'
+      },
+      {
+        path: 'codelabs/viame-dive-docker-setup/codelab.json',
+        logo: './logo/codelabs.svg'
+      },
+      {
+        path: 'codelabs/tator-setup/codelab.json',
+        logo: './logo/codelabs.svg'
       },
       {
         path: 'codelabs/labelstudio-script-install/codelab.json',
@@ -264,7 +303,7 @@
       {
         title: '🏷️ Annotation & Labeling',
         subtitle: 'Labeling tools and annotation-focused workflows.',
-        urls: ['cat-install', 'jetstream-setup', 'taglab-install', 'njobvu-ai-docker-setup', 'labelstudio-docker-install']
+        urls: ['cat-install', 'njobvu-ai-docker-setup', 'tator-setup', 'jetstream-setup', 'viame-dive-docker-setup', 'taglab-install', 'labelstudio-docker-install']
       },
       {
         title: '📊 Data Science & GIS',
@@ -317,10 +356,12 @@
       const resultsSummary = document.getElementById('resultsSummary');
       const sectionedBtn = document.getElementById('sectionedBtn');
       const allBtn = document.getElementById('allBtn');
+      const sectionControls = document.getElementById('sectionControls');
       const search = document.getElementById('searchInput').value.toLowerCase();
 
       sectionedBtn.classList.toggle('active', layoutMode === 'sectioned');
       allBtn.classList.toggle('active', layoutMode === 'all');
+      sectionControls.style.display = layoutMode === 'sectioned' ? 'flex' : 'none';
 
       list.innerHTML = '';
       let filtered = codelabs.filter(c => {
@@ -379,18 +420,22 @@
       sectionBuckets.forEach(section => {
         if (!section.items.length) return;
 
-        const sectionEl = document.createElement('section');
+        const sectionEl = document.createElement('details');
         sectionEl.className = 'codelab-section';
+        sectionEl.open = true;
 
-        const heading = document.createElement('h2');
+        const heading = document.createElement('summary');
         heading.className = 'section-heading';
-        heading.textContent = section.title;
+        heading.textContent = `${section.title} (${section.items.length})`;
         sectionEl.appendChild(heading);
+
+        const body = document.createElement('div');
+        body.className = 'section-body';
 
         const subtitle = document.createElement('p');
         subtitle.className = 'section-subtitle';
         subtitle.textContent = section.subtitle;
-        sectionEl.appendChild(subtitle);
+        body.appendChild(subtitle);
 
         const sectionGrid = document.createElement('div');
         sectionGrid.className = 'codelab-list';
@@ -406,7 +451,8 @@
           sectionGrid.appendChild(card);
         });
 
-        sectionEl.appendChild(sectionGrid);
+        body.appendChild(sectionGrid);
+        sectionEl.appendChild(body);
         list.appendChild(sectionEl);
       });
     }
@@ -419,6 +465,16 @@
     document.getElementById('allBtn').addEventListener('click', () => {
       layoutMode = 'all';
       renderCodelabs();
+    });
+    document.getElementById('expandAllBtn').addEventListener('click', () => {
+      document.querySelectorAll('.codelab-section').forEach(section => {
+        section.open = true;
+      });
+    });
+    document.getElementById('collapseAllBtn').addEventListener('click', () => {
+      document.querySelectorAll('.codelab-section').forEach(section => {
+        section.open = false;
+      });
     });
   </script>
 </body>
