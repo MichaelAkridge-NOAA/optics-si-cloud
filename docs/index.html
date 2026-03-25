@@ -59,7 +59,7 @@
     }
     .search-bar input:focus { outline: 2px solid #80a8f5; border-color: #7ba3ef; }
     .results-summary { text-align: center; color: #506385; font-size: 0.95rem; margin-bottom: 0.8rem; }
-    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.2rem; }
+    .tags { display: none; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.2rem; }
     .tag { background: #e5eefc; color: #2a3b6b; border-radius: 16px; padding: 0.3em 1em; cursor: pointer; font-size: 0.95em; transition: background 0.2s; }
     .tag.selected { background: #4F7DC9; color: #fff; }
     .codelab-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; max-width: 1400px; margin: 0 auto 1.2rem; }
@@ -113,12 +113,12 @@
     // List of codelabs with logo URLs
     const codelabEntries = [
       {
-        path: 'codelabs/chrome-remote-desktop-startup/codelab.json',
-        logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/crd.png'
+        path: 'codelabs/data-science-stack-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/anaconda/anaconda-original.svg'
       },
       {
-        path: 'codelabs/gcs-fuse-mount/codelab.json',
-        logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/gcloud.png'
+        path: 'codelabs/dev-stack-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg'
       },
       {
         path: 'codelabs/labelstudio-script-install/codelab.json',
@@ -127,38 +127,6 @@
       {
         path: 'codelabs/labelstudio-docker-install/codelab.json',
         logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/ls.ico'
-      },
-      {
-        path: 'codelabs/meshroom-install/codelab.json',
-        logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/anim-meshroom-once.gif'
-      },
-      {
-        path: 'codelabs/taglab-install/codelab.json',
-        logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/taglab.png'
-      },
-      {
-        path: 'codelabs/python-env-setup/codelab.json',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'
-      },
-      {
-        path: 'codelabs/jupyter-setup/codelab.json',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original-wordmark.svg'
-      },
-      {
-        path: 'codelabs/gcloud-adc-setup/codelab.json',
-        logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/gcloud.png'
-      },
-      {
-        path: 'codelabs/git-ssh-setup/codelab.json',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg'
-      },
-      {
-        path: 'codelabs/code-server-setup/codelab.json',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg'
-      },
-      {
-        path: 'codelabs/docker-setup/codelab.json',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg'
       },
       {
         path: 'codelabs/workstation-health/codelab.json',
@@ -173,7 +141,23 @@
         logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/gcloud.png'
       },
       {
+        path: 'codelabs/python-env-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg'
+      },
+      {
+        path: 'codelabs/jupyter-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original-wordmark.svg'
+      },
+      {
         path: 'codelabs/r-rstudio-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg'
+      },
+      {
+        path: 'codelabs/quarto-setup/codelab.json',
+        logo: './logo/codelabs.svg'
+      },
+      {
+        path: 'codelabs/positron-setup/codelab.json',
         logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg'
       },
       {
@@ -185,20 +169,36 @@
         logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg'
       },
       {
-        path: 'codelabs/positron-setup/codelab.json',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg'
-      },
-      {
-        path: 'codelabs/quarto-setup/codelab.json',
-        logo: './logo/codelabs.svg'
-      },
-      {
-        path: 'codelabs/data-science-stack-setup/codelab.json',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/anaconda/anaconda-original.svg'
-      },
-      {
-        path: 'codelabs/dev-stack-setup/codelab.json',
+        path: 'codelabs/code-server-setup/codelab.json',
         logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg'
+      },
+      {
+        path: 'codelabs/git-ssh-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg'
+      },
+      {
+        path: 'codelabs/gcloud-adc-setup/codelab.json',
+        logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/gcloud.png'
+      },
+      {
+        path: 'codelabs/docker-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg'
+      },
+      {
+        path: 'codelabs/gcs-fuse-mount/codelab.json',
+        logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/gcloud.png'
+      },
+      {
+        path: 'codelabs/chrome-remote-desktop-startup/codelab.json',
+        logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/crd.png'
+      },
+      {
+        path: 'codelabs/meshroom-install/codelab.json',
+        logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/anim-meshroom-once.gif'
+      },
+      {
+        path: 'codelabs/taglab-install/codelab.json',
+        logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/taglab.png'
       }
     ];
     let codelabs = [];
@@ -258,7 +258,6 @@
         card.innerHTML = `
           <div class="codelab-title">${c.logo ? `<img src='${c.logo}' alt='${c.title} logo' class='codelab-logo' loading='lazy' onerror="this.onerror=null;this.src='${DEFAULT_LOGO}';">` : ''}${c.title}</div>
           <div class="codelab-summary">${c.summary||''}</div>
-          <div class="codelab-tags">${(c.tags||[]).map(t => `<span class='codelab-tag'>${t}</span>`).join(' ')}</div>
           <a class="codelab-link" href="./codelabs/${c.url}/" target="_blank">Open</a>
         `;
         list.appendChild(card);
