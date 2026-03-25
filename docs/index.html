@@ -5,39 +5,110 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Optics SI Cloud Codelabs</title>
   <style>
-    body { font-family: Roboto, Arial, sans-serif; background: #f7f9fb; margin: 0; }
-    header { background: #4F7DC9; color: #fff; padding: 1.5rem 1rem; text-align: center; }
-    .search-bar { margin: 2rem auto 1rem auto; max-width: 500px; display: flex; gap: 0.5rem; }
-    .search-bar input { flex: 1; padding: 0.5rem; font-size: 1rem; border-radius: 4px; border: 1px solid #ccc; }
-    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.5rem; }
-    .tag { background: #e3eafc; color: #2a3b6b; border-radius: 16px; padding: 0.3em 1em; cursor: pointer; font-size: 0.95em; transition: background 0.2s; }
+    body { font-family: Roboto, Arial, sans-serif; background: #f4f7ff; margin: 0; color: #22314d; }
+    .hero {
+      background: linear-gradient(130deg, #3f66b8 0%, #4f7dc9 40%, #5d8fe1 100%);
+      color: #fff;
+      padding: 2rem 1rem;
+      box-shadow: inset 0 -1px 0 #ffffff33;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      justify-content: center;
+    }
+    .logo-badge {
+      background: #fff;
+      border-radius: 12px;
+      padding: 0.55rem 0.75rem;
+      box-shadow: 0 10px 24px #1d356929;
+      border: 1px solid #ffffff66;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-badge img { height: 76px; width: auto; display: block; }
+    .hero h1 { margin: 0; color: #fff; font-size: 1.7rem; }
+    .hero p { font-size: 1.05rem; max-width: 720px; margin: 0.35rem 0 0; color: #eef3ff; }
+    .page-content { max-width: 1400px; margin: 0 auto; padding: 1.2rem 1rem 2rem; }
+    .quick-links { display: flex; flex-wrap: wrap; gap: 0.65rem; margin: 0.4rem 0 1.1rem; }
+    .quick-link {
+      text-decoration: none;
+      background: #fff;
+      color: #274079;
+      border: 1px solid #d7e4ff;
+      padding: 0.5rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.93rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px #233d700d;
+    }
+    .quick-link:hover { background: #edf3ff; border-color: #b9d0ff; }
+    .search-bar { margin: 0.3rem auto 0.8rem; max-width: 560px; display: flex; gap: 0.5rem; }
+    .search-bar input {
+      flex: 1;
+      padding: 0.7rem 0.9rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #d1ddf5;
+      box-shadow: 0 1px 6px #213c730d;
+    }
+    .search-bar input:focus { outline: 2px solid #80a8f5; border-color: #7ba3ef; }
+    .results-summary { text-align: center; color: #506385; font-size: 0.95rem; margin-bottom: 0.8rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.2rem; }
+    .tag { background: #e5eefc; color: #2a3b6b; border-radius: 16px; padding: 0.3em 1em; cursor: pointer; font-size: 0.95em; transition: background 0.2s; }
     .tag.selected { background: #4F7DC9; color: #fff; }
-    .codelab-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; max-width: 1400px; margin: 0 auto 2rem auto; }
-    .codelab-card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; transition: box-shadow 0.2s; }
-    .codelab-card:hover { box-shadow: 0 4px 16px #0002; }
+    .codelab-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; max-width: 1400px; margin: 0 auto 1.2rem; }
+    .codelab-card { background: #fff; border-radius: 12px; box-shadow: 0 6px 20px #2a427714; padding: 1.3rem; display: flex; flex-direction: column; gap: 0.5rem; transition: box-shadow 0.2s, transform 0.2s; border: 1px solid #e2ebff; }
+    .codelab-card:hover { box-shadow: 0 12px 28px #253d7022; transform: translateY(-2px); }
     .codelab-logo { height: 32px; width: 32px; object-fit: contain; margin-right: 0.7em; vertical-align: middle; }
     .codelab-title { font-size: 1.2rem; font-weight: 600; color: #2a3b6b; margin: 0; display: flex; align-items: center; gap: 0.7em; }
     .codelab-summary { color: #444; margin: 0.5em 0 0.5em 0; }
     .codelab-tags { display: flex; flex-wrap: wrap; gap: 0.3em; }
     .codelab-tag { background: #e3eafc; color: #2a3b6b; border-radius: 12px; padding: 0.2em 0.8em; font-size: 0.85em; }
-    .codelab-link { margin-top: auto; align-self: flex-end; background: #4F7DC9; color: #fff; text-decoration: none; padding: 0.5em 1.2em; border-radius: 4px; font-weight: 500; transition: background 0.2s; }
+    .codelab-link { margin-top: auto; align-self: flex-end; background: #4F7DC9; color: #fff; text-decoration: none; padding: 0.5em 1.2em; border-radius: 8px; font-weight: 500; transition: background 0.2s; }
     .codelab-link:hover { background: #34508b; }
-    @media (max-width: 600px) { .codelab-list { grid-template-columns: 1fr; } }
+    @media (max-width: 700px) {
+      .hero-inner { flex-direction: column; text-align: center; }
+      .hero p { margin: 0.5rem auto 0; }
+      .logo-badge img { height: 66px; }
+      .codelab-list { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <header style="display:flex;align-items:center;gap:1em;margin-bottom:2em;justify-content:center;background:#4F7DC9;color:#fff;padding:1.5rem 1rem;text-align:center;">
-    <img src="https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/optics_si_logo_v1.png" alt="Optics SI Logo" style="height:80px;">
-    <div style="text-align:left;">
-      <h1 style="margin:0;color:#fff;">Optics SI Cloud Codelabs | Cloud Workstation Tools</h1>
-      <p style="font-size:1.15em;max-width:600px;margin:0;">Welcome to the Optics SI Cloud Codelabs portal! Explore hands-on tutorials for workstation tools, data annotation, and more. Use the search or filter by tag to get started.</p>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="logo-badge">
+        <img src="https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/optics_si_logo_v1.png" alt="Optics SI Logo">
+      </div>
+      <div>
+        <h1>Optics SI Cloud Codelabs | Cloud Workstation Tools</h1>
+        <p>Hands-on setup and operations guides for NOAA optics workflows on Google Cloud Workstations.</p>
+      </div>
     </div>
   </header>
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search codelabs by title or summary...">
-  </div>
-  <div class="tags" id="tagFilters"></div>
-  <div class="codelab-list" id="codelabList"></div>
+
+  <main class="page-content">
+    <div class="quick-links">
+      <a class="quick-link" href="https://michaelakridge-noaa.github.io/optics-si-cloud-tools/" target="_blank" rel="noopener">🌐 Project Home</a>
+      <a class="quick-link" href="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools" target="_blank" rel="noopener">📦 GitHub Repository</a>
+      <a class="quick-link" href="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/tree/main/scripts" target="_blank" rel="noopener">🧰 Setup Scripts</a>
+      <a class="quick-link" href="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues" target="_blank" rel="noopener">📝 Feedback / Issues</a>
+      <a class="quick-link" href="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/blob/main/README.md" target="_blank" rel="noopener">🚀 Quick Start</a>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="🔎 Search codelabs by title or summary...">
+    </div>
+    <div class="results-summary" id="resultsSummary"></div>
+    <div class="tags" id="tagFilters"></div>
+    <div class="codelab-list" id="codelabList"></div>
+  </main>
   <script>
     // List of codelabs with logo URLs
     const codelabEntries = [
@@ -137,6 +208,7 @@
 
     function renderCodelabs() {
       const list = document.getElementById('codelabList');
+      const resultsSummary = document.getElementById('resultsSummary');
       const search = document.getElementById('searchInput').value.toLowerCase();
       list.innerHTML = '';
       let filtered = codelabs.filter(c => {
@@ -146,6 +218,7 @@
           (c.summary||'').toLowerCase().includes(search);
         return matchesTag && matchesSearch;
       });
+      resultsSummary.textContent = `Showing ${filtered.length} of ${codelabs.length} codelabs`;
       if (filtered.length === 0) {
         list.innerHTML = '<div style="color:#888;text-align:center;padding:2em;">No codelabs found.</div>';
         return;
