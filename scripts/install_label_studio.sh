@@ -4,12 +4,17 @@
 
 # =============================================================================
 # Label Studio Installation Script for Google Cloud Workstations
-# Version: 2.0.8 (2024-03-24)
+# Version: 2.1.0 (2024-03-25)
 # =============================================================================
+# Changes in 2.1.0:
+#   - Fixed: Startup script no longer uses LAUNCH_CMD variable (broke escaping)
+#   - Clean if/else: runs directly as user, or su only when running as root
+# Changes in 2.0.9:
+#   - Fixed: Auto-start on reboot (su - fails when already running as user)
+#   - Fixed: Autostart errors now logged to ~/.label-studio/autostart.log
 # Changes in 2.0.8:
 #   - Fixed: Log file permission denied (chown before startup)
-#   - Improved: URL detection with 4 methods (resolv.conf, metadata attrs,
-#     resolv.conf word scan, metadata proxy-url)
+#   - Improved: URL detection with 4 methods
 # Changes in 2.0.7:
 #   - REMOVED set -e (root cause of script silently stopping)
 #   - FIXED version check: use 'pip show' instead of 'label-studio --version'
@@ -26,7 +31,7 @@
 #   - Dynamic URL detection from DNS/resolv.conf
 #   - New commands: label-studio-set-url, label-studio-diagnostics
 # =============================================================================
-SCRIPT_VERSION="2.0.8"
+SCRIPT_VERSION="2.1.0"
 
 echo "=============================================="
 echo "Label Studio Installer v${SCRIPT_VERSION}"
@@ -203,7 +208,7 @@ if ! grep -q 'label-studio-autostart' "$BASHRC" 2>/dev/null; then
 # Auto-start Label Studio if not running (fallback for Cloud Workstation restarts)
 if [ -f "$HOME/.label-studio/startup.sh" ] && ! pgrep -f "label-studio start" > /dev/null 2>&1; then
     echo "Starting Label Studio in background..."
-    nohup "$HOME/.label-studio/startup.sh" > /dev/null 2>&1 &
+    nohup "$HOME/.label-studio/startup.sh" >> "$HOME/.label-studio/autostart.log" 2>&1 &
 fi
 # label-studio-autostart marker
 BASHRC_EOF
@@ -331,30 +336,46 @@ echo "Environment merged to $LS_DATA_DIR/.env" | tee -a "$LOG_FILE"
 echo "Starting Label Studio..." | tee -a "$LOG_FILE"
 cd "$LABEL_STUDIO_HOME"
 
-# Source static .env, then dynamic .env.runtime, then run Label Studio
-su - "$ACTUAL_USER" -c "
-    cd '$LABEL_STUDIO_HOME'
-    # Load static environment config
-    if [ -f '$ENV_FILE' ]; then
-        set -a
-        source '$ENV_FILE'
-        set +a
-    fi
-    # Load dynamic runtime config (auto-detected URL overrides static .env)
-    if [ -f '$RUNTIME_ENV_FILE' ]; then
-        set -a
-        source '$RUNTIME_ENV_FILE'
-        set +a
-    fi
-    nohup '$LABEL_STUDIO_HOME/venv/bin/label-studio' start \
+# Load environment variables
+if [ -f "$ENV_FILE" ]; then
+    set -a
+    source "$ENV_FILE"
+    set +a
+fi
+if [ -f "$RUNTIME_ENV_FILE" ]; then
+    set -a
+    source "$RUNTIME_ENV_FILE"
+    set +a
+fi
+
+# Determine how to launch (don't use su if already the right user)
+CURRENT_USER=$(whoami)
+if [ "$CURRENT_USER" = "$ACTUAL_USER" ]; then
+    # Already the correct user - launch directly
+    nohup "$LABEL_STUDIO_HOME/venv/bin/label-studio" start \
         --host 0.0.0.0 \
         --port 8080 \
-        --data-dir '$LABEL_STUDIO_HOME/data' \
+        --data-dir "$LABEL_STUDIO_HOME/data" \
         --no-browser \
         --log-level WARNING \
-        >> '$LOG_FILE' 2>&1 &
-    echo \$! > '$LABEL_STUDIO_HOME/label-studio.pid'
-"
+        >> "$LOG_FILE" 2>&1 &
+    echo $! > "$LABEL_STUDIO_HOME/label-studio.pid"
+else
+    # Running as root (e.g. from startup.d) - switch to target user
+    su - "$ACTUAL_USER" -c "
+        cd '$LABEL_STUDIO_HOME'
+        set -a
+        [ -f '$ENV_FILE' ] && source '$ENV_FILE'
+        [ -f '$RUNTIME_ENV_FILE' ] && source '$RUNTIME_ENV_FILE'
+        set +a
+        nohup '$LABEL_STUDIO_HOME/venv/bin/label-studio' start \
+            --host 0.0.0.0 --port 8080 \
+            --data-dir '$LABEL_STUDIO_HOME/data' \
+            --no-browser --log-level WARNING \
+            >> '$LOG_FILE' 2>&1 &
+        echo \$! > '$LABEL_STUDIO_HOME/label-studio.pid'
+    "
+fi
 
 echo "Label Studio started." | tee -a "$LOG_FILE"
 echo "Access at: http://localhost:8080" | tee -a "$LOG_FILE"
