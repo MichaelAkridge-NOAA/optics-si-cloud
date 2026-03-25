@@ -14,7 +14,7 @@ Duration: 1
 
 This guide runs containerized Njobvu-AI using prebuilt Docker images.
 
-![Njobvu-AI Docker](../docs/logo/njobvu_docker_02.png)
+![Njobvu-AI Docker](assets/njobvu_docker_02.png)
 
 Project repo: https://github.com/MichaelAkridge-NOAA/njobvu-ai-docker
 

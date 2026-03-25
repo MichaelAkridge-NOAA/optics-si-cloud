@@ -14,7 +14,7 @@ Duration: 2
 
 JetStream is a web-based application for managing Google Cloud Storage uploads, queueing, and analytics.
 
-![JetStream Logo](../docs/logo/jetstream_logo_400px.png)
+![JetStream Logo](assets/jetstream_logo_400px.png)
 
 Project repo: https://github.com/MichaelAkridge-NOAA/jetstream
 

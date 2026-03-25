@@ -14,7 +14,7 @@ Duration: 2
 
 CAT (Coral Annotation Tool) is a lightweight, file-based annotation system for Structure-from-Motion orthomosaic workflows.
 
-![CAT Logo](../docs/logo/cat_logo.png)
+![CAT Logo](assets/cat_logo.png)
 
 Project repo: https://github.com/MichaelAkridge-NOAA/cat
 

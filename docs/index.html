@@ -58,11 +58,42 @@
       box-shadow: 0 1px 6px #213c730d;
     }
     .search-bar input:focus { outline: 2px solid #80a8f5; border-color: #7ba3ef; }
+    .layout-toggle { display: flex; justify-content: center; gap: 0.55rem; margin: 0.2rem 0 0.9rem; }
+    .layout-btn {
+      border: 1px solid #c9dafd;
+      background: #fff;
+      color: #2b467f;
+      padding: 0.42rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .layout-btn:hover { background: #edf3ff; }
+    .layout-btn.active { background: #4F7DC9; color: #fff; border-color: #4F7DC9; }
     .results-summary { text-align: center; color: #506385; font-size: 0.95rem; margin-bottom: 0.8rem; }
     .tags { display: none; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.2rem; }
     .tag { background: #e5eefc; color: #2a3b6b; border-radius: 16px; padding: 0.3em 1em; cursor: pointer; font-size: 0.95em; transition: background 0.2s; }
     .tag.selected { background: #4F7DC9; color: #fff; }
-    .codelab-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; max-width: 1400px; margin: 0 auto 1.2rem; }
+    .codelab-sections { display: flex; flex-direction: column; gap: 1.5rem; }
+    .codelab-section {
+      background: #f7faff;
+      border: 1px solid #dde8ff;
+      border-radius: 14px;
+      padding: 1rem;
+    }
+    .section-heading {
+      margin: 0 0 0.2rem;
+      color: #22407d;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+    .section-subtitle {
+      margin: 0 0 0.9rem;
+      color: #536b96;
+      font-size: 0.9rem;
+    }
+    .codelab-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; max-width: 1400px; margin: 0 auto 0.2rem; }
     .codelab-card { background: #fff; border-radius: 12px; box-shadow: 0 6px 20px #2a427714; padding: 1.3rem; display: flex; flex-direction: column; gap: 0.5rem; transition: box-shadow 0.2s, transform 0.2s; border: 1px solid #e2ebff; }
     .codelab-card:hover { box-shadow: 0 12px 28px #253d7022; transform: translateY(-2px); }
     .codelab-logo { height: 32px; width: 32px; object-fit: contain; margin-right: 0.7em; vertical-align: middle; }
@@ -99,7 +130,6 @@
       <a class="quick-link" href="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools" target="_blank" rel="noopener">📦 GitHub Repository</a>
       <a class="quick-link" href="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/tree/main/scripts" target="_blank" rel="noopener">🧰 Setup Scripts</a>
       <a class="quick-link" href="https://github.com/MichaelAkridge-NOAA/cat" target="_blank" rel="noopener">🐠 CAT (Coral Annotation Tool)</a>
-      <a class="quick-link" href="https://github.com/MichaelAkridge-NOAA/njobvu-ai-docker" target="_blank" rel="noopener">🏷️ Njobvu-AI Docker</a>
       <a class="quick-link" href="https://github.com/MichaelAkridge-NOAA/jetstream/tree/main" target="_blank" rel="noopener">🚀 JetStream</a>
       <a class="quick-link" href="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues" target="_blank" rel="noopener">📝 Feedback / Issues</a>
       <a class="quick-link" href="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/blob/main/README.md" target="_blank" rel="noopener">🚀 Quick Start</a>
@@ -108,9 +138,13 @@
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="🔎 Search codelabs by title or summary...">
     </div>
+    <div class="layout-toggle">
+      <button id="sectionedBtn" class="layout-btn active" type="button">Sectioned</button>
+      <button id="allBtn" class="layout-btn" type="button">All</button>
+    </div>
     <div class="results-summary" id="resultsSummary"></div>
     <div class="tags" id="tagFilters"></div>
-    <div class="codelab-list" id="codelabList"></div>
+    <div class="codelab-sections" id="codelabList"></div>
   </main>
   <script>
     // List of codelabs with logo URLs
@@ -219,7 +253,35 @@
     let codelabs = [];
     let allTags = new Set();
     let selectedTag = null;
+    let layoutMode = 'sectioned';
     const DEFAULT_LOGO = './logo/codelabs.svg';
+    const SECTION_DEFS = [
+      {
+        title: '🚀 Start Here',
+        subtitle: 'Recommended first installs for most users.',
+        urls: ['data-science-stack-setup', 'dev-stack-setup', 'labelstudio-script-install']
+      },
+      {
+        title: '🏷️ Annotation & Labeling',
+        subtitle: 'Labeling tools and annotation-focused workflows.',
+        urls: ['cat-install', 'jetstream-setup', 'taglab-install', 'njobvu-ai-docker-setup', 'labelstudio-docker-install']
+      },
+      {
+        title: '📊 Data Science & GIS',
+        subtitle: 'Python, R, Quarto, and geospatial analysis setup.',
+        urls: ['python-env-setup', 'jupyter-setup', 'r-rstudio-setup', 'quarto-setup', 'positron-setup', 'qgis-gdal-setup', 'meshroom-install']
+      },
+      {
+        title: '🛠️ Developer Setup',
+        subtitle: 'Developer tooling, cloud auth, and platform setup.',
+        urls: ['code-server-setup', 'git-ssh-setup', 'gcloud-adc-setup', 'docker-setup', 'gcs-fuse-mount', 'dev-cli-tools-setup', 'chrome-remote-desktop-startup']
+      },
+      {
+        title: '🏥 Workstation Operations',
+        subtitle: 'Health checks, cleanup, and backup operations.',
+        urls: ['workstation-health', 'workstation-cleanup', 'workstation-backup']
+      }
+    ];
 
     // Load all codelab.json files and attach logo
     Promise.all(
@@ -253,7 +315,13 @@
     function renderCodelabs() {
       const list = document.getElementById('codelabList');
       const resultsSummary = document.getElementById('resultsSummary');
+      const sectionedBtn = document.getElementById('sectionedBtn');
+      const allBtn = document.getElementById('allBtn');
       const search = document.getElementById('searchInput').value.toLowerCase();
+
+      sectionedBtn.classList.toggle('active', layoutMode === 'sectioned');
+      allBtn.classList.toggle('active', layoutMode === 'all');
+
       list.innerHTML = '';
       let filtered = codelabs.filter(c => {
         const matchesTag = !selectedTag || (c.tags||[]).includes(selectedTag);
@@ -267,19 +335,91 @@
         list.innerHTML = '<div style="color:#888;text-align:center;padding:2em;">No codelabs found.</div>';
         return;
       }
+
+      if (layoutMode === 'all') {
+        const allGrid = document.createElement('div');
+        allGrid.className = 'codelab-list';
+
+        filtered.forEach(c => {
+          const card = document.createElement('div');
+          card.className = 'codelab-card';
+          card.innerHTML = `
+            <div class="codelab-title">${c.logo ? `<img src='${c.logo}' alt='${c.title} logo' class='codelab-logo' loading='lazy' onerror="this.onerror=null;this.src='${DEFAULT_LOGO}';">` : ''}${c.title}</div>
+            <div class="codelab-summary">${c.summary||''}</div>
+            <a class="codelab-link" href="./codelabs/${c.url}/" target="_blank">Open</a>
+          `;
+          allGrid.appendChild(card);
+        });
+
+        list.appendChild(allGrid);
+        return;
+      }
+
+      const sectionBuckets = SECTION_DEFS.map(section => ({ ...section, items: [] }));
+      const unmatched = [];
+
       filtered.forEach(c => {
-        const card = document.createElement('div');
-        card.className = 'codelab-card';
-        card.innerHTML = `
-          <div class="codelab-title">${c.logo ? `<img src='${c.logo}' alt='${c.title} logo' class='codelab-logo' loading='lazy' onerror="this.onerror=null;this.src='${DEFAULT_LOGO}';">` : ''}${c.title}</div>
-          <div class="codelab-summary">${c.summary||''}</div>
-          <a class="codelab-link" href="./codelabs/${c.url}/" target="_blank">Open</a>
-        `;
-        list.appendChild(card);
+        const section = sectionBuckets.find(s => s.urls.includes(c.url));
+        if (section) {
+          section.items.push(c);
+        } else {
+          unmatched.push(c);
+        }
+      });
+
+      if (unmatched.length > 0) {
+        sectionBuckets.push({
+          title: '📚 More Guides',
+          subtitle: 'Additional codelabs and reference walkthroughs.',
+          urls: [],
+          items: unmatched
+        });
+      }
+
+      sectionBuckets.forEach(section => {
+        if (!section.items.length) return;
+
+        const sectionEl = document.createElement('section');
+        sectionEl.className = 'codelab-section';
+
+        const heading = document.createElement('h2');
+        heading.className = 'section-heading';
+        heading.textContent = section.title;
+        sectionEl.appendChild(heading);
+
+        const subtitle = document.createElement('p');
+        subtitle.className = 'section-subtitle';
+        subtitle.textContent = section.subtitle;
+        sectionEl.appendChild(subtitle);
+
+        const sectionGrid = document.createElement('div');
+        sectionGrid.className = 'codelab-list';
+
+        section.items.forEach(c => {
+          const card = document.createElement('div');
+          card.className = 'codelab-card';
+          card.innerHTML = `
+            <div class="codelab-title">${c.logo ? `<img src='${c.logo}' alt='${c.title} logo' class='codelab-logo' loading='lazy' onerror="this.onerror=null;this.src='${DEFAULT_LOGO}';">` : ''}${c.title}</div>
+            <div class="codelab-summary">${c.summary||''}</div>
+            <a class="codelab-link" href="./codelabs/${c.url}/" target="_blank">Open</a>
+          `;
+          sectionGrid.appendChild(card);
+        });
+
+        sectionEl.appendChild(sectionGrid);
+        list.appendChild(sectionEl);
       });
     }
 
     document.getElementById('searchInput').addEventListener('input', renderCodelabs);
+    document.getElementById('sectionedBtn').addEventListener('click', () => {
+      layoutMode = 'sectioned';
+      renderCodelabs();
+    });
+    document.getElementById('allBtn').addEventListener('click', () => {
+      layoutMode = 'all';
+      renderCodelabs();
+    });
   </script>
 </body>
 </html>
