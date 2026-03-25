@@ -4,6 +4,35 @@
 
 Optics SI cloud tools repository is to support data science workflows, cloud deployment, documentation, and reproducible research using cloud workstations and resources.
 
+### Data Labeling & Data Management Tools (Related)
+
+- **CAT (Coral Annotation Tool):** https://github.com/MichaelAkridge-NOAA/cat
+	- Install:
+		```bash
+		pip install coral-annotation-tool
+		cat
+		```
+	- Default URL: `http://localhost:8000`
+
+- **Njobvu-AI Docker:** https://github.com/MichaelAkridge-NOAA/njobvu-ai-docker
+	- Install/Run:
+		```bash
+		docker run -p 8080:8080 michaelakridge326/njobvu-ai
+		```
+	- Default URL: `http://localhost:8080`
+
+- **JetStream:** https://github.com/MichaelAkridge-NOAA/jetstream/tree/main
+	- Install + auth + run:
+		```bash
+		git clone https://github.com/MichaelAkridge-NOAA/jetstream.git
+		cd jetstream
+		pip install -r requirements.txt
+		gcloud auth login --no-launch-browser
+		gcloud auth application-default login --no-launch-browser
+		python -m uvicorn jetstream_api.main:app --reload
+		```
+	- Default URL: `http://localhost:8000`
+
 ### Quick Start - Cloud Workstation Setup
 - **[Visit this Link for the Full Setup Guides & Codelabs](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/)**
 
