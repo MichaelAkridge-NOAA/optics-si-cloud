@@ -4,48 +4,18 @@
 
 Optics SI cloud tools repository is to support data science workflows, cloud deployment, documentation, and reproducible research using cloud workstations and resources.
 
-### Data Labeling & Data Management Tools (Related)
 
-- **CAT (Coral Annotation Tool):** https://github.com/MichaelAkridge-NOAA/cat
-	- Install:
-		```bash
-		pip install coral-annotation-tool
-		cat
-		```
-	- Default URL: `http://localhost:8000`
-
-- **Njobvu-AI Docker:** https://github.com/MichaelAkridge-NOAA/njobvu-ai-docker
-	- Install/Run:
-		```bash
-		docker run -p 8080:8080 michaelakridge326/njobvu-ai
-		```
-	- Default URL: `http://localhost:8080`
-
-- **Tator:** https://github.com/mbari-org/tator
-	- Install/Run (single node):
-		```bash
-		git clone --recurse-submodules https://github.com/mbari-org/tator.git
-		cd tator
-		cp example-env .env
-		make tator
-		make superuser
-		```
-	- Default URL: `http://localhost:8080`
-
-- **JetStream:** https://github.com/MichaelAkridge-NOAA/jetstream/tree/main
-	- Install + auth + run:
-		```bash
-		git clone https://github.com/MichaelAkridge-NOAA/jetstream.git
-		cd jetstream
-		pip install -r requirements.txt
-		gcloud auth login --no-launch-browser
-		gcloud auth application-default login --no-launch-browser
-		python -m uvicorn jetstream_api.main:app --reload
-		```
-	- Default URL: `http://localhost:8000`
 
 ### Quick Start - Cloud Workstation Setup
 - **[Visit this Link for the Full Setup Guides & Codelabs](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/)**
+
+### Screenshots
+
+| View | Screenshot |
+|---|---|
+| Codelabs homepage | [![Optics SI Cloud Codelabs homepage](./documents/images/site-home-hero.png)](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/) |
+| Google Cloud Workstations 101 codelab | [![Google Cloud Workstations 101 codelab](./documents/images/workstations-101-codelab.png)](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/codelabs/google-cloud-workstations-101/) |
+| JetStream Setup codelab | [![JetStream Setup codelab overview](./documents/images/jetstream-overview-codelab.png)](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/codelabs/jetstream-setup/#0) |
 
 ### Main Folders
 - **cloud/**: Cloud deployment resources (e.g., Terraform, AWS, Azure, GCP configs).
