@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
   <title id="title">Google Cloud Workstations 101 Overview</title>
-  <desc id="desc">Flow diagram showing how users connect to Cloud Workstations and apps using web IDE, forwarded ports, and SSH.</desc>
+  <desc id="desc">Flow diagram showing how users connect to Cloud Workstations and apps using web IDE, forwarded ports, SSH, and Chrome Remote Desktop for GUI apps.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#0b3a53"/>
@@ -26,7 +26,7 @@
   <rect x="0" y="0" width="1400" height="760" fill="url(#bg)"/>
 
   <text x="700" y="78" text-anchor="middle" class="title">Google Cloud Workstations 101</text>
-  <text x="700" y="115" text-anchor="middle" class="subtitle">Connect once, work through web IDE, app ports, or SSH — all with IAM + persistent home directory</text>
+  <text x="700" y="115" text-anchor="middle" class="subtitle">Connect once via web IDE, app ports, SSH, or Chrome Remote Desktop — all with IAM + persistent home</text>
 
   <rect x="70" y="175" width="300" height="150" rx="18" fill="#e0f2fe"/>
   <text x="220" y="230" text-anchor="middle" class="chip">You</text>
@@ -50,8 +50,9 @@
   <text x="1180" y="394" text-anchor="middle" class="cardText">8080 Label tools / 8443 code-server</text>
 
   <rect x="1020" y="450" width="320" height="120" rx="16" fill="url(#card)" stroke="#a78bfa" stroke-width="2"/>
-  <text x="1180" y="500" text-anchor="middle" class="cardTitle">SSH Access</text>
-  <text x="1180" y="533" text-anchor="middle" class="cardText">gcloud workstations ssh ...</text>
+  <text x="1180" y="494" text-anchor="middle" class="cardTitle">SSH + Desktop GUI</text>
+  <text x="1180" y="523" text-anchor="middle" class="cardText">SSH: gcloud workstations ssh ...</text>
+  <text x="1180" y="550" text-anchor="middle" class="cardText">GUI apps: Chrome Remote Desktop</text>
 
   <path d="M370 250 L510 250" stroke="#38bdf8" stroke-width="5" fill="none" marker-end="url(#arrow)"/>
   <path d="M880 200 L1010 170" stroke="#34d399" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
@@ -62,5 +63,5 @@
   <text x="100" y="558" class="cardTitle" font-size="24">Quick rules of thumb</text>
   <text x="100" y="593" class="footer">• Use Web IDE (port 80) for general development and file editing.</text>
   <text x="100" y="623" class="footer">• Use forwarded ports for app UIs (Jupyter, RStudio, Label Studio, code-server).</text>
-  <text x="100" y="653" class="footer">• Use SSH for automation, debugging, and shell-first workflows.</text>
+  <text x="100" y="653" class="footer">• Use SSH for automation; use Chrome Remote Desktop for full GUI apps (QGIS, Positron).</text>
 </svg>
