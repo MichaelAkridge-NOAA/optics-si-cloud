@@ -30,6 +30,12 @@
     
       <google-codelab-step label="Overview" duration="2">
         <p>This codelab installs a practical developer stack for daily coding workflows.</p>
+<h2 is-upgraded>Before you begin</h2>
+<ul>
+<li>Expected setup time: ~10-20 minutes</li>
+<li>Requires <code>sudo</code> access</li>
+<li>Docker install may require re-login/new shell for group updates</li>
+</ul>
 <h2 is-upgraded>Default stack</h2>
 <ul>
 <li>Git + SSH setup (<code>setup_git_ssh.sh</code>)</li>
@@ -37,9 +43,22 @@
 <li>CLI productivity tools (<code>setup_dev_cli_tools.sh</code>)</li>
 <li>Docker (<code>setup_docker.sh</code>)</li>
 </ul>
+<h2 is-upgraded>What this enables</h2>
+<ul>
+<li>Browser IDE on port <code>8443</code> (code-server)</li>
+<li>Source control + SSH auth workflow</li>
+<li>Faster CLI operations (<code>rg</code>, <code>fd</code>, <code>jq</code>, <code>yq</code>, etc.)</li>
+<li>Containerized local development via Docker</li>
+</ul>
 <h2 is-upgraded>Optional</h2>
 <ul>
 <li>gcloud ADC (<code>--with-gcloud-adc</code>)</li>
+</ul>
+<h2 is-upgraded>Do I need ADC?</h2>
+<p>Use <code>--with-gcloud-adc</code> if you will access Google Cloud APIs (especially GCS) from scripts/apps/SDKs.</p>
+<ul>
+<li>Need <code>gs://</code> access or cloud API calls from code? <strong>Yes, enable ADC</strong>.</li>
+<li>Pure local/docker-only development? <strong>ADC can be skipped</strong>.</li>
 </ul>
 
 

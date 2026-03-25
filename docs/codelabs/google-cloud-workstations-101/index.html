@@ -1,0 +1,263 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Google Cloud Workstations 101</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="google-cloud-workstations-101"
+                  title="Google Cloud Workstations 101"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="3">
+        <p>This guide explains the most important Cloud Workstations behaviors before installing tools.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Core Concepts" duration="3">
+        <h2 is-upgraded>1) Authentication model</h2>
+<p>Cloud Workstations web access is protected by IAM. Most local services behind forwarded ports do not need separate external auth setup.</p>
+<h2 is-upgraded>2) Persistence model</h2>
+<p>Only your home directory (<code>~/</code>) persists reliably across restarts. Install scripts in this repo store data/config in persistent paths.</p>
+<h2 is-upgraded>3) Port forwarding model</h2>
+<p>Services should bind to <code>0.0.0.0</code> and then be accessed through Workstation forwarded URLs.</p>
+<p>Common ports in this repo:</p>
+<ul>
+<li><code>8080</code> Label Studio / annotation tools</li>
+<li><code>8443</code> code-server</li>
+<li><code>8787</code> RStudio Server</li>
+<li><code>8888</code> JupyterLab</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Startup Behavior" duration="2">
+        <p>Some services autostart at boot; others are started on demand. If a port shows 503 immediately after restart, wait 30-120 seconds and check service status/logs.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="ADC (Application Default Credentials)" duration="2">
+        <p>If tools need Google Cloud APIs (<code>gs://</code>, storage SDKs, etc.), configure ADC:</p>
+<pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_gcloud_adc.sh | bash
+</code></pre>
+<p>For advanced scope needs, run <code>gcloud auth application-default login</code> with explicit scopes.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Common Commands: Data Movement &#43; Storage &#43; OS Basics" duration="4">
+        
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Linux 101 (Quick Essentials)" duration="4">
+        <p>If you&#39;re new to Linux, these are the most useful day-1 commands.</p>
+<h2 is-upgraded>Navigation + files</h2>
+<pre><code language="language-bash" class="language-bash"># where am I?
+pwd
+
+# list files
+ls
+ls -la
+
+# change directory
+cd ~/          # go to home
+cd ..          # go up one folder
+
+# create/remove folders
+mkdir my_folder
+rm -rf old_folder
+</code></pre>
+<h2 is-upgraded>View + edit files</h2>
+<pre><code language="language-bash" class="language-bash"># print file contents
+cat README.md
+
+# view first/last lines
+head -20 file.txt
+tail -20 file.txt
+
+# search inside files
+grep -i &#34;label&#34; file.txt
+</code></pre>
+<h2 is-upgraded>Download files</h2>
+<pre><code language="language-bash" class="language-bash"># download file
+wget https://example.com/file.sh
+
+# or with curl
+curl -L -o file.sh https://example.com/file.sh
+</code></pre>
+<h2 is-upgraded>Process/session basics</h2>
+<pre><code language="language-bash" class="language-bash"># show running processes
+ps aux | head
+
+# kill process by name
+pkill -f jupyter
+
+# use tmux for persistent terminal sessions
+tmux new -s work
+tmux attach -t work
+</code></pre>
+<h2 is-upgraded>Zip and unzip</h2>
+<pre><code language="language-bash" class="language-bash"># zip a folder
+zip -r archive.zip my_folder/
+
+# unzip
+unzip archive.zip
+</code></pre>
+<h2 is-upgraded>Permissions and executable scripts</h2>
+<pre><code language="language-bash" class="language-bash"># make script executable
+chmod +x script.sh
+
+# run script
+./script.sh
+</code></pre>
+<h2 is-upgraded>Command history tips</h2>
+<pre><code language="language-bash" class="language-bash"># show command history
+history
+
+# show last 50 commands
+history 50
+
+# search command history
+history | grep docker
+
+# rerun previous command
+!!
+
+# rerun command by history number
+!123
+</code></pre>
+<p>Optional: append history across sessions (add to <code>~/.bashrc</code>):</p>
+<pre><code language="language-bash" class="language-bash">shopt -s histappend
+PROMPT_COMMAND=&#39;history -a&#39;
+</code></pre>
+<aside class="special"><p> Tip: If unsure what a command does, run `command --help` (example: `ls --help`). </p>
+</aside>
+<h2 is-upgraded>Local file operations</h2>
+<pre><code language="language-bash" class="language-bash"># copy/move files
+cp source.txt dest.txt
+mv old_name.txt new_name.txt
+
+# copy folders recursively
+cp -r data/ backup_data/
+
+# check sizes and free space
+du -sh ~/data
+df -h
+</code></pre>
+<h2 is-upgraded>Compress / archive data</h2>
+<pre><code language="language-bash" class="language-bash"># create tar.gz archive
+tar -czf dataset_backup.tar.gz ~/data
+
+# extract archive
+tar -xzf dataset_backup.tar.gz
+</code></pre>
+<h2 is-upgraded>Google Cloud Storage (recommended: <code>gcloud storage</code>)</h2>
+<pre><code language="language-bash" class="language-bash"># list bucket contents
+gcloud storage ls gs://YOUR-BUCKET/
+
+# copy file to bucket
+gcloud storage cp local_file.csv gs://YOUR-BUCKET/path/
+
+# copy folder recursively
+gcloud storage cp --recursive ~/data gs://YOUR-BUCKET/data/
+
+# sync local folder -&gt; bucket folder
+gcloud storage rsync ~/data gs://YOUR-BUCKET/data --recursive
+</code></pre>
+<h2 is-upgraded><code>gsutil</code> equivalents (still widely used)</h2>
+<pre><code language="language-bash" class="language-bash"># list bucket
+gsutil ls gs://YOUR-BUCKET/
+
+# parallel copy (faster for many files)
+gsutil -m cp -r ~/data gs://YOUR-BUCKET/
+
+# sync local folder -&gt; bucket folder
+gsutil -m rsync -r ~/data gs://YOUR-BUCKET/data
+</code></pre>
+<h2 is-upgraded>Quick verification</h2>
+<pre><code language="language-bash" class="language-bash"># verify auth and project context
+gcloud auth list
+gcloud config get-value project
+
+# test GCS access
+gcloud storage ls gs://YOUR-BUCKET/ | head
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Quick Health Workflow" duration="2">
+        <pre><code language="language-bash" class="language-bash">workstation_health.sh
+workstation_cleanup.sh --dry-run
+workstation_backup.sh list gs://YOUR-BUCKET/PATH
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Common Troubleshooting" duration="3">
+        <h2 is-upgraded>503 on forwarded port</h2>
+<ul>
+<li>Service may still be starting</li>
+<li>Verify process/status commands</li>
+<li>Check service logs</li>
+</ul>
+<h2 is-upgraded>GCS access fails</h2>
+<ul>
+<li>Confirm ADC setup</li>
+<li>Confirm bucket IAM permissions</li>
+<li>Re-auth if tokens expired</li>
+</ul>
+<h2 is-upgraded>Service works after SSH only</h2>
+<ul>
+<li>Check autostart method and restart scripts</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="1">
+        <ul>
+<li>Run Data Science Stack or Dev Stack codelab</li>
+<li>Configure ADC if using cloud data</li>
+<li>Add backup + health checks for long-running environments</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
+</body>
+</html>

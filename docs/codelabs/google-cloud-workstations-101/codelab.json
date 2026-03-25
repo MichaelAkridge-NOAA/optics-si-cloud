@@ -1,0 +1,32 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-03-25T21:46:51Z",
+  "id": "google-cloud-workstations-101",
+  "duration": 24,
+  "title": "Google Cloud Workstations 101",
+  "authors": "Michael Akridge",
+  "summary": "Core concepts for ports, persistence, auth, startup behavior, and common troubleshooting.",
+  "source": "codelabs/google-cloud-workstations-101.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "cloudworkstation",
+    "gettingstarted",
+    "operations"
+  ],
+  "tags": [
+    "auth",
+    "cloud-workstations",
+    "persistence",
+    "ports",
+    "troubleshooting",
+    "web"
+  ],
+  "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
+  "url": "google-cloud-workstations-101"
+}
