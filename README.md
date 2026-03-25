@@ -4,43 +4,8 @@
 
 Optics SI cloud tools repository is to support data science workflows, cloud deployment, documentation, and reproducible research using cloud workstations and resources.
 
-### 🚀 Quick Start - Cloud Workstation Setup
-
-Install common tools with one command:
-
-```bash
-# Label Studio (data annotation)
-curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/install_label_studio.sh | bash
-
-# JupyterLab
-curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_jupyter.sh | bash
-
-# Python environment (pyenv + venvs)
-curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_python_env.sh | bash
-
-# R + RStudio Server (port 8787)
-curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_r_rstudio.sh | bash
-
-# QGIS + GDAL geospatial stack
-curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_qgis_gdal.sh | bash
-
-# Developer productivity CLI tools
-curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_dev_cli_tools.sh | bash
-
-# Positron IDE (Linux .deb)
-curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_positron.sh | bash
-
-# Quarto publishing toolkit
-curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_quarto.sh | bash
-
-# Full data science stack (Python + Jupyter + RStudio + Quarto)
-curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_data_science_stack.sh | bash
-
-# Full developer stack (Git/SSH + code-server + dev tools + Docker)
-curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_dev_stack.sh | bash
-```
-
-📚 **[Full Setup Guides & Codelabs →](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/)**
+### Quick Start - Cloud Workstation Setup
+- **[Visit this Link for the Full Setup Guides & Codelabs](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/)**
 
 ### Main Folders
 - **cloud/**: Cloud deployment resources (e.g., Terraform, AWS, Azure, GCP configs).
