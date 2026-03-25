@@ -54,6 +54,14 @@ cd CorAI/docker/labelstudio
       <google-codelab-step label="Step 2: Start Label Studio" duration="0">
         <pre><code language="language-bash" class="language-bash">docker-compose up -d
 </code></pre>
+<p><strong>Optional: force a completely fresh image update</strong></p>
+<p>If you want to avoid using cached layers/images and pull everything fresh:</p>
+<pre><code language="language-bash" class="language-bash">docker-compose down
+docker-compose pull
+docker-compose build --no-cache
+docker-compose up -d --force-recreate
+</code></pre>
+<p>This is useful if you suspect stale/cached image content.</p>
 
 
       </google-codelab-step>
