@@ -7,7 +7,7 @@ categories: Cloud, Remote Desktop, Connection
 environments: Web
 status: Published
 tags: cloud, remote-desktop, workstations, connection
-feedback link: https://github.com/MichaelAkridge-NOAA/CorAI/issues
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 <meta name="codelabs-base" content="/CorAI/">
 # Codelab: Connecting to Google Cloud Workstations Remote Desktop

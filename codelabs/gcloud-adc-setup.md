@@ -1,8 +1,16 @@
 # GCloud ADC Setup for Cloud Workstations
+id: gcloud-adc-setup
+title: GCloud ADC Setup for Cloud Workstations
+summary: Configure Application Default Credentials with proper scopes to fix GCS access issues.
+authors: Michael Akridge
+categories: Cloud, GCloud, Authentication
+environments: Web
+status: Published
+tags: cloud, gcloud, adc, authentication, workstations
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 ## Overview
-
-Duration: 3 minutes
+Duration: 3
 
 This guide configures **Application Default Credentials (ADC)** with proper scopes to fix GCS access issues on Cloud Workstations.
 

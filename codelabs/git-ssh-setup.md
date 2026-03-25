@@ -1,8 +1,16 @@
 # Git & SSH Setup for Cloud Workstations
+id: git-ssh-setup
+title: Git & SSH Setup for Cloud Workstations
+summary: Configure Git and SSH keys for secure authentication with GitHub, GitLab, and Cloud Source Repos.
+authors: Michael Akridge
+categories: Cloud, Git, SSH
+environments: Web
+status: Published
+tags: cloud, git, ssh, github, workstations
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 ## Overview
-
-Duration: 2 minutes
+Duration: 2
 
 This guide configures Git and SSH keys for secure authentication with GitHub, GitLab, and Google Cloud Source Repositories.
 

@@ -6,7 +6,7 @@ categories: Docker, LabelStudio, Setup
 environments: Web
 status: Published
 tags: annotation, object-detection
-feedback link: https://github.com/MichaelAkridge-NOAA/CorAI/issues
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 <meta name="codelabs-base" content="/CorAI/">
 

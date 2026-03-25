@@ -1,8 +1,16 @@
 # JupyterLab Setup for Cloud Workstations
+id: jupyter-setup
+title: JupyterLab Setup for Cloud Workstations
+summary: Install JupyterLab with useful extensions in a persistent location.
+authors: Michael Akridge
+categories: Cloud, Jupyter, Python
+environments: Web
+status: Published
+tags: cloud, jupyter, python, notebooks, workstations
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 ## Overview
-
-Duration: 3 minutes
+Duration: 3
 
 This guide installs **JupyterLab** with useful extensions in a persistent location on your Cloud Workstation.
 

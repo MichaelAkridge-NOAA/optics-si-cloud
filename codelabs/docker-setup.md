@@ -1,4 +1,13 @@
 # Docker Setup for Cloud Workstations
+id: docker-setup
+title: Docker Setup for Cloud Workstations
+summary: Install Docker Engine with persistence helpers for saving images across restarts.
+authors: Michael Akridge
+categories: Cloud, Docker, Tools
+environments: Web
+status: Published
+tags: cloud, docker, containers, workstations
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 ## Overview
 Duration: 1

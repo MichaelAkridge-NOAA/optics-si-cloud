@@ -7,7 +7,7 @@ categories: TagLab, Annotation, Setup
 environments: Web
 status: Published
 tags: annotation, vital-rates
-feedback link: https://github.com/MichaelAkridge-NOAA/CorAI/issues
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 <meta name="codelabs-base" content="/CorAI/">
 # Codelab: Installing TagLab for Coral Annotation
@@ -270,7 +270,7 @@ export QT_X11_NO_MITSHM=1
 
 - **Documentation:** [TagLab Wiki](https://github.com/cnr-isti-vclab/TagLab/wiki)
 - **Issues:** [TagLab GitHub Issues](https://github.com/cnr-isti-vclab/TagLab/issues)
-- **CorAI Support:** [CorAI Issues](https://github.com/MichaelAkridge-NOAA/CorAI/issues)
+- **CorAI Support:** [CorAI Issues](https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues)
 
 ---
 

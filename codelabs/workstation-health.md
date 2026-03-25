@@ -1,4 +1,13 @@
 # Workstation Health Check
+id: workstation-health
+title: Workstation Health Check
+summary: Monitor all services and system resources on your Cloud Workstation.
+authors: Michael Akridge
+categories: Cloud, Monitoring, Tools
+environments: Web
+status: Published
+tags: cloud, health, monitoring, workstations
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 ## Overview
 Duration: 1

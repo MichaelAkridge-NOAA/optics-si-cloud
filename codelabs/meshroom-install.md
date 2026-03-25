@@ -7,7 +7,7 @@ categories: Meshroom, 3D Reconstruction, Photogrammetry
 environments: Web
 status: Published
 tags: photogrammetry, 3d-reconstruction, meshroom, computer-vision
-feedback link: https://github.com/MichaelAkridge-NOAA/CorAI/issues
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 <meta name="codelabs-base" content="/CorAI/">
 # Codelab: Installing Meshroom for 3D Reconstruction
@@ -312,7 +312,7 @@ meshroom --help | grep -i cuda
 - **Documentation:** [Meshroom Manual](https://meshroom-manual.readthedocs.io)
 - **Community:** [AliceVision Forum](https://github.com/alicevision/meshroom/discussions)
 - **Issues:** [GitHub Issues](https://github.com/alicevision/meshroom/issues)
-- **CorAI Support:** [CorAI Issues](https://github.com/MichaelAkridge-NOAA/CorAI/issues)
+- **CorAI Support:** [CorAI Issues](https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues)
 
 ---
 

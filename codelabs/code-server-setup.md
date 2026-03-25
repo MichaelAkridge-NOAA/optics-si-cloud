@@ -1,8 +1,16 @@
 # VS Code Server (code-server) Setup for Cloud Workstations
+id: code-server-setup
+title: VS Code Server Setup for Cloud Workstations
+summary: Install code-server to run VS Code in your browser as a lightweight alternative.
+authors: Michael Akridge
+categories: Cloud, VS Code, Development
+environments: Web
+status: Published
+tags: cloud, vscode, code-server, ide, workstations
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 ## Overview
-
-Duration: 3 minutes
+Duration: 3
 
 This guide installs **code-server**, which runs VS Code in your browser. It's an alternative/supplement to the built-in Cloud Workstation IDE.
 

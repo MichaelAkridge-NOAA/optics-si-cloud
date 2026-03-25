@@ -1,4 +1,13 @@
 # Workstation Cleanup Guide
+id: workstation-cleanup
+title: Workstation Cleanup Guide
+summary: Clean logs, caches, and temporary files to free disk space.
+authors: Michael Akridge
+categories: Cloud, Maintenance, Tools
+environments: Web
+status: Published
+tags: cloud, cleanup, maintenance, workstations
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 ## Overview
 Duration: 1

@@ -1,8 +1,16 @@
 # Python Environment Setup for Cloud Workstations
+id: python-env-setup
+title: Python Environment Setup for Cloud Workstations
+summary: Install pyenv for Python version management and create persistent virtual environments.
+authors: Michael Akridge
+categories: Cloud, Python, Development
+environments: Web
+status: Published
+tags: cloud, python, pyenv, venv, workstations
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 ## Overview
-
-Duration: 5 minutes
+Duration: 5
 
 This guide installs **pyenv** for Python version management and creates persistent virtual environments that survive Cloud Workstation restarts.
 

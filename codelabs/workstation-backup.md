@@ -1,4 +1,13 @@
 # Workstation Backup to GCS
+id: workstation-backup
+title: Workstation Backup to GCS
+summary: Back up your Cloud Workstation home directory to Google Cloud Storage.
+authors: Michael Akridge
+categories: Cloud, Backup, Tools
+environments: Web
+status: Published
+tags: cloud, backup, gcs, workstations
+feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 ## Overview
 Duration: 1
