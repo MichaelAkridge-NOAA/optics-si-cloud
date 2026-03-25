@@ -17,6 +17,27 @@ curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-t
 
 # Python environment (pyenv + venvs)
 curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_python_env.sh | bash
+
+# R + RStudio Server (port 8787)
+curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_r_rstudio.sh | bash
+
+# QGIS + GDAL geospatial stack
+curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_qgis_gdal.sh | bash
+
+# Developer productivity CLI tools
+curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_dev_cli_tools.sh | bash
+
+# Positron IDE (Linux .deb)
+curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_positron.sh | bash
+
+# Quarto publishing toolkit
+curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_quarto.sh | bash
+
+# Full data science stack (Python + Jupyter + RStudio + Quarto)
+curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_data_science_stack.sh | bash
+
+# Full developer stack (Git/SSH + code-server + dev tools + Docker)
+curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_dev_stack.sh | bash
 ```
 
 📚 **[Full Setup Guides & Codelabs →](https://michaelakridge-noaa.github.io/optics-si-cloud-tools/)**

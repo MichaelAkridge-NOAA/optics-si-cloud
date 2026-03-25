@@ -171,11 +171,40 @@
       {
         path: 'codelabs/workstation-backup/codelab.json',
         logo: 'https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/refs/heads/main/docs/logo/gcloud.png'
+      },
+      {
+        path: 'codelabs/r-rstudio-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg'
+      },
+      {
+        path: 'codelabs/qgis-gdal-setup/codelab.json',
+        logo: './logo/codelabs.svg'
+      },
+      {
+        path: 'codelabs/dev-cli-tools-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg'
+      },
+      {
+        path: 'codelabs/positron-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg'
+      },
+      {
+        path: 'codelabs/quarto-setup/codelab.json',
+        logo: './logo/codelabs.svg'
+      },
+      {
+        path: 'codelabs/data-science-stack-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/anaconda/anaconda-original.svg'
+      },
+      {
+        path: 'codelabs/dev-stack-setup/codelab.json',
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg'
       }
     ];
     let codelabs = [];
     let allTags = new Set();
     let selectedTag = null;
+    const DEFAULT_LOGO = './logo/codelabs.svg';
 
     // Load all codelab.json files and attach logo
     Promise.all(
@@ -227,7 +256,7 @@
         const card = document.createElement('div');
         card.className = 'codelab-card';
         card.innerHTML = `
-          <div class="codelab-title">${c.logo ? `<img src='${c.logo}' alt='${c.title} logo' class='codelab-logo'>` : ''}${c.title}</div>
+          <div class="codelab-title">${c.logo ? `<img src='${c.logo}' alt='${c.title} logo' class='codelab-logo' loading='lazy' onerror="this.onerror=null;this.src='${DEFAULT_LOGO}';">` : ''}${c.title}</div>
           <div class="codelab-summary">${c.summary||''}</div>
           <div class="codelab-tags">${(c.tags||[]).map(t => `<span class='codelab-tag'>${t}</span>`).join(' ')}</div>
           <a class="codelab-link" href="./codelabs/${c.url}/" target="_blank">Open</a>

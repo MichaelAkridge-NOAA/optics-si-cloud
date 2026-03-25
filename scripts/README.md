@@ -7,7 +7,7 @@ Scripts for configuring Google Cloud Workstations with common development tools.
 Run any script directly:
 ```bash
 # Download and run
-curl -sL https://raw.githubusercontent.com/YOUR-ORG/YOUR-REPO/main/scripts/SCRIPT_NAME.sh | bash
+curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/SCRIPT_NAME.sh | bash
 
 # Or clone and run locally
 bash scripts/SCRIPT_NAME.sh
@@ -31,6 +31,13 @@ bash scripts/SCRIPT_NAME.sh
 | `setup_python_env.sh` | pyenv + persistent virtual environments | — |
 | `setup_jupyter.sh` | JupyterLab with extensions | 8888 |
 | `setup_code_server.sh` | VS Code in browser (code-server) | 8443 |
+| `setup_r_rstudio.sh` | R + RStudio Server | 8787 |
+| `setup_quarto.sh` | Quarto CLI publishing toolkit | — |
+| `setup_positron.sh` | Positron IDE (Linux .deb) | GUI |
+| `setup_qgis_gdal.sh` | QGIS + GDAL geospatial tools | GUI/CLI |
+| `setup_dev_cli_tools.sh` | tmux, rg, fd, jq, yq, direnv, pre-commit | — |
+| `setup_data_science_stack.sh` | One-command data science stack installer | 8888, 8787 (+optional GUI) |
+| `setup_dev_stack.sh` | One-command developer stack installer | 8443 (+Docker) |
 | `setup_docker.sh` | Docker Engine with persistence helpers | — |
 | `setup_git_ssh.sh` | Git configuration + SSH keys | — |
 | `setup_gcloud_adc.sh` | Application Default Credentials | — |
@@ -49,11 +56,12 @@ After installation, scripts create management commands in `~/.local/bin/`:
 
 ### Label Studio
 ```bash
-label-studio-start      # Start Label Studio
 label-studio-stop       # Stop Label Studio
 label-studio-restart    # Restart Label Studio
 label-studio-status     # Check status
 label-studio-diagnostics # Full diagnostic info
+label-studio-logs       # Tail service logs
+label-studio-update     # Update to latest Label Studio
 ```
 
 ### JupyterLab
@@ -72,6 +80,15 @@ code-server-restart     # Restart code-server
 code-server-status      # Check status
 ```
 
+### RStudio Server
+```bash
+rstudio-start           # Start RStudio Server
+rstudio-stop            # Stop RStudio Server
+rstudio-restart         # Restart RStudio Server
+rstudio-status          # Check status
+rstudio-logs            # View service logs
+```
+
 ### Python Environment
 ```bash
 venv-default            # Activate default virtualenv
@@ -85,6 +102,25 @@ docker-status           # Show Docker status and containers
 docker-cleanup          # Remove unused containers/images
 docker-save-images      # Save images for persistence
 docker-load-images      # Load saved images after restart
+```
+
+### Geospatial + Publishing + Productivity
+```bash
+geotools-check          # Check QGIS/GDAL/PROJ install
+gdal-version            # Show GDAL version
+qgis-version            # Show QGIS version
+quarto-check            # Verify Quarto install
+positron-launch         # Launch Positron in GUI session
+dev-tools-check         # Verify dev CLI tool versions
+```
+
+### Stack Installers
+```bash
+setup_data_science_stack.sh                 # Python + Jupyter + RStudio + Quarto
+setup_data_science_stack.sh --with-qgis     # Add QGIS/GDAL
+setup_data_science_stack.sh --with-positron # Add Positron
+setup_dev_stack.sh                          # Git/SSH + code-server + dev tools + Docker
+setup_dev_stack.sh --with-gcloud-adc        # Also configure ADC
 ```
 
 ### Workstation Management
@@ -109,7 +145,7 @@ workstation_backup.sh list gs://bucket/path      # List backups
 ### Ports & Access
 - Cloud Workstations use **IAM authentication** — no passwords needed
 - Access services via Cloud Workstation port forwarding
-- Default ports: Label Studio (8080), JupyterLab (8888), code-server (8443)
+- Default ports: Label Studio (8080), JupyterLab (8888), code-server (8443), RStudio Server (8787)
 
 ### Common Issues
 

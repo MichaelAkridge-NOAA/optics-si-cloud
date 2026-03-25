@@ -24,6 +24,36 @@ This codelab walks you through installing Label Studio on a Google Cloud Worksta
 - Internet connectivity
 - Basic familiarity with the terminal
 
+## Cloud Workstations Sharing + Cloud Storage Auth Notes
+Duration: 2
+
+If you are sharing a workstation with teammates, make sure they are added as users in Cloud Workstations/IAM for that workstation environment. If they are not granted access, they may not be able to open the forwarded Label Studio port URL even if the service is running.
+
+If you plan to use **Google Cloud Storage integration** in Label Studio, configure ADC with the correct scopes before connecting storage:
+
+```bash
+gcloud auth application-default login
+
+gcloud auth application-default login --scopes="https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/devstorage.full_control"
+```
+
+Reference: [Label Studio Cloud Storage (GCS) guide](https://labelstud.io/guide/storage.html#Google-Cloud-Storage)
+
+When you add GCS storage in Label Studio, use these settings:
+
+- **Bucket name**: your target bucket (for example `my-labeling-bucket`)
+- **Google Project ID**: the project that owns the bucket
+- **Use pre-signed URLs**: **OFF** (disable for Cloud Workstations + ADC flow)
+
+On the next page/step:
+
+- **Bucket prefix**: optional folder path inside the bucket (for example `incoming/images/`)
+- Click **Select files** to verify Label Studio can list and access objects
+
+<aside class="warning">
+Without the proper ADC scopes, GCS import/export can fail with permission/scope errors even when bucket IAM looks correct.
+</aside>
+
 ## Download the Installation Script
 Duration: 2
 
