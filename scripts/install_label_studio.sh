@@ -349,11 +349,56 @@ STARTUP_SCRIPT="/etc/workstation-startup.d/50-start-label-studio"
 if [ -d "/etc/workstation-startup.d" ]; then
     sudo bash -c "cat > '$STARTUP_SCRIPT'" << BOOTSTRAP_EOF
 #!/bin/bash
+set -euo pipefail
+
+LOG_FILE="/var/log/label-studio-bootstrap.log"
+echo "=== label-studio bootstrap \\$(date '+%Y-%m-%d %H:%M:%S %Z') ===" >> "\$LOG_FILE"
+
 ACTUAL_USER=\$(awk -F: '\$3>=1000 && \$3<60000 && \$1!="nobody" {print \$1; exit}' /etc/passwd)
-ACTUAL_HOME=\$(eval echo ~\$ACTUAL_USER)
-if [ -f "\$ACTUAL_HOME/.label-studio/startup.sh" ]; then
-    "\$ACTUAL_HOME/.label-studio/startup.sh"
+if [ -z "\${ACTUAL_USER:-}" ]; then
+    echo "No non-root user found; skipping startup" >> "\$LOG_FILE"
+    exit 0
 fi
+
+ACTUAL_HOME=\$(eval echo ~\$ACTUAL_USER)
+START_SCRIPT="\$ACTUAL_HOME/.label-studio/startup.sh"
+
+# Home mount can come up a little late; wait up to 2 minutes for startup script.
+for i in \$(seq 1 24); do
+    if [ -x "\$START_SCRIPT" ]; then
+        break
+    fi
+    sleep 5
+done
+
+if [ ! -x "\$START_SCRIPT" ]; then
+    echo "startup.sh not found/executable at \$START_SCRIPT" >> "\$LOG_FILE"
+    exit 0
+fi
+
+if pgrep -f "label-studio start" >/dev/null 2>&1; then
+    echo "Label Studio already running; nothing to do" >> "\$LOG_FILE"
+    exit 0
+fi
+
+echo "Starting Label Studio as user: \$ACTUAL_USER" >> "\$LOG_FILE"
+if command -v runuser >/dev/null 2>&1; then
+    runuser -u "\$ACTUAL_USER" -- bash -lc "nohup '\$START_SCRIPT' >> '\$ACTUAL_HOME/.label-studio/autostart.log' 2>&1 &"
+else
+    su - "\$ACTUAL_USER" -c "nohup '\$START_SCRIPT' >> '\$ACTUAL_HOME/.label-studio/autostart.log' 2>&1 &"
+fi
+
+# Quick readiness probe (best-effort)
+for i in \$(seq 1 18); do
+    HTTP_CODE=\$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080 2>/dev/null || true)
+    if echo "\$HTTP_CODE" | grep -q "200\\|302"; then
+        echo "Label Studio is reachable on localhost:8080" >> "\$LOG_FILE"
+        exit 0
+    fi
+    sleep 5
+done
+
+echo "Label Studio started but readiness check timed out" >> "\$LOG_FILE"
 BOOTSTRAP_EOF
     sudo chmod +x "$STARTUP_SCRIPT"
 fi
