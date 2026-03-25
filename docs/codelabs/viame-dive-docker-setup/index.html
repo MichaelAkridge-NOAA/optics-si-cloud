@@ -1,0 +1,135 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>VIAME Web (DIVE) via Docker Compose</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="viame-dive-docker-setup"
+                  title="VIAME Web (DIVE) via Docker Compose"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="2">
+        <p>This guide deploys <strong>VIAME Web (DIVE)</strong> using Docker Compose.</p>
+<p>Reference docs: https://kitware.github.io/dive/Deployment-Docker-Compose/</p>
+<h2 is-upgraded>Core services</h2>
+<ul>
+<li><code>kitware/viame-web</code> (web server)</li>
+<li><code>kitware/viame-worker</code> (queue worker)</li>
+<li>MongoDB + RabbitMQ</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Prerequisites" duration="2">
+        <ul>
+<li>Linux host or VM</li>
+<li>Docker 19.03+</li>
+<li>Docker Compose 1.28+</li>
+<li>(Optional GPU workflows) NVIDIA drivers + nvidia-container-toolkit</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Basic Deployment" duration="4">
+        <pre><code language="language-bash" class="language-bash"># Clone DIVE repo
+git clone https://github.com/Kitware/dive /opt/dive
+cd /opt/dive
+
+# Initialize env
+cp .env.default .env
+# Edit settings as needed
+nano .env
+
+# Pull images
+docker-compose pull
+
+# Start stack
+docker-compose -f docker-compose.yml up -d
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Access" duration="1">
+        <p>Open:</p>
+<pre><code language="language-text" class="language-text">http://localhost:8010
+</code></pre>
+<p>Default credentials from DIVE docs:</p>
+<pre><code language="language-text" class="language-text">admin / letmein
+</code></pre>
+<p>For Cloud Workstations, use forwarded port URL for <code>8010</code>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Optional: Production Compose" duration="2">
+        <pre><code language="language-bash" class="language-bash"># pull extra production images
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
+
+# start with production compose and scale web
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --scale girder=4
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Troubleshooting" duration="2">
+        <pre><code language="language-bash" class="language-bash"># check running containers
+docker ps
+
+# tail logs
+docker-compose logs -f
+
+# restart
+docker-compose -f docker-compose.yml down
+docker-compose -f docker-compose.yml up -d
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="References" duration="1">
+        <ul>
+<li>DIVE deployment docs: https://kitware.github.io/dive/Deployment-Docker-Compose/</li>
+<li>DIVE repo: https://github.com/Kitware/dive</li>
+<li>VIAME web image: https://hub.docker.com/r/kitware/viame-web</li>
+<li>VIAME worker image: https://hub.docker.com/r/kitware/viame-worker</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
+</body>
+</html>
