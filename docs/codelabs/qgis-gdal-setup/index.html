@@ -1,0 +1,113 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>QGIS &#43; GDAL Setup for Cloud Workstations</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="qgis-gdal-setup"
+                  title="QGIS &#43; GDAL Setup for Cloud Workstations"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="2">
+        <p>Install geospatial tools for raster/vector processing and GIS workflows.</p>
+<aside class="special"><p> QGIS is a desktop GUI application (like TagLab). If you plan to open the QGIS interface, set up a desktop session first via Chrome Remote Desktop. </p>
+</aside>
+<h2 is-upgraded>Recommended before starting (GUI users)</h2>
+<ul>
+<li>Complete: <a href="https://michaelakridge-noaa.github.io/optics-si-cloud-tools/codelabs/chrome-remote-desktop-startup/" target="_blank">Chrome Remote Desktop Startup codelab</a></li>
+<li>Then run this QGIS install codelab</li>
+</ul>
+<p>If you only need command-line geospatial tools (GDAL/PROJ), you can continue without CRD.</p>
+<h2 is-upgraded>Includes</h2>
+<ul>
+<li>QGIS</li>
+<li>GDAL CLI (<code>gdalinfo</code>, <code>ogr2ogr</code>, etc.)</li>
+<li>PROJ tooling</li>
+<li>Helper commands: <code>qgis-version</code>, <code>gdal-version</code>, <code>geotools-check</code></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install QGIS &#43; GDAL" duration="4">
+        <pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_qgis_gdal.sh | bash
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Verify Installation" duration="2">
+        <pre><code language="language-bash" class="language-bash">geotools-check
+gdal-version
+qgis-version
+</code></pre>
+<p>Example GDAL test:</p>
+<pre><code language="language-bash" class="language-bash">gdalinfo --formats | head
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Usage Notes" duration="1">
+        <p>QGIS is GUI-based. For browser-only workflows, use GDAL CLI + Python geospatial libraries in notebooks.</p>
+<p>To launch QGIS GUI, use a desktop-enabled session (e.g., CRD) and run:</p>
+<pre><code language="language-bash" class="language-bash">qgis
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Troubleshooting" duration="2">
+        <h2 is-upgraded>QGIS command not found</h2>
+<pre><code language="language-bash" class="language-bash">which qgis
+source ~/.bashrc
+</code></pre>
+<h2 is-upgraded>GDAL Python import issues</h2>
+<pre><code language="language-bash" class="language-bash">python3 -c &#34;from osgeo import gdal; print(gdal.VersionInfo())&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="1">
+        <ul>
+<li>Add sample geotiff/shapefile dataset</li>
+<li>Integrate with Jupyter notebooks</li>
+<li>Add a raster reprojection and clip workflow</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
+</body>
+</html>

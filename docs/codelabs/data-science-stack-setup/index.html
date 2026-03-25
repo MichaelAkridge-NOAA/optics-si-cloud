@@ -1,0 +1,110 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Data Science Stack Setup for Cloud Workstations</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="data-science-stack-setup"
+                  title="Data Science Stack Setup for Cloud Workstations"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="2">
+        <p>This codelab installs a practical data science workstation stack with one command.</p>
+<h2 is-upgraded>Default stack</h2>
+<ul>
+<li>Python environment (<code>setup_python_env.sh</code>)</li>
+<li>JupyterLab (<code>setup_jupyter.sh</code>)</li>
+<li>R + RStudio Server (<code>setup_r_rstudio.sh</code>)</li>
+<li>Quarto (<code>setup_quarto.sh</code>)</li>
+</ul>
+<h2 is-upgraded>Optional add-ons</h2>
+<ul>
+<li>QGIS + GDAL (<code>--with-qgis</code>)</li>
+<li>Positron (<code>--with-positron</code>)</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install Default Stack" duration="5">
+        <pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_data_science_stack.sh | bash
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install with Optional Components" duration="3">
+        <p>Include QGIS + Positron:</p>
+<pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_data_science_stack.sh | bash -s -- --with-qgis --with-positron
+</code></pre>
+<p>Skip RStudio if needed:</p>
+<pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_data_science_stack.sh | bash -s -- --skip-rstudio
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Verify Core Services" duration="2">
+        <pre><code language="language-bash" class="language-bash">jupyter-status
+rstudio-status
+quarto --version
+</code></pre>
+<p>If installed:</p>
+<pre><code language="language-bash" class="language-bash">geotools-check
+which positron
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Notes for GUI Apps" duration="1">
+        <p>QGIS and Positron are desktop GUI apps. For GUI launch, use a desktop-enabled session (e.g., Chrome Remote Desktop):</p>
+<ul>
+<li><a href="https://michaelakridge-noaa.github.io/optics-si-cloud-tools/codelabs/chrome-remote-desktop-startup/" target="_blank">Chrome Remote Desktop Startup</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="1">
+        <ul>
+<li>Add project templates for R/Python/Quarto</li>
+<li>Configure GCS auth for cloud data access</li>
+<li>Run workstation health checks after setup</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
+</body>
+</html>

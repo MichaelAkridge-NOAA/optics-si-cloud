@@ -1,0 +1,107 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Developer CLI Tools Setup for Cloud Workstations</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="dev-cli-tools-setup"
+                  title="Developer CLI Tools Setup for Cloud Workstations"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <p>This setup installs commonly used command-line productivity tools.</p>
+<h2 is-upgraded>Installed tools</h2>
+<ul>
+<li><code>tmux</code></li>
+<li><code>ripgrep</code> (<code>rg</code>)</li>
+<li><code>fd</code>/<code>fdfind</code></li>
+<li><code>bat</code>/<code>batcat</code></li>
+<li><code>jq</code>, <code>yq</code></li>
+<li><code>direnv</code></li>
+<li><code>pre-commit</code></li>
+<li><code>tree</code>, <code>htop</code>, <code>shellcheck</code></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install Tools" duration="3">
+        <pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_dev_cli_tools.sh | bash
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Reload Shell" duration="1">
+        <pre><code language="language-bash" class="language-bash">source ~/.bashrc
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Verify" duration="1">
+        <pre><code language="language-bash" class="language-bash">dev-tools-check
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Quick Usage" duration="2">
+        <pre><code language="language-bash" class="language-bash"># fast search
+rg &#34;label-studio&#34; scripts/
+
+# find files
+fd &#34;setup_&#34; scripts/
+
+# JSON processing
+cat package.json | jq &#39;.&#39;
+
+# load project env vars safely
+direnv allow
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="1">
+        <ul>
+<li>Add <code>.pre-commit-config.yaml</code></li>
+<li>Add shared shell aliases in repo docs</li>
+<li>Add team standard for <code>direnv</code> usage</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
+</body>
+</html>

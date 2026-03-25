@@ -4,29 +4,29 @@
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
   "updated": "2026-03-25T21:03:50Z",
-  "id": "jupyter-setup",
-  "duration": 3,
-  "title": "JupyterLab Setup for Cloud Workstations",
+  "id": "qgis-gdal-setup",
+  "duration": 12,
+  "title": "QGIS + GDAL Setup for Cloud Workstations",
   "authors": "Michael Akridge",
-  "summary": "Install JupyterLab with useful extensions in a persistent location.",
-  "source": "codelabs/jupyter-setup.md",
+  "summary": "Install QGIS, GDAL, and core geospatial tooling.",
+  "source": "codelabs/qgis-gdal-setup.md",
   "theme": "",
   "status": [
     "published"
   ],
   "category": [
     "cloud",
-    "jupyter",
-    "python"
+    "gis",
+    "geospatial"
   ],
   "tags": [
     "cloud",
-    "jupyter",
-    "notebooks",
-    "python",
+    "gdal",
+    "geospatial",
+    "qgis",
     "web",
     "workstations"
   ],
   "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
-  "url": "jupyter-setup"
+  "url": "qgis-gdal-setup"
 }

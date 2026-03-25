@@ -47,6 +47,31 @@
 
       </google-codelab-step>
     
+      <google-codelab-step label="Cloud Workstations Sharing &#43; Cloud Storage Auth Notes" duration="2">
+        <p>If you are sharing a workstation with teammates, make sure they are added as users in Cloud Workstations/IAM for that workstation environment. If they are not granted access, they may not be able to open the forwarded Label Studio port URL even if the service is running.</p>
+<p>If you plan to use <strong>Google Cloud Storage integration</strong> in Label Studio, configure ADC with the correct scopes before connecting storage:</p>
+<pre><code language="language-bash" class="language-bash">gcloud auth application-default login
+
+gcloud auth application-default login --scopes=&#34;https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/devstorage.full_control&#34;
+</code></pre>
+<p>Reference: <a href="https://labelstud.io/guide/storage.html#Google-Cloud-Storage" target="_blank">Label Studio Cloud Storage (GCS) guide</a></p>
+<p>When you add GCS storage in Label Studio, use these settings:</p>
+<ul>
+<li><strong>Bucket name</strong>: your target bucket (for example <code>my-labeling-bucket</code>)</li>
+<li><strong>Google Project ID</strong>: the project that owns the bucket</li>
+<li><strong>Use pre-signed URLs</strong>: <strong>OFF</strong> (disable for Cloud Workstations + ADC flow)</li>
+</ul>
+<p>On the next page/step:</p>
+<ul>
+<li><strong>Bucket prefix</strong>: optional folder path inside the bucket (for example <code>incoming/images/</code>)</li>
+<li>Click <strong>Select files</strong> to verify Label Studio can list and access objects</li>
+</ul>
+<aside class="special"><p> Without the proper ADC scopes, GCS import/export can fail with permission/scope errors even when bucket IAM looks correct. </p>
+</aside>
+
+
+      </google-codelab-step>
+    
       <google-codelab-step label="Download the Installation Script" duration="2">
         <p>The installation script is located in the <code>scripts</code> directory of the optics-si-cloud-tools repository.</p>
 <p><strong>Option 1: Download the script directly</strong> (Recommended)</p>

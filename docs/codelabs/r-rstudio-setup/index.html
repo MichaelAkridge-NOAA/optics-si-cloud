@@ -1,0 +1,120 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>R &#43; RStudio Server Setup for Cloud Workstations</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="r-rstudio-setup"
+                  title="R &#43; RStudio Server Setup for Cloud Workstations"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="2">
+        <p>This guide installs <strong>R</strong> and <strong>RStudio Server</strong> on a Google Cloud Workstation.</p>
+<h2 is-upgraded>What you&#39;ll get</h2>
+<ul>
+<li>R + common data-science packages</li>
+<li>RStudio Server on port <code>8787</code></li>
+<li>Management commands: <code>rstudio-start</code>, <code>rstudio-stop</code>, <code>rstudio-restart</code>, <code>rstudio-status</code>, <code>rstudio-logs</code></li>
+</ul>
+<h2 is-upgraded>Prerequisites</h2>
+<ul>
+<li>Ubuntu-based Google Cloud Workstation</li>
+<li><code>sudo</code> access</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install R &#43; RStudio Server" duration="5">
+        <p>Run:</p>
+<pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_r_rstudio.sh | bash
+</code></pre>
+<p>Optional: install a specific RStudio Server version:</p>
+<pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_r_rstudio.sh | bash -s -- 2026.01.1-403
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Access RStudio Server" duration="1">
+        <p>Open the Cloud Workstation forwarded port URL for <code>8787</code>.</p>
+<p>Local check:</p>
+<pre><code language="language-bash" class="language-bash">curl -I http://localhost:8787
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Management Commands" duration="2">
+        <pre><code language="language-bash" class="language-bash">rstudio-status
+rstudio-restart
+rstudio-logs
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Shared Workstation Notes" duration="1">
+        <p>If multiple people share a workstation, ensure each user is granted access in Cloud Workstations/IAM. Otherwise the service may run but users still cannot open the forwarded URL.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Troubleshooting" duration="2">
+        <h2 is-upgraded>503 on port 8787</h2>
+<ul>
+<li>Wait 30-60 seconds after startup</li>
+<li>Check service status:</li>
+</ul>
+<pre><code language="language-bash" class="language-bash">rstudio-status
+sudo systemctl status rstudio-server --no-pager
+</code></pre>
+<h2 is-upgraded>Service not starting</h2>
+<pre><code language="language-bash" class="language-bash">sudo journalctl -u rstudio-server -n 100 --no-pager
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="1">
+        <ul>
+<li>Add project-level <code>.Rprofile</code></li>
+<li>Install domain packages (<code>terra</code>, <code>stars</code>, <code>sf</code>, <code>arrow</code>)</li>
+<li>Add Quarto for publishing</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
+</body>
+</html>

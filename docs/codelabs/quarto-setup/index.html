@@ -1,0 +1,101 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Quarto Setup for Cloud Workstations</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="quarto-setup"
+                  title="Quarto Setup for Cloud Workstations"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="1">
+        <p>Install Quarto CLI to build reports, dashboards, and notebooks from R/Python projects.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install Quarto" duration="3">
+        <pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_quarto.sh | bash
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Verify" duration="1">
+        <pre><code language="language-bash" class="language-bash">quarto --version
+quarto-check
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="First Render Test" duration="2">
+        <pre><code language="language-bash" class="language-bash">mkdir -p ~/quarto-test &amp;&amp; cd ~/quarto-test
+quarto create project default
+quarto render
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Use with R / Python" duration="2">
+        <ul>
+<li>R engine: pairs well with RStudio and Positron</li>
+<li>Python engine: pairs with your existing <code>setup_python_env.sh</code> and Jupyter stack</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Troubleshooting" duration="1">
+        <pre><code language="language-bash" class="language-bash">quarto check
+</code></pre>
+<p>If dependencies were interrupted during install:</p>
+<pre><code language="language-bash" class="language-bash">sudo apt-get install -f
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="1">
+        <ul>
+<li>Add project templates</li>
+<li>Set up publish targets (GitHub Pages/Quarto Pub)</li>
+<li>Standardize report structure for team workflows</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
+</body>
+</html>

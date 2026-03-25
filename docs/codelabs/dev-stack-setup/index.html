@@ -1,0 +1,98 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Developer Stack Setup for Cloud Workstations</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="dev-stack-setup"
+                  title="Developer Stack Setup for Cloud Workstations"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="2">
+        <p>This codelab installs a practical developer stack for daily coding workflows.</p>
+<h2 is-upgraded>Default stack</h2>
+<ul>
+<li>Git + SSH setup (<code>setup_git_ssh.sh</code>)</li>
+<li>code-server (<code>setup_code_server.sh</code>)</li>
+<li>CLI productivity tools (<code>setup_dev_cli_tools.sh</code>)</li>
+<li>Docker (<code>setup_docker.sh</code>)</li>
+</ul>
+<h2 is-upgraded>Optional</h2>
+<ul>
+<li>gcloud ADC (<code>--with-gcloud-adc</code>)</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install Default Stack" duration="4">
+        <pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_dev_stack.sh | bash
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install with ADC" duration="2">
+        <pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_dev_stack.sh | bash -s -- --with-gcloud-adc
+</code></pre>
+<p>Skip Docker:</p>
+<pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_dev_stack.sh | bash -s -- --skip-docker
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Verify" duration="2">
+        <pre><code language="language-bash" class="language-bash">code-server-status
+dev-tools-check
+docker-status
+</code></pre>
+<p>If ADC enabled:</p>
+<pre><code language="language-bash" class="language-bash">gcloud auth application-default print-access-token &gt;/dev/null &amp;&amp; echo &#34;ADC OK&#34;
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="1">
+        <ul>
+<li>Add <code>.pre-commit-config.yaml</code></li>
+<li>Enable code-server extensions for your language stack</li>
+<li>Add backup + cleanup cron tasks for long-running workstations</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
+</body>
+</html>

@@ -4,29 +4,30 @@
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
   "updated": "2026-03-25T21:03:50Z",
-  "id": "jupyter-setup",
-  "duration": 3,
-  "title": "JupyterLab Setup for Cloud Workstations",
+  "id": "data-science-stack-setup",
+  "duration": 14,
+  "title": "Data Science Stack Setup for Cloud Workstations",
   "authors": "Michael Akridge",
-  "summary": "Install JupyterLab with useful extensions in a persistent location.",
-  "source": "codelabs/jupyter-setup.md",
+  "summary": "Install a full data science stack (Python, Jupyter, RStudio, Quarto) with optional QGIS and Positron.",
+  "source": "codelabs/data-science-stack-setup.md",
   "theme": "",
   "status": [
     "published"
   ],
   "category": [
     "cloud",
-    "jupyter",
-    "python"
+    "datascience",
+    "setup"
   ],
   "tags": [
     "cloud",
-    "jupyter",
-    "notebooks",
+    "data-science",
     "python",
+    "quarto",
+    "rstudio",
     "web",
     "workstations"
   ],
   "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
-  "url": "jupyter-setup"
+  "url": "data-science-stack-setup"
 }

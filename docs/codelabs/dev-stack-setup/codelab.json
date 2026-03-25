@@ -4,29 +4,30 @@
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
   "updated": "2026-03-25T21:03:50Z",
-  "id": "jupyter-setup",
-  "duration": 3,
-  "title": "JupyterLab Setup for Cloud Workstations",
+  "id": "dev-stack-setup",
+  "duration": 11,
+  "title": "Developer Stack Setup for Cloud Workstations",
   "authors": "Michael Akridge",
-  "summary": "Install JupyterLab with useful extensions in a persistent location.",
-  "source": "codelabs/jupyter-setup.md",
+  "summary": "Install a full developer stack (Git/SSH, code-server, dev CLI tools, Docker) in one run.",
+  "source": "codelabs/dev-stack-setup.md",
   "theme": "",
   "status": [
     "published"
   ],
   "category": [
     "cloud",
-    "jupyter",
-    "python"
+    "developertools",
+    "setup"
   ],
   "tags": [
     "cloud",
-    "jupyter",
-    "notebooks",
-    "python",
+    "code-server",
+    "developer",
+    "docker",
+    "git",
     "web",
     "workstations"
   ],
   "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
-  "url": "jupyter-setup"
+  "url": "dev-stack-setup"
 }

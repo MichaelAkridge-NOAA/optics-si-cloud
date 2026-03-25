@@ -1,0 +1,111 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Positron Setup for Cloud Workstations</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="positron-setup"
+                  title="Positron Setup for Cloud Workstations"
+                  environment="web"
+                  feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
+    
+      <google-codelab-step label="Overview" duration="2">
+        <p>This guide installs <strong>Positron</strong> on Ubuntu-based Cloud Workstations.</p>
+<aside class="special"><p> Positron is evolving quickly. Keep this as an optional/beta IDE path alongside RStudio/code-server for shared production workflows. </p>
+</aside>
+<h2 is-upgraded>Prerequisites</h2>
+<ul>
+<li>Ubuntu-based Cloud Workstation</li>
+<li><code>sudo</code> access</li>
+<li>GUI session (for launching desktop apps)</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install Positron" duration="4">
+        <pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_positron.sh | bash
+</code></pre>
+<p>The script resolves the latest Linux <code>.deb</code> from Positron releases and installs it.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Launch Positron" duration="1">
+        <p>In a GUI session:</p>
+<pre><code language="language-bash" class="language-bash">positron
+</code></pre>
+<p>Or use helper:</p>
+<pre><code language="language-bash" class="language-bash">positron-launch
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Verify" duration="1">
+        <pre><code language="language-bash" class="language-bash">which positron
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="References" duration="1">
+        <ul>
+<li><a href="https://positron.posit.co/download.html" target="_blank">Positron Downloads</a></li>
+<li><a href="https://positron.posit.co/install.html" target="_blank">Positron Install Docs</a></li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Troubleshooting" duration="2">
+        <h2 is-upgraded>No GUI session</h2>
+<p>If you are in SSH-only mode, desktop launch will fail. Open a GUI-capable session first (e.g., CRD/workstation IDE with desktop session).</p>
+<h2 is-upgraded>Install dependency errors</h2>
+<pre><code language="language-bash" class="language-bash">sudo apt-get install -f
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="1">
+        <ul>
+<li>Pair with R + Quarto setup</li>
+<li>Compare workflow vs RStudio/code-server</li>
+<li>Decide if Positron should be default or optional for your team</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+<script src="/optics-si-cloud-tools/codelabs/assets/close-button-patch.js"></script>
+<script src="/optics-si-cloud-tools/codelabs/assets/copy-code-button.js"></script>
+</body>
+</html>

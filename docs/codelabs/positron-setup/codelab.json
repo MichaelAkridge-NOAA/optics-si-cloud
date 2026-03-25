@@ -4,29 +4,30 @@
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
   "updated": "2026-03-25T21:03:50Z",
-  "id": "jupyter-setup",
-  "duration": 3,
-  "title": "JupyterLab Setup for Cloud Workstations",
+  "id": "positron-setup",
+  "duration": 12,
+  "title": "Positron Setup for Cloud Workstations",
   "authors": "Michael Akridge",
-  "summary": "Install JupyterLab with useful extensions in a persistent location.",
-  "source": "codelabs/jupyter-setup.md",
+  "summary": "Install Positron on Linux Cloud Workstations using official .deb releases.",
+  "source": "codelabs/positron-setup.md",
   "theme": "",
   "status": [
     "published"
   ],
   "category": [
     "cloud",
-    "jupyter",
-    "python"
+    "positron",
+    "datascience"
   ],
   "tags": [
     "cloud",
-    "jupyter",
-    "notebooks",
+    "ide",
+    "positron",
     "python",
+    "r",
     "web",
     "workstations"
   ],
   "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
-  "url": "jupyter-setup"
+  "url": "positron-setup"
 }
