@@ -51,8 +51,9 @@ For advanced scope needs, run `gcloud auth application-default login` with expli
 ## Common Commands: Data Movement + Storage + OS Basics
 Duration: 4
 
-## Linux 101 (Quick Essentials)
-Duration: 4
+Use this as a practical command reference for daily workstation usage.
+
+### Linux 101 (Quick Essentials)
 
 If you're new to Linux, these are the most useful day-1 commands.
 
