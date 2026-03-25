@@ -4,26 +4,29 @@
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
   "updated": "2026-03-25T21:38:22Z",
-  "id": "taglab-install",
-  "duration": 0,
-  "title": "Install Taglab",
+  "id": "viame-dive-docker-setup",
+  "duration": 14,
+  "title": "VIAME Web (DIVE) via Docker Compose",
   "authors": "Michael Akridge",
-  "summary": "Step-by-step guide to install TagLab for coral annotation.",
-  "source": "codelabs/taglab-install.md",
+  "summary": "Deploy VIAME Web (DIVE) with Docker Compose for annotation and labeling workflows.",
+  "source": "codelabs/viame-dive-docker-setup.md",
   "theme": "",
   "status": [
     "published"
   ],
   "category": [
-    "taglab",
     "annotation",
-    "setup"
+    "docker",
+    "dive"
   ],
   "tags": [
     "annotation",
-    "vital-rates",
+    "dive",
+    "docker",
+    "labeling",
+    "viame",
     "web"
   ],
   "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
-  "url": "taglab-install"
+  "url": "viame-dive-docker-setup"
 }

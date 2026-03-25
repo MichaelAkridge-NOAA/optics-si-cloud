@@ -4,29 +4,29 @@
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
   "updated": "2026-03-25T21:38:22Z",
-  "id": "qgis-gdal-setup",
-  "duration": 12,
-  "title": "QGIS + GDAL Setup for Cloud Workstations",
+  "id": "tator-setup",
+  "duration": 11,
+  "title": "Tator Setup",
   "authors": "Michael Akridge",
-  "summary": "Install QGIS, GDAL, and core geospatial tooling.",
-  "source": "codelabs/qgis-gdal-setup.md",
+  "summary": "Deploy Tator on a single node with Docker for data labeling and annotation workflows.",
+  "source": "codelabs/tator-setup.md",
   "theme": "",
   "status": [
     "published"
   ],
   "category": [
-    "cloud",
-    "gis",
-    "geospatial"
+    "annotation",
+    "docker",
+    "video"
   ],
   "tags": [
-    "cloud",
-    "gdal",
-    "geospatial",
-    "qgis",
-    "web",
-    "workstations"
+    "annotation",
+    "docker",
+    "labeling",
+    "tator",
+    "video",
+    "web"
   ],
   "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
-  "url": "qgis-gdal-setup"
+  "url": "tator-setup"
 }
