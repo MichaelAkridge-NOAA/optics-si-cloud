@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Google Cloud Workstations 101 Overview</title>
+  <desc id="desc">Flow diagram showing how users connect to Cloud Workstations and apps using web IDE, forwarded ports, and SSH.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b3a53"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f2937"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <style>
+      .title { font: 700 42px 'Segoe UI', Arial, sans-serif; fill: #f8fafc; }
+      .subtitle { font: 500 22px 'Segoe UI', Arial, sans-serif; fill: #cbd5e1; }
+      .cardTitle { font: 700 28px 'Segoe UI', Arial, sans-serif; fill: #f8fafc; }
+      .cardText { font: 500 19px 'Segoe UI', Arial, sans-serif; fill: #d1d5db; }
+      .chip { font: 700 17px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .footer { font: 500 18px 'Segoe UI', Arial, sans-serif; fill: #cbd5e1; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L12,6 L0,12 z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="760" fill="url(#bg)"/>
+
+  <text x="700" y="78" text-anchor="middle" class="title">Google Cloud Workstations 101</text>
+  <text x="700" y="115" text-anchor="middle" class="subtitle">Connect once, work through web IDE, app ports, or SSH — all with IAM + persistent home directory</text>
+
+  <rect x="70" y="175" width="300" height="150" rx="18" fill="#e0f2fe"/>
+  <text x="220" y="230" text-anchor="middle" class="chip">You</text>
+  <text x="220" y="265" text-anchor="middle" class="chip">Browser + Terminal</text>
+
+  <rect x="520" y="145" width="360" height="220" rx="20" fill="url(#card)" stroke="#38bdf8" stroke-width="2"/>
+  <text x="700" y="195" text-anchor="middle" class="cardTitle">Cloud Workstation</text>
+  <text x="700" y="232" text-anchor="middle" class="cardText">IAM-protected entry point</text>
+  <text x="700" y="262" text-anchor="middle" class="cardText">Persistent home: ~/</text>
+  <text x="700" y="292" text-anchor="middle" class="cardText">Apps bind to 0.0.0.0</text>
+  <text x="700" y="322" text-anchor="middle" class="cardText">Use forwarded URLs for app access</text>
+
+  <rect x="1020" y="110" width="320" height="120" rx="16" fill="url(#card)" stroke="#34d399" stroke-width="2"/>
+  <text x="1180" y="160" text-anchor="middle" class="cardTitle">Web IDE</text>
+  <text x="1180" y="193" text-anchor="middle" class="cardText">Launch on port 80</text>
+
+  <rect x="1020" y="255" width="320" height="170" rx="16" fill="url(#card)" stroke="#f59e0b" stroke-width="2"/>
+  <text x="1180" y="305" text-anchor="middle" class="cardTitle">Forwarded App Ports</text>
+  <text x="1180" y="338" text-anchor="middle" class="cardText">8888 JupyterLab</text>
+  <text x="1180" y="366" text-anchor="middle" class="cardText">8787 RStudio</text>
+  <text x="1180" y="394" text-anchor="middle" class="cardText">8080 Label tools / 8443 code-server</text>
+
+  <rect x="1020" y="450" width="320" height="120" rx="16" fill="url(#card)" stroke="#a78bfa" stroke-width="2"/>
+  <text x="1180" y="500" text-anchor="middle" class="cardTitle">SSH Access</text>
+  <text x="1180" y="533" text-anchor="middle" class="cardText">gcloud workstations ssh ...</text>
+
+  <path d="M370 250 L510 250" stroke="#38bdf8" stroke-width="5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M880 200 L1010 170" stroke="#34d399" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M880 260 L1010 320" stroke="#f59e0b" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M880 320 L1010 500" stroke="#a78bfa" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="70" y="510" width="810" height="180" rx="16" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+  <text x="100" y="558" class="cardTitle" font-size="24">Quick rules of thumb</text>
+  <text x="100" y="593" class="footer">• Use Web IDE (port 80) for general development and file editing.</text>
+  <text x="100" y="623" class="footer">• Use forwarded ports for app UIs (Jupyter, RStudio, Label Studio, code-server).</text>
+  <text x="100" y="653" class="footer">• Use SSH for automation, debugging, and shell-first workflows.</text>
+</svg>
