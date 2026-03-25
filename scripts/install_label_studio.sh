@@ -4,8 +4,13 @@
 
 # =============================================================================
 # Label Studio Installation Script for Google Cloud Workstations
-# Version: 2.1.1 (2024-03-25)
+# Version: 2.1.2 (2024-03-25)
 # =============================================================================
+# Changes in 2.1.2:
+#   - Fixed: label-studio-status and label-studio-diagnostics called
+#     'label-studio --version' which STARTS the Django server (same bug as v2.0.7)
+#     Now uses 'pip show label-studio' instead
+#   - Added: Timestamps in startup.sh and autostart.log for easier debugging
 # Changes in 2.1.1:
 #   - Fixed: .bashrc autostart block now cleaned before rewriting (prevents
 #     corruption from multiple installs)
@@ -34,7 +39,7 @@
 #   - Dynamic URL detection from DNS/resolv.conf
 #   - New commands: label-studio-set-url, label-studio-diagnostics
 # =============================================================================
-SCRIPT_VERSION="2.1.1"
+SCRIPT_VERSION="2.1.2"
 
 echo "=============================================="
 echo "Label Studio Installer v${SCRIPT_VERSION}"
@@ -253,9 +258,13 @@ touch "$LOG_FILE"
 chown "$ACTUAL_USER" "$LOG_FILE" 2>/dev/null || true
 chown "$ACTUAL_USER" "$LABEL_STUDIO_HOME" 2>/dev/null || true
 
+# Timestamp for log clarity
+echo "" | tee -a "$LOG_FILE"
+echo "=== Startup at $(date '+%Y-%m-%d %H:%M:%S %Z') ===" | tee -a "$LOG_FILE"
+
 # Check if Label Studio is already running
 if pgrep -f "label-studio start" > /dev/null; then
-    echo "Label Studio is already running."
+    echo "Label Studio is already running (PID: $(pgrep -f 'label-studio start'))." | tee -a "$LOG_FILE"
     exit 0
 fi
 
@@ -419,7 +428,8 @@ sudo -u "$ACTUAL_USER" bash -c "cat > '$LOCAL_BIN/label-studio-status'" << 'EOF'
 LABEL_STUDIO_HOME="$HOME/.label-studio"
 
 if pgrep -f "label-studio start" > /dev/null; then
-    VERSION=$("$LABEL_STUDIO_HOME/venv/bin/label-studio" --version 2>/dev/null | sed -n 's/.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p' | head -1)
+    # IMPORTANT: Do NOT use 'label-studio --version' — it starts the Django server!
+    VERSION=$("$LABEL_STUDIO_HOME/venv/bin/pip" show label-studio 2>/dev/null | grep -i '^Version:' | sed 's/Version: *//')
     [ -z "$VERSION" ] && VERSION="unknown"
     echo "✓ Label Studio is running"
     echo "  PID:     $(pgrep -f 'label-studio start')"
@@ -559,7 +569,8 @@ INSTALLER_VER="unknown"
 if [ -f "$LABEL_STUDIO_HOME/.installer-version" ]; then
     INSTALLER_VER=$(cat "$LABEL_STUDIO_HOME/.installer-version")
 fi
-LS_VER=$("$LABEL_STUDIO_HOME/venv/bin/label-studio" --version 2>/dev/null | sed -n 's/.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p' | head -1)
+# IMPORTANT: Do NOT use 'label-studio --version' — it starts the Django server!
+LS_VER=$("$LABEL_STUDIO_HOME/venv/bin/pip" show label-studio 2>/dev/null | grep -i '^Version:' | sed 's/Version: *//')
 [ -z "$LS_VER" ] && LS_VER="unknown"
 echo "--- Versions ---"
 echo "  Installer script: v${INSTALLER_VER}"
