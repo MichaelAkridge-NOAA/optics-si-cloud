@@ -30,6 +30,12 @@
     
       <google-codelab-step label="Overview" duration="2">
         <p>This codelab installs a practical data science workstation stack with one command.</p>
+<h2 is-upgraded>Before you begin</h2>
+<ul>
+<li>Expected setup time: ~15-30 minutes (depending on internet speed)</li>
+<li>Requires <code>sudo</code> access</li>
+<li>Some optional components are GUI apps (QGIS, Positron)</li>
+</ul>
 <h2 is-upgraded>Default stack</h2>
 <ul>
 <li>Python environment (<code>setup_python_env.sh</code>)</li>
@@ -37,11 +43,23 @@
 <li>R + RStudio Server (<code>setup_r_rstudio.sh</code>)</li>
 <li>Quarto (<code>setup_quarto.sh</code>)</li>
 </ul>
+<h2 is-upgraded>What this enables</h2>
+<ul>
+<li>Jupyter workflows on port <code>8888</code></li>
+<li>RStudio workflows on port <code>8787</code></li>
+<li>Reproducible report publishing with Quarto</li>
+<li>Optional geospatial desktop tooling and IDE add-ons</li>
+</ul>
 <h2 is-upgraded>Optional add-ons</h2>
 <ul>
 <li>QGIS + GDAL (<code>--with-qgis</code>)</li>
 <li>Positron (<code>--with-positron</code>)</li>
 </ul>
+<h2 is-upgraded>Do I need ADC here?</h2>
+<p>If your projects read/write Google Cloud Storage (<code>gs://</code>) data, run ADC setup after install:</p>
+<pre><code language="language-bash" class="language-bash">curl -sL https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/setup_gcloud_adc.sh | bash
+</code></pre>
+<p>If you only work with local files, ADC is optional.</p>
 
 
       </google-codelab-step>
