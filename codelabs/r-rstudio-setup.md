@@ -58,6 +58,24 @@ rstudio-restart
 rstudio-logs
 ```
 
+## Installing Packages, Libraries, and Additional Resources
+Duration: 2
+
+🚨 **Important:** On custom NOAA Fisheries workstations, install packages in your home directory so they persist across sessions.
+
+For R/RStudio workflows, use a user library path:
+
+```r
+install.packages("package_name", lib="~/Rlibs")
+```
+
+Optional one-time setup in R to make this default:
+
+```r
+dir.create("~/Rlibs", showWarnings = FALSE, recursive = TRUE)
+.libPaths(c("~/Rlibs", .libPaths()))
+```
+
 ## Shared Workstation Notes
 Duration: 1
 

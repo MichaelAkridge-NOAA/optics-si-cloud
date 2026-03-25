@@ -77,9 +77,17 @@ Then use these commands:
 - **jupyterlab-lsp** — Code intelligence (autocomplete, go-to-definition)
 - **ipywidgets** — Interactive widgets
 
-## Installing Additional Packages
+## Installing Packages, Libraries, and Additional Resources
 
-Activate the JupyterLab environment and install packages:
+🚨 **Important:** On custom NOAA Fisheries workstations, install packages in paths under your home directory (`~/`) so they persist across sessions.
+
+For Python/Jupyter workflows:
+
+```bash
+pip install --user package_name
+```
+
+If you prefer to keep packages in the Jupyter virtual environment created by this setup, install there:
 
 ```bash
 source ~/.jupyter-env/bin/activate

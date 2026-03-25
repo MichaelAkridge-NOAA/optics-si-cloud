@@ -82,6 +82,25 @@ geotools-check
 which positron
 ```
 
+## Installing Packages, Libraries, and Additional Resources
+Duration: 2
+
+🚨 **Important:** On custom NOAA Fisheries workstations, install Python and R packages in home-directory locations so they persist across sessions.
+
+For Python (Jupyter workstations):
+
+```bash
+pip install --user package_name
+```
+
+For R (RStudio workstations):
+
+```r
+install.packages("package_name", lib="~/Rlibs")
+```
+
+Users should configure their environments to use local library paths to avoid reinstalling packages each session.
+
 ## Notes for GUI Apps
 Duration: 1
 

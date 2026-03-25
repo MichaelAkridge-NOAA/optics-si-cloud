@@ -14,6 +14,80 @@ Duration: 3
 
 This guide explains the most important Cloud Workstations behaviors before installing tools.
 
+## Official Google Cloud Links
+Duration: 2
+
+- Cloud Workstations docs: https://cloud.google.com/workstations/docs
+- Connect to a workstation: https://cloud.google.com/workstations/docs/connect-to-workstation
+- Port forwarding: https://cloud.google.com/workstations/docs/port-forwarding
+- Manage configurations: https://cloud.google.com/workstations/docs/manage-configuration
+- Troubleshooting: https://cloud.google.com/workstations/docs/troubleshooting
+- Cloud Storage authentication: https://cloud.google.com/storage/docs/authentication
+
+## How to Connect to Cloud Workstations
+Duration: 4
+
+### Option A: Connect from the Cloud console (recommended)
+
+1. Open Cloud Workstations in Google Cloud Console.
+2. Select your workstation.
+3. Start it if needed.
+4. Click **Launch** to open the web IDE.
+
+### Option B: Connect with SSH
+
+If you prefer terminal-only access, use the Google Cloud CLI.
+
+General flow:
+
+```bash
+# 1) ensure gcloud is authenticated
+gcloud auth login
+
+# 2) start workstation (if stopped)
+gcloud workstations start WORKSTATION_ID --region=REGION --cluster=CLUSTER_ID --config=CONFIG_ID
+
+# 3) open SSH session
+gcloud workstations ssh WORKSTATION_ID --region=REGION --cluster=CLUSTER_ID --config=CONFIG_ID
+```
+
+Use the official connect guide above for exact command variants in your environment.
+
+### Option C: Connect to app ports (Jupyter, RStudio, Label Studio, etc.)
+
+After launching the workstation, open the forwarded port URL from the Workstations UI.
+
+- `8888` JupyterLab
+- `8787` RStudio Server
+- `8080` Label Studio / annotation tools
+- `8443` code-server
+
+If you get `503`, wait 30-120 seconds and check service status/logs.
+
+### Console menu options explained
+
+In the workstation menu, you may see options like these:
+
+- **Start**  
+	Starts the workstation VM/container if it is stopped.
+
+- **Launch on port 80**  
+	Opens the default workstation web IDE endpoint (port 80). Use this for normal IDE access.
+
+- **Connect to web app on port...**  
+	Lets you open a specific app port (for example `8888`, `8787`, `8080`, `8443`). Use this when your app is already running.
+
+- **Port forwarding...**  
+	Shows/manages forwarded ports and links. Useful when you need to discover URLs, verify mappings, or troubleshoot access.
+
+- **Connect using SSH...**  
+	Opens SSH access instructions/flow for terminal-based connection.
+
+Rule of thumb:
+- Use **Launch on port 80** for IDE work.
+- Use **Connect to web app on port...** for app UIs.
+- Use **SSH** for shell-first workflows, service debugging, and scripting.
+
 ## Core Concepts
 Duration: 3
 
@@ -37,8 +111,59 @@ Duration: 2
 
 Some services autostart at boot; others are started on demand. If a port shows 503 immediately after restart, wait 30-120 seconds and check service status/logs.
 
-## ADC (Application Default Credentials)
+## Google Cloud Storage & Google Auth
 Duration: 2
+
+### Google Cloud Storage (recommended: `gcloud storage`)
+
+### Manual Google auth (if needed)
+
+If auth is missing or expired, run:
+
+```bash
+# user auth for gcloud CLI
+gcloud auth login --no-launch-browser
+
+# application default credentials (used by SDKs/tools)
+gcloud auth application-default login --no-launch-browser
+```
+
+### Quick verification
+
+```bash
+# verify auth and project context
+gcloud auth list
+gcloud config get-value project
+
+# test GCS access
+gcloud storage ls gs://YOUR-BUCKET/ | head
+```
+```bash
+# list bucket contents
+gcloud storage ls gs://YOUR-BUCKET/
+
+# copy file to bucket
+gcloud storage cp local_file.csv gs://YOUR-BUCKET/path/
+
+# copy folder recursively
+gcloud storage cp --recursive ~/data gs://YOUR-BUCKET/data/
+
+# sync local folder -> bucket folder
+gcloud storage rsync ~/data gs://YOUR-BUCKET/data --recursive
+```
+
+### `gsutil` equivalents (still widely used)
+
+```bash
+# list bucket
+gsutil ls gs://YOUR-BUCKET/
+
+# parallel copy (faster for many files)
+gsutil -m cp -r ~/data gs://YOUR-BUCKET/
+
+# sync local folder -> bucket folder
+gsutil -m rsync -r ~/data gs://YOUR-BUCKET/data
+```
 
 If tools need Google Cloud APIs (`gs://`, storage SDKs, etc.), configure ADC:
 
@@ -187,46 +312,6 @@ tar -czf dataset_backup.tar.gz ~/data
 
 # extract archive
 tar -xzf dataset_backup.tar.gz
-```
-
-### Google Cloud Storage (recommended: `gcloud storage`)
-
-```bash
-# list bucket contents
-gcloud storage ls gs://YOUR-BUCKET/
-
-# copy file to bucket
-gcloud storage cp local_file.csv gs://YOUR-BUCKET/path/
-
-# copy folder recursively
-gcloud storage cp --recursive ~/data gs://YOUR-BUCKET/data/
-
-# sync local folder -> bucket folder
-gcloud storage rsync ~/data gs://YOUR-BUCKET/data --recursive
-```
-
-### `gsutil` equivalents (still widely used)
-
-```bash
-# list bucket
-gsutil ls gs://YOUR-BUCKET/
-
-# parallel copy (faster for many files)
-gsutil -m cp -r ~/data gs://YOUR-BUCKET/
-
-# sync local folder -> bucket folder
-gsutil -m rsync -r ~/data gs://YOUR-BUCKET/data
-```
-
-### Quick verification
-
-```bash
-# verify auth and project context
-gcloud auth list
-gcloud config get-value project
-
-# test GCS access
-gcloud storage ls gs://YOUR-BUCKET/ | head
 ```
 
 ## Quick Health Workflow
