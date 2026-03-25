@@ -21,6 +21,7 @@ This guide explains the most important Cloud Workstations behaviors before insta
 ### What this guide helps you do quickly
 
 - Choose the right connection path: **Web IDE**, **forwarded app ports**, or **SSH**.
+- Know when to use **Chrome Remote Desktop** for full desktop GUI apps.
 - Understand what persists across restarts (`~/`) and what does not.
 - Fix the most common startup and port access issues (`503`, auth, ADC).
 - Verify storage access and cloud auth before installing larger tools.
