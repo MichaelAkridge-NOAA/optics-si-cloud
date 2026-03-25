@@ -33,6 +33,19 @@ cd CorAI/docker/labelstudio
 docker-compose up -d
 ```
 
+**Optional: force a completely fresh image update**
+
+If you want to avoid using cached layers/images and pull everything fresh:
+
+```bash
+docker-compose down
+docker-compose pull
+docker-compose build --no-cache
+docker-compose up -d --force-recreate
+```
+
+This is useful if you suspect stale/cached image content.
+
 ## Step 3: Access Label Studio
 
 Open your browser and go to [http://localhost:8080](http://localhost:8080)

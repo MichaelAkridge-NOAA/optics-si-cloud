@@ -37,6 +37,14 @@ wget https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools
 chmod +x install_label_studio.sh
 ```
 
+If you want to force a fresh download (ignore cached responses):
+
+```bash
+wget --no-cache -O install_label_studio.sh \
+  https://raw.githubusercontent.com/MichaelAkridge-NOAA/optics-si-cloud-tools/main/scripts/install_label_studio.sh
+chmod +x install_label_studio.sh
+```
+
 **Option 2: Clone the repository first**
 
 If you prefer to clone the entire repository:
