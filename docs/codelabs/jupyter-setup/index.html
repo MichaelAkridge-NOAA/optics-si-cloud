@@ -106,8 +106,12 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Installing Additional Packages" duration="0">
-        <p>Activate the JupyterLab environment and install packages:</p>
+      <google-codelab-step label="Installing Packages, Libraries, and Additional Resources" duration="0">
+        <p>🚨 <strong>Important:</strong> On custom NOAA Fisheries workstations, install packages in paths under your home directory (<code>~/</code>) so they persist across sessions.</p>
+<p>For Python/Jupyter workflows:</p>
+<pre><code language="language-bash" class="language-bash">pip install --user package_name
+</code></pre>
+<p>If you prefer to keep packages in the Jupyter virtual environment created by this setup, install there:</p>
 <pre><code language="language-bash" class="language-bash">source ~/.jupyter-env/bin/activate
 pip install your-package
 </code></pre>

@@ -74,6 +74,19 @@ rstudio-logs
 
       </google-codelab-step>
     
+      <google-codelab-step label="Installing Packages, Libraries, and Additional Resources" duration="2">
+        <p>🚨 <strong>Important:</strong> On custom NOAA Fisheries workstations, install packages in your home directory so they persist across sessions.</p>
+<p>For R/RStudio workflows, use a user library path:</p>
+<pre><code language="language-r" class="language-r">install.packages(&#34;package_name&#34;, lib=&#34;~/Rlibs&#34;)
+</code></pre>
+<p>Optional one-time setup in R to make this default:</p>
+<pre><code language="language-r" class="language-r">dir.create(&#34;~/Rlibs&#34;, showWarnings = FALSE, recursive = TRUE)
+.libPaths(c(&#34;~/Rlibs&#34;, .libPaths()))
+</code></pre>
+
+
+      </google-codelab-step>
+    
       <google-codelab-step label="Shared Workstation Notes" duration="1">
         <p>If multiple people share a workstation, ensure each user is granted access in Cloud Workstations/IAM. Otherwise the service may run but users still cannot open the forwarded URL.</p>
 

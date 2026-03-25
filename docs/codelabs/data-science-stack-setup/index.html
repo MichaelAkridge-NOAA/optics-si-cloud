@@ -95,6 +95,19 @@ which positron
 
       </google-codelab-step>
     
+      <google-codelab-step label="Installing Packages, Libraries, and Additional Resources" duration="2">
+        <p>🚨 <strong>Important:</strong> On custom NOAA Fisheries workstations, install Python and R packages in home-directory locations so they persist across sessions.</p>
+<p>For Python (Jupyter workstations):</p>
+<pre><code language="language-bash" class="language-bash">pip install --user package_name
+</code></pre>
+<p>For R (RStudio workstations):</p>
+<pre><code language="language-r" class="language-r">install.packages(&#34;package_name&#34;, lib=&#34;~/Rlibs&#34;)
+</code></pre>
+<p>Users should configure their environments to use local library paths to avoid reinstalling packages each session.</p>
+
+
+      </google-codelab-step>
+    
       <google-codelab-step label="Notes for GUI Apps" duration="1">
         <p>QGIS and Positron are desktop GUI apps. For GUI launch, use a desktop-enabled session (e.g., Chrome Remote Desktop):</p>
 <ul>
