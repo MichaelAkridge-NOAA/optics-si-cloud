@@ -43,9 +43,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Install &#43; Authenticate" duration="3">
-        <pre><code language="language-bash" class="language-bash">git clone https://github.com/MichaelAkridge-NOAA/jetstream.git
-cd jetstream
-pip install -r requirements.txt
+        <pre><code language="language-bash" class="language-bash">pip install noaa-jetstream
 
 gcloud auth login --no-launch-browser
 gcloud auth application-default login --no-launch-browser
@@ -59,9 +57,7 @@ gcloud auth list
       </google-codelab-step>
     
       <google-codelab-step label="Start JetStream" duration="1">
-        <pre><code language="language-bash" class="language-bash">python -m uvicorn jetstream_api.main:app --reload
-# Linux/macOS:
-python3 -m uvicorn jetstream_api.main:app --reload
+        <pre><code language="language-bash" class="language-bash">jetstream
 </code></pre>
 <p>Open:</p>
 <pre><code language="language-text" class="language-text">http://localhost:8000
