@@ -27,9 +27,7 @@ Project repo: https://github.com/MichaelAkridge-NOAA/jetstream
 Duration: 3
 
 ```bash
-git clone https://github.com/MichaelAkridge-NOAA/jetstream.git
-cd jetstream
-pip install -r requirements.txt
+pip install noaa-jetstream
 
 gcloud auth login --no-launch-browser
 gcloud auth application-default login --no-launch-browser
@@ -46,9 +44,7 @@ gcloud auth list
 Duration: 1
 
 ```bash
-python -m uvicorn jetstream_api.main:app --reload
-# Linux/macOS:
-python3 -m uvicorn jetstream_api.main:app --reload
+jetstream
 ```
 
 Open:
