@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>CAT (Coral Annotation Tool) Setup</title>
+  <title></title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
@@ -24,84 +24,109 @@
   <google-codelab codelab-gaid=""
                   codelab-ga4id=""
                   id="cat-install"
-                  title="CAT (Coral Annotation Tool) Setup"
+                  title=""
                   environment="web"
                   feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
     
       <google-codelab-step label="Overview" duration="2">
-        <p>CAT (Coral Annotation Tool) is a lightweight, file-based annotation system for Structure-from-Motion orthomosaic workflows.</p>
+        <p>CAT (Coral Annotation Tool) is an annotation and visualization platform for marine scientists working with Structure-from-Motion (SfM) orthomosaic imagery. The <code>cat_db_v2</code> branch adds an <strong>Oracle database backend</strong> for centralized project management, persistent annotations, overlay layer support, and multi-user workflows — all deployed via Docker Compose.</p>
+<p>On first startup the system <strong>auto-bootstraps</strong>: Oracle init scripts create the schema, and the CAT app ingests reference data from CSVs — no manual DDL required.</p>
 <p class="image-container"><img alt="CAT Logo" src="img/5323b3e3807ceaee.png"></p>
-<p>Project repo: https://github.com/MichaelAkridge-NOAA/cat</p>
+<p>Project repo (<code>cat_db_v2</code> branch): https://github.com/MichaelAkridge-NOAA/cat/tree/cat_db_v2</p>
+<h2 is-upgraded>Key Features</h2>
+<ul>
+<li><strong>Oracle Database Backend</strong> — Centralized project, annotation, and session storage</li>
+<li><strong>Auto-Bootstrap</strong> — Schema and reference data created on first startup</li>
+<li><strong>Fast Tile Streaming</strong> — Dynamic COG tile generation (Google Maps-style) for instant viewing</li>
+<li><strong>Shapefile Overlay Layers</strong> — Import, edit, reorder, and style vector overlays per project</li>
+<li><strong>Species Database</strong> — 1,000+ coral species with autocomplete</li>
+<li><strong>GeoJSON Export</strong> — Export annotations in standard GeoJSON format</li>
+<li><strong>GCS Integration</strong> — Native <code>gs://</code> bucket paths for COG imagery</li>
+</ul>
 <h2 is-upgraded>Prerequisites</h2>
 <ul>
-<li>Python 3.9+</li>
-<li>Pip</li>
+<li>Google Cloud Workstation</li>
+<li>Docker &amp; Docker Compose v2+ (installed by <code>install_cat.sh</code> if not present)</li>
+<li>Git</li>
+<li><code>sudo</code> / root access</li>
 </ul>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Install from PyPI (Recommended)" duration="2">
-        <pre><code language="language-bash" class="language-bash">pip install coral-annotation-tool
-</code></pre>
-<p>Optional (desktop shortcuts):</p>
-<pre><code language="language-bash" class="language-bash">pip install coral-annotation-tool[shortcuts]
-cat-create-shortcuts
-</code></pre>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Run CAT" duration="1">
-        <pre><code language="language-bash" class="language-bash">cat
-</code></pre>
-<p>Open:</p>
-<pre><code language="language-text" class="language-text">http://localhost:8000
-</code></pre>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Install from Source (Optional)" duration="2">
-        <pre><code language="language-bash" class="language-bash">git clone https://github.com/MichaelAkridge-NOAA/cat
+      <google-codelab-step label="Google Cloud Workstation Deployment (Automated)" duration="3">
+        <p>For a fully automated install that configures Docker, sets up systemd auto-start, and installs management scripts, run the one-line installer from the repo root:</p>
+<pre><code language="language-bash" class="language-bash"># Clone the cat_db_v2 branch
+git clone -b cat_db_v2 https://github.com/MichaelAkridge-NOAA/cat.git
 cd cat
-pip install -e .
+cp .env.example .env
+nano .env   # change ORACLE_PASSWORD and APP_SCHEMA_PASSWORD
+# Run the automated installer
+sudo bash install_cat.sh
 </code></pre>
-<p>Optional source shortcuts:</p>
-<pre><code language="language-bash" class="language-bash">pip install -e .[shortcuts]
-cat-create-shortcuts
+<p>This script handles:</p>
+<ul>
+<li>Docker installation and configuration</li>
+<li>Environment file creation</li>
+<li>Docker Compose stack startup</li>
+<li>Systemd service registration for auto-start on reboot</li>
+</ul>
+<p>On first startup:</p>
+<ol type="1">
+<li>Oracle Free initializes and runs <code>scripts/db-init/*.sql</code> (creates schema + tables)</li>
+<li>CAT app waits for Oracle, verifies schema, and ingests reference CSVs</li>
+<li>FastAPI server starts on port <code>8000</code></li>
+</ol>
+<h2 is-upgraded>Verify &amp; Access</h2>
+<p><strong>Finding your Cloud Workstation URL:</strong> In the <a href="https://console.cloud.google.com/workstations" target="_blank">Google Cloud Workstations console</a>, click <strong>Open</strong> next to your workstation. Your CAT URL will be: <code>https://8000-<your-workstation-id>.cloudworkstations.dev</code></p>
+<p>Open CAT in your browser:</p>
+<pre><code language="language-text" class="language-text">https://8000-&lt;your-workstation-id&gt;.cloudworkstations.dev
 </code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Quick First Workflow" duration="2">
+      <google-codelab-step label="Quick First Workflow" duration="3">
         <ol type="1">
-<li>Open CAT at <code>http://localhost:8000</code></li>
-<li>Create a project</li>
-<li>Drag/drop TIFF/GeoTIFF files</li>
-<li>Add metadata and generate project JSON</li>
-<li>Open the annotation interface and start labeling</li>
+<li>Navigate to <code>https://8000-<your-workstation-id>.cloudworkstations.dev</code> and open the <strong>Project Manager</strong></li>
+<li>Click <strong>Quick Create</strong> in the Oracle Projects panel</li>
+<li>Fill in: Project Name, Site, Island, Year, Cruise, Observer</li>
+<li>Add COG TIF file paths (GCS <code>gs://</code> URLs or local paths)</li>
+<li>Click <strong>Create Project</strong>, then <strong>Open</strong> to launch the annotation view</li>
+<li>Draw polygons, lines, or points on the orthomosaic — annotations save to Oracle automatically</li>
+<li>Export results as <strong>GeoJSON</strong> or <strong>Shapefile</strong> for use in ArcGIS/QGIS</li>
 </ol>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Notes" duration="1">
-        <ul>
-<li>CAT uses file-based project storage (no DB required)</li>
-<li>GeoJSON export is supported</li>
-<li>COG conversion tools are included (<code>cat-convert</code>, <code>cat-batch-convert</code>)</li>
-</ul>
+      <google-codelab-step label="COG Conversion" duration="2">
+        <p>COG conversion happens automatically on first project load. You can also convert manually.</p>
+<p><strong>Via Web Interface:</strong></p>
+<ol type="1">
+<li>Navigate to <code>https://8000-<your-workstation-id>.cloudworkstations.dev/converter</code></li>
+<li>Drag &amp; drop GeoTIFF files</li>
+<li>Select compression type (LZW, DEFLATE, or JPEG)</li>
+<li>Click <strong>Convert to COG</strong></li>
+</ol>
+<p><strong>Via Command Line:</strong></p>
+<pre><code language="language-bash" class="language-bash"># Single file
+cat-convert input.tif output_cog.tif
+
+# Batch conversion
+cat-batch-convert input_folder/ output_folder/
+</code></pre>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="References" duration="1">
         <ul>
-<li>CAT repo: https://github.com/MichaelAkridge-NOAA/cat</li>
-<li>CAT PyPI: https://pypi.org/project/coral-annotation-tool</li>
-<li>CAT Lite demo: https://michaelakridge-noaa.github.io/cat-web-lite/</li>
+<li>CAT repo (<code>cat_db_v2</code>): https://github.com/MichaelAkridge-NOAA/cat/tree/cat_db_v2</li>
+<li>Deployment plan: https://github.com/MichaelAkridge-NOAA/cat/blob/cat_db_v2/docs/DEPLOYMENT_PLAN.md</li>
+<li>CAT PyPI (file-based version): https://pypi.org/project/coral-annotation-tool</li>
+<li>Data Dictionary: https://www.fisheries.noaa.gov/inport/item/63239</li>
+<li>Metadata: https://www.fisheries.noaa.gov/inport/item/63097</li>
 </ul>
 
 

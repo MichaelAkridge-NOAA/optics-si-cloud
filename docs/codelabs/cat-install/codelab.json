@@ -3,12 +3,12 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2026-03-27T19:48:08Z",
+  "updated": "2026-03-31T20:06:03Z",
   "id": "cat-install",
   "duration": 11,
-  "title": "CAT (Coral Annotation Tool) Setup",
+  "title": "",
   "authors": "Michael Akridge",
-  "summary": "Install and run CAT for coral reef annotation workflows.",
+  "summary": "Deploy CAT (cat_db_v2) on a Google Cloud Workstation with Docker and an Oracle database backend.",
   "source": "codelabs/cat-install.md",
   "theme": "",
   "status": [
@@ -22,9 +22,11 @@
   "tags": [
     "annotation",
     "cat",
+    "cloud-workstation",
     "coral",
+    "docker",
     "geospatial",
-    "python",
+    "oracle",
     "web"
   ],
   "feedback": "https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues",
