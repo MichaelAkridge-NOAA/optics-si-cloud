@@ -1,89 +1,114 @@
-# CAT (Coral Annotation Tool) Setup
+﻿# CAT (Coral Annotation Tool) Setup
 id: cat-install
 title: CAT (Coral Annotation Tool) Setup
-summary: Install and run CAT for coral reef annotation workflows.
+summary: Deploy CAT (cat_db_v2) on a Google Cloud Workstation with Docker and an Oracle database backend.
 authors: Michael Akridge
 categories: Annotation, Coral, Data Science
 environments: Web
 status: Published
-tags: coral, annotation, cat, python, geospatial
+tags: coral, annotation, cat, docker, oracle, geospatial, cloud-workstation
 feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues
 
 ## Overview
 Duration: 2
 
-CAT (Coral Annotation Tool) is a lightweight, file-based annotation system for Structure-from-Motion orthomosaic workflows.
+CAT (Coral Annotation Tool) is an annotation and visualization platform for marine scientists working with Structure-from-Motion (SfM) orthomosaic imagery. The `cat_db_v2` branch adds an **Oracle database backend** for centralized project management, persistent annotations, overlay layer support, and multi-user workflows — all deployed via Docker Compose.
+
+On first startup the system **auto-bootstraps**: Oracle init scripts create the schema, and the CAT app ingests reference data from CSVs — no manual DDL required.
 
 ![CAT Logo](assets/cat_logo.png)
 
-Project repo: https://github.com/MichaelAkridge-NOAA/cat
+Project repo (`cat_db_v2` branch): https://github.com/MichaelAkridge-NOAA/cat/tree/cat_db_v2
+
+### Key Features
+- **Oracle Database Backend** — Centralized project, annotation, and session storage
+- **Auto-Bootstrap** — Schema and reference data created on first startup
+- **Fast Tile Streaming** — Dynamic COG tile generation (Google Maps-style) for instant viewing
+- **Shapefile Overlay Layers** — Import, edit, reorder, and style vector overlays per project
+- **Species Database** — 1,000+ coral species with autocomplete
+- **GeoJSON Export** — Export annotations in standard GeoJSON format
+- **GCS Integration** — Native `gs://` bucket paths for COG imagery
 
 ### Prerequisites
-- Python 3.9+
-- Pip
+- Google Cloud Workstation
+- Docker & Docker Compose v2+ (installed by `install_cat.sh` if not present)
+- Git
+- `sudo` / root access
 
-## Install from PyPI (Recommended)
-Duration: 2
+## Google Cloud Workstation Deployment (Automated)
+Duration: 3
 
-```bash
-pip install coral-annotation-tool
-```
-
-Optional (desktop shortcuts):
+For a fully automated install that configures Docker, sets up systemd auto-start, and installs management scripts, run the one-line installer from the repo root:
 
 ```bash
-pip install coral-annotation-tool[shortcuts]
-cat-create-shortcuts
+# Clone the cat_db_v2 branch
+git clone -b cat_db_v2 https://github.com/MichaelAkridge-NOAA/cat.git
+cd cat
+cp .env.example .env
+nano .env   # change ORACLE_PASSWORD and APP_SCHEMA_PASSWORD
+# Run the automated installer
+sudo bash install_cat.sh
 ```
 
-## Run CAT
-Duration: 1
+This script handles:
+- Docker installation and configuration
+- Environment file creation
+- Docker Compose stack startup
+- Systemd service registration for auto-start on reboot
 
-```bash
-cat
-```
+On first startup:
+1. Oracle Free initializes and runs `scripts/db-init/*.sql` (creates schema + tables)
+2. CAT app waits for Oracle, verifies schema, and ingests reference CSVs
+3. FastAPI server starts on port `8000`
 
-Open:
+### Verify & Access
+
+> **Finding your Cloud Workstation URL:** In the [Google Cloud Workstations console](https://console.cloud.google.com/workstations), click **Open** next to your workstation. Your CAT URL will be:
+> `https://8000-<your-workstation-id>.cloudworkstations.dev`
+
+Open CAT in your browser:
 
 ```text
-http://localhost:8000
-```
-
-## Install from Source (Optional)
-Duration: 2
-
-```bash
-git clone https://github.com/MichaelAkridge-NOAA/cat
-cd cat
-pip install -e .
-```
-
-Optional source shortcuts:
-
-```bash
-pip install -e .[shortcuts]
-cat-create-shortcuts
+https://8000-<your-workstation-id>.cloudworkstations.dev
 ```
 
 ## Quick First Workflow
+Duration: 3
+
+1. Navigate to `https://8000-<your-workstation-id>.cloudworkstations.dev` and open the **Project Manager**
+2. Click **Quick Create** in the Oracle Projects panel
+3. Fill in: Project Name, Site, Island, Year, Cruise, Observer
+4. Add COG TIF file paths (GCS `gs://` URLs or local paths)
+5. Click **Create Project**, then **Open** to launch the annotation view
+6. Draw polygons, lines, or points on the orthomosaic — annotations save to Oracle automatically
+7. Export results as **GeoJSON** or **Shapefile** for use in ArcGIS/QGIS
+
+## COG Conversion
 Duration: 2
 
-1. Open CAT at `http://localhost:8000`
-2. Create a project
-3. Drag/drop TIFF/GeoTIFF files
-4. Add metadata and generate project JSON
-5. Open the annotation interface and start labeling
+COG conversion happens automatically on first project load. You can also convert manually.
 
-## Notes
-Duration: 1
+**Via Web Interface:**
+1. Navigate to `https://8000-<your-workstation-id>.cloudworkstations.dev/converter`
+2. Drag & drop GeoTIFF files
+3. Select compression type (LZW, DEFLATE, or JPEG)
+4. Click **Convert to COG**
 
-- CAT uses file-based project storage (no DB required)
-- GeoJSON export is supported
-- COG conversion tools are included (`cat-convert`, `cat-batch-convert`)
+**Via Command Line:**
+
+```bash
+# Single file
+cat-convert input.tif output_cog.tif
+
+# Batch conversion
+cat-batch-convert input_folder/ output_folder/
+```
 
 ## References
 Duration: 1
 
-- CAT repo: https://github.com/MichaelAkridge-NOAA/cat
-- CAT PyPI: https://pypi.org/project/coral-annotation-tool
-- CAT Lite demo: https://michaelakridge-noaa.github.io/cat-web-lite/
+- CAT repo (`cat_db_v2`): https://github.com/MichaelAkridge-NOAA/cat/tree/cat_db_v2
+- Deployment plan: https://github.com/MichaelAkridge-NOAA/cat/blob/cat_db_v2/docs/DEPLOYMENT_PLAN.md
+- CAT PyPI (file-based version): https://pypi.org/project/coral-annotation-tool
+- Data Dictionary: https://www.fisheries.noaa.gov/inport/item/63239
+- Metadata: https://www.fisheries.noaa.gov/inport/item/63097
