@@ -16,7 +16,7 @@ CAT (Coral Annotation Tool) is an annotation and visualization platform for mari
 
 On first startup the system **auto-bootstraps**: Oracle init scripts create the schema, and the CAT app ingests reference data from CSVs — no manual DDL required.
 
-![CAT Logo](assets/cat_logo.png)
+<a href="https://github.com/MichaelAkridge-NOAA/cat" target="_blank"><img src="https://github.com/MichaelAkridge-NOAA/cat/raw/main/docs/logo.png" align="right" alt="logo" width="400"/></a>
 
 Project repo (`cat_db_v2` branch): https://github.com/MichaelAkridge-NOAA/cat/tree/cat_db_v2
 
@@ -78,7 +78,7 @@ Duration: 3
 1. Navigate to `https://8000-<your-workstation-id>.cloudworkstations.dev` and open the **Project Manager**
 2. Click **Quick Create** in the Oracle Projects panel
 3. Fill in: Project Name, Site, Island, Year, Cruise, Observer
-4. Add COG TIF file paths (GCS `gs://` URLs or local paths)
+4. Add COG TIF file paths (GCS `gs://` URLs)
 5. Click **Create Project**, then **Open** to launch the annotation view
 6. Draw polygons, lines, or points on the orthomosaic — annotations save to Oracle automatically
 7. Export results as **GeoJSON** or **Shapefile** for use in ArcGIS/QGIS
