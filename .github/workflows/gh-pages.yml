@@ -24,7 +24,7 @@ jobs:
           set -e
           find docs/codelabs -mindepth 1 ! -path 'docs/codelabs/assets*' -exec rm -rf {} +
           mkdir -p docs/codelabs/assets
-          echo "claat version:" && claat --version || true
+          echo "claat help:" && claat -h | head -n 1 || true
           echo "Building codelabs..."
           claat export -o docs/codelabs codelabs/*.md
           echo "Codelabs output:"
