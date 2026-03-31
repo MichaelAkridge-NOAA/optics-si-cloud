@@ -29,9 +29,9 @@
                   feedback-link="https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issues">
     
       <google-codelab-step label="Overview" duration="2">
-        <p>CAT (Coral Annotation Tool) is an annotation and visualization platform for marine scientists working with Structure-from-Motion (SfM) orthomosaic imagery. The <code>cat_db_v2</code> branch adds an <strong>Oracle database backend</strong> for centralized project management, persistent annotations, overlay layer support, and multi-user workflows — all deployed via Docker Compose.</p>
+        <p><a href="https://github.com/MichaelAkridge-NOAA/cat" target="_blank"><img alt="CAT Logo" src="img/5323b3e3807ceaee.png"></a></p>
+<p>CAT (Coral Annotation Tool) is an annotation and visualization platform for marine scientists working with Structure-from-Motion (SfM) orthomosaic imagery. The <code>cat_db_v2</code> branch adds an <strong>Oracle database backend</strong> for centralized project management, persistent annotations, overlay layer support, and multi-user workflows — all deployed via Docker Compose.</p>
 <p>On first startup the system <strong>auto-bootstraps</strong>: Oracle init scripts create the schema, and the CAT app ingests reference data from CSVs — no manual DDL required.</p>
-<p class="image-container"><img alt="CAT Logo" src="img/5323b3e3807ceaee.png"></p>
 <p>Project repo (<code>cat_db_v2</code> branch): https://github.com/MichaelAkridge-NOAA/cat/tree/cat_db_v2</p>
 <h2 is-upgraded>Key Features</h2>
 <ul>
@@ -91,7 +91,7 @@ sudo bash install_cat.sh
 <li>Navigate to <code>https://8000-<your-workstation-id>.cloudworkstations.dev</code> and open the <strong>Project Manager</strong></li>
 <li>Click <strong>Quick Create</strong> in the Oracle Projects panel</li>
 <li>Fill in: Project Name, Site, Island, Year, Cruise, Observer</li>
-<li>Add COG TIF file paths (GCS <code>gs://</code> URLs or local paths)</li>
+<li>Add COG TIF file paths (GCS <code>gs://</code> URLs)</li>
 <li>Click <strong>Create Project</strong>, then <strong>Open</strong> to launch the annotation view</li>
 <li>Draw polygons, lines, or points on the orthomosaic — annotations save to Oracle automatically</li>
 <li>Export results as <strong>GeoJSON</strong> or <strong>Shapefile</strong> for use in ArcGIS/QGIS</li>
