@@ -13,11 +13,10 @@ feedback link: https://github.com/MichaelAkridge-NOAA/optics-si-cloud-tools/issu
 Duration: 2
 
 <a href="https://github.com/MichaelAkridge-NOAA/cat" target="_blank"><img src="https://github.com/MichaelAkridge-NOAA/cat/raw/main/docs/logo.png" align="right" alt="logo" width="400"/></a>
+
 CAT (Coral Annotation Tool) is an annotation and visualization platform for marine scientists working with Structure-from-Motion (SfM) orthomosaic imagery. The `cat_db_v2` branch adds an **Oracle database backend** for centralized project management, persistent annotations, overlay layer support, and multi-user workflows — all deployed via Docker Compose.
 
 On first startup the system **auto-bootstraps**: Oracle init scripts create the schema, and the CAT app ingests reference data from CSVs — no manual DDL required.
-
-![CAT Logo](assets/cat_logo.png)
 
 Project repo (`cat_db_v2` branch): https://github.com/MichaelAkridge-NOAA/cat/tree/cat_db_v2
 
